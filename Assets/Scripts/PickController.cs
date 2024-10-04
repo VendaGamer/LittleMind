@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class PickController : MonoBehaviour
 {
-    private GameObject holding;
+    [SerializeField]
+    private Transform pickupPoint;
+    private PickableObject holding;
     private Camera playerCamera;
     [SerializeField]
     private float rayDistance = 100f;
@@ -11,9 +13,14 @@ public class PickController : MonoBehaviour
     {
         playerCamera = GetComponentInChildren<Camera>();
     }
-    private void PickUpObject(GameObject gameObject)
+    private void PickUpObject(PickableObject gameObject)
     {
+        if (holding != null) return;
         holding = gameObject;
+        gameObject.transform.position = pickupPoint.position;
+        var rb = gameObject.gameObject.GetComponent<Rigidbody>();
+        rb.
+        gameObject.transform.parent = pickupPoint;
     }
     void Update()
     {
@@ -28,7 +35,7 @@ public class PickController : MonoBehaviour
                 Debug.Log("Can pickup gameobject named: " + pickableObject.DisplayName);
                 if (Input.GetButton("Pickup"))
                 {
-                    PickUpObject(gameObject);
+                    PickUpObject(pickableObject);
                 }
             }
         }
