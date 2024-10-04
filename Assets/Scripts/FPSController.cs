@@ -38,7 +38,7 @@ public class FPSController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         // Rotate the player horizontally
-        transform.Rotate(Vector3.up * mouseX);
+        rb.transform.Rotate(Vector3.up * mouseX);
 
         // Rotate the camera vertically
         Vector3 currentRotation = playerCamera.transform.localEulerAngles;
@@ -58,6 +58,6 @@ public class FPSController : MonoBehaviour
 
         Vector3 movement = transform.right * moveHorizontal + transform.forward * moveVertical;
 
-        rb.MovePosition(rb.position + movement.normalized * moveSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * movement.normalized);
     }
 }

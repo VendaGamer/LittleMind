@@ -7,36 +7,66 @@ public class PickController : MonoBehaviour
     private PickableObject holding;
     private Camera playerCamera;
     [SerializeField]
-    private float rayDistance = 100f;
+    private float rayDistance = 3f;
 
     void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
     }
-    private void PickUpObject(PickableObject gameObject)
+    private void PickUpObject(PickableObject pickableObject)
     {
-        if (holding != null) return;
-        holding = gameObject;
-        gameObject.transform.position = pickupPoint.position;
-        var rb = gameObject.gameObject.GetComponent<Rigidbody>();
-        rb.
-        gameObject.transform.parent = pickupPoint;
+        holding = pickableObject;
+        pickableObject.transform.SetParent(pickupPoint);
+        pickableObject.transform.localPosition = Vector3.zero;
+        pickableObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        pickableObject.transform.localScale = Vector3.one;
+
+        if (pickableObject.gameObject.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.isKinematic = true;
+        }
+        if (pickableObject.gameObject.TryGetComponent<Collider>(out var col))
+        {
+            col.isTrigger = true;
+        }
+    }
+    private void DropObject()
+    {
+        holding.transform.SetParent(null);
+        if (holding.gameObject.TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.isKinematic = false;
+        }
+        if (holding.gameObject.TryGetComponent<Collider>(out var col))
+        {
+            col.isTrigger = false;
+        }
+        holding = null;
     }
     void Update()
     {
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, rayDistance))
+        if (holding == null) //pickup logic
         {
-            var gameObject = hit.collider.gameObject;
-            if (gameObject == null) return;
-            if (gameObject.TryGetComponent<PickableObject>(out var pickableObject))
+            Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
             {
-                Debug.Log("Can pickup gameobject named: " + pickableObject.DisplayName);
-                if (Input.GetButton("Pickup"))
+                var gameObject = hit.collider.gameObject;
+                if (gameObject == null) return;
+                if (gameObject.TryGetComponent<PickableObject>(out var pickableObject))
                 {
-                    PickUpObject(pickableObject);
+                    Debug.Log("Can pickup gameobject named: " + pickableObject.DisplayName);
+                    if (Input.GetButton("Pickup"))
+                    {
+                        PickUpObject(pickableObject);
+                    }
                 }
+            }
+        }
+        else //drop logic
+        {
+            if (Input.GetButton("Drop"))
+            {
+                DropObject();
             }
         }
     }
