@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FPSController : MonoBehaviour
+public class FPSController : PickController
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
@@ -10,20 +10,20 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float maxLookUpAngle = 90f;
     [SerializeField] private float maxLookDownAngle = -90f;
 
-    private Camera playerCamera;
     private Rigidbody rb;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody>();
-        playerCamera = GetComponentInChildren<Camera>();
         // Lock and hide the cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         HandleLook();
     }
 

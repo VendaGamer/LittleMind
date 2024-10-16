@@ -1,15 +1,16 @@
 using UnityEngine;
 
-public class PickController : MonoBehaviour
+public abstract class PickController : MonoBehaviour
 {
+    [Header("Pickup Settings")]
     [SerializeField]
     private Transform pickupPoint;
     private PickableObject holding;
-    private Camera playerCamera;
+    protected Camera playerCamera;
     [SerializeField]
     private float rayDistance = 3f;
 
-    void Start()
+    protected virtual void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
     }
@@ -43,7 +44,7 @@ public class PickController : MonoBehaviour
         }
         holding = null;
     }
-    void Update()
+    protected virtual void Update()
     {
         if (holding == null) //pickup logic
         {
