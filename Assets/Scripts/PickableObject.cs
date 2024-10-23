@@ -3,8 +3,7 @@ using UnityEngine;
 public class PickableObject : MonoBehaviour
 {
     [SerializeField]
-    private string displayName;
-    public string DisplayName => displayName;
+    public string DisplayName { get; private set; }
     protected virtual void Start()
     {
         

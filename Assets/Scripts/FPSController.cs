@@ -9,6 +9,7 @@ public class FPSController : PickController
     [SerializeField] private float mouseSensitivity = 2f;
     [SerializeField] private float maxLookUpAngle = 90f;
     [SerializeField] private float maxLookDownAngle = -90f;
+    [SerializeField] private Transform playerCameraHolder;
 
     private Rigidbody rb;
 
@@ -25,32 +26,31 @@ public class FPSController : PickController
     {
         base.Update();
         HandleLook();
-    }
-
-    private void FixedUpdate()
-    {
         HandleMovement();
     }
-
+    /// <summary>
+    /// Stara se o otaceni kamery a hrace
+    /// </summary>
     private void HandleLook()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        // Rotate the player horizontally
-        rb.transform.Rotate(Vector3.up * mouseX);
+        // Otaceni s hracem, samozrejmne jen horizontalne :D
+        transform.Rotate(Vector3.up * mouseX);
 
-        // Rotate the camera vertically
-        Vector3 currentRotation = playerCamera.transform.localEulerAngles;
-        float newXRotation = currentRotation.x - mouseY;
 
-        // Clamp the vertical rotation
+        float newXRotation = playerCameraHolder.localEulerAngles.x - mouseY;
+
+        // zajisteni ze nedevame obrovske stupne rotace
         if (newXRotation > 180f) newXRotation -= 360f;
         newXRotation = Mathf.Clamp(newXRotation, maxLookDownAngle, maxLookUpAngle);
-
-        playerCamera.transform.localEulerAngles = new Vector3(newXRotation, 0f, 0f);
+        // Otaceni s kamerou
+        playerCameraHolder.localEulerAngles = new Vector3(newXRotation, 0f, 0f);
     }
-
+    /// <summary>
+    /// Provadi pohyb hrace s pomoci unity input systemu
+    /// </summary>
     private void HandleMovement()
     {
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
@@ -58,6 +58,6 @@ public class FPSController : PickController
 
         Vector3 movement = transform.right * moveHorizontal + transform.forward * moveVertical;
 
-        rb.MovePosition(rb.position + moveSpeed * Time.fixedDeltaTime * movement.normalized);
+        rb.MovePosition(rb.position + moveSpeed * Time.deltaTime * movement.normalized);
     }
 }

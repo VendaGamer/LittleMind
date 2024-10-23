@@ -6,7 +6,8 @@ public abstract class PickController : MonoBehaviour
     [SerializeField]
     private Transform pickupPoint;
     private PickableObject holding;
-    protected Camera playerCamera;
+    [SerializeField]
+    protected Camera playerCamera { get; private set;}
     [SerializeField]
     private float rayDistance = 3f;
 
