@@ -14,7 +14,6 @@ public abstract class MentalIllness : MonoBehaviour
     /// <summary>
     /// Tuto metodu budu <see langword="override"/>, pro to abych spoustel aktivoval jednotlivej symptom
     /// </summary>
-    /// 
     protected virtual void FixedUpdate()
     {
         if (currentAnxietyLevel > 0f)

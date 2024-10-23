@@ -2,13 +2,17 @@ using UnityEngine;
 using EZCameraShake;
 public class Trembling : Symptom
 {
-    [SerializeField] private float baseMagnitude = 0.8f;
-    [SerializeField] private float baseRoughness = 13f;
+    [SerializeField] private float baseMagnitude = 2f;
+    [SerializeField] private float baseRoughness = 5f;
     [SerializeField] private float baseFadeInTime = 3f;
     [SerializeField] private float baseFadeOutTime = 5f;
     [SerializeField] private Vector3 baseRotationInfluence = new Vector3(0.7f, 0.7f, 0.7f);
-    [SerializeField] private Vector3 basePositionInfluence = Vector3.zero;
     private CameraShakeInstance currentShake;
+    private void Start()
+    {
+        //Nejspis optimalnejsi nez nechat na true, protoze trembling nepouziva Update
+        enabled = false;
+    }
     public override void StopSymptom()
     {
         IsActive = false;
@@ -22,15 +26,12 @@ public class Trembling : Symptom
         IsActive = true;
         if (currentShake == null)
         {
-            Debug.Log("New shake");
-            currentShake = CameraShaker.Instance.StartShake(baseMagnitude * Intensity, baseRoughness * Intensity, baseFadeInTime / Intensity,
-            basePositionInfluence * Intensity, baseRotationInfluence * Intensity);
+            currentShake = CameraShaker.Instance.StartShake(baseMagnitude * Intensity, baseRoughness * Intensity, baseFadeInTime / Intensity);
             return;
         }
         currentShake.Magnitude = baseMagnitude * Intensity;
         currentShake.Roughness = baseRoughness * Intensity;
         currentShake.Magnitude = baseMagnitude * Intensity;
-        currentShake.PositionInfluence = basePositionInfluence * Intensity;
-        currentShake.PositionInfluence = baseRotationInfluence * Intensity;
+        currentShake.RotationInfluence = baseRotationInfluence * Intensity;
     }
 }
