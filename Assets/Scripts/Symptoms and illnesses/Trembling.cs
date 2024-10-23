@@ -16,7 +16,9 @@ public class Trembling : Symptom
     }
     public override void UpdateOrTriggerSymptom(float intensity)
     {
+        if (intensity < MinimalIntensity) return;
         Intensity = intensity;
+        IsActive = true;
         if (currentShake == null)
         {
             currentShake = CameraShaker.Instance.StartShake(baseMagnitude * Intensity, baseRoughness * Intensity, baseFadeInTime / Intensity,

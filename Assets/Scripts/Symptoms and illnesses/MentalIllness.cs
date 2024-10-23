@@ -12,9 +12,10 @@ public abstract class MentalIllness : MonoBehaviour
 
     public float AnxietyLevel => currentAnxietyLevel;
     /// <summary>
-    /// Tuto metodu budu <see langword="override"/>, pro to aby jsem spoustel aktivoval jednotlivej symptom
+    /// Tuto metodu budu <see langword="override"/>, pro to abych spoustel aktivoval jednotlivej symptom
     /// </summary>
-    protected virtual void LateUpdate()
+    /// 
+    protected virtual void FixedUpdate()
     {
         if (currentAnxietyLevel > 0f)
         {
@@ -24,6 +25,7 @@ public abstract class MentalIllness : MonoBehaviour
         {
             RecoverFromSymptoms();
         }
+        currentAnxietyLevel = 0f;
     }
     /// <summary>
     /// Logika pro aktivitu danych symptomu, ve velke vetsine neovverridnu
@@ -40,8 +42,6 @@ public abstract class MentalIllness : MonoBehaviour
     /// </summary>
     protected virtual void RecoverFromSymptoms()
     {
-        currentAnxietyLevel = 0f;
-
         foreach (var symptom in symptoms)
         {
             if (symptom.IsActive)

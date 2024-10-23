@@ -12,14 +12,10 @@ public class Arachnophobia : MentalIllness
         RequireSymptom<VisualDistortion>();
         RequireSymptom<Trembling>();
     }
-    private void Update()
+    protected override void FixedUpdate()
     {
         CheckForNearbySpiders();
-    }
-    protected override void LateUpdate()
-    {
-        base.LateUpdate();
-        currentAnxietyLevel = 0f;
+        base.FixedUpdate();
     }
     private void CheckForNearbySpiders()
     {
@@ -51,28 +47,17 @@ public class Arachnophobia : MentalIllness
         //zjisteni zda je objekt v vrstve spider (pavucinky)
         if (spiderLayer == (spiderLayer | (1 << other.gameObject.layer)))
         {
-            //zjisteni zda je hrac dostatecne blisko na to aby se bal :D
-            float distance = Vector3.Distance(transform.position, other.transform.position);
-            if (distance <= triggerDistance)
-            {
-                float intensity = 1f - (distance / triggerDistance);
-                PendNewAnxietyLevel(intensity);
-            }
+            PendNewAnxietyLevel(1f);
         }
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (spiderLayer == (spiderLayer | (1 << other.gameObject.layer)))
-        {
-            PendNewAnxietyLevel(0f);
-        }
-    }
-
     public override void PendNewAnxietyLevel(float intensity)
     {
-        var higher = Mathf.Max(currentAnxietyLevel, intensity * anxietyBuildupRate);
-        currentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
-        Debug.Log("Set new anxiety: " + currentAnxietyLevel);
+        var calculatedAnxiety = intensity * anxietyBuildupRate;
+        if (calculatedAnxiety > 0f)
+        {
+            var higher = Mathf.Max(currentAnxietyLevel, calculatedAnxiety);
+            currentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
+            Debug.Log("Set new anxiety: " + currentAnxietyLevel);
+        }
     }
 }
