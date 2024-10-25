@@ -1,8 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class Arachnophobia : MentalIllness
+public class ArachnoPhobia : MentalIllness
 {
     [SerializeField] private LayerMask spiderLayer;
 
@@ -33,7 +31,7 @@ public class Arachnophobia : MentalIllness
             if (dSqrToCollider < closestDistanceSqr)
             {
                 closestCollider = collider;
-                closestDistanceSqr = dSqrToCollider;  // Fixed: Was missing this assignment
+                closestDistanceSqr = dSqrToCollider;
             }
         }
 
@@ -45,19 +43,9 @@ public class Arachnophobia : MentalIllness
     private void OnTriggerStay(Collider other)
     {
         //zjisteni zda je objekt v vrstve spider (pavucinky)
-        if (spiderLayer == (spiderLayer | (1 << other.gameObject.layer)))
+        if (spiderLayer.value == other.gameObject.layer)
         {
             PendNewAnxietyLevel(1f);
-        }
-    }
-    public override void PendNewAnxietyLevel(float intensity)
-    {
-        var calculatedAnxiety = intensity * anxietyBuildupRate;
-        if (calculatedAnxiety > 0f)
-        {
-            var higher = Mathf.Max(currentAnxietyLevel, calculatedAnxiety);
-            currentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
-            Debug.Log("Set new anxiety: " + currentAnxietyLevel);
         }
     }
 }

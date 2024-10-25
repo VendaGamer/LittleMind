@@ -54,7 +54,16 @@ public abstract class MentalIllness : MonoBehaviour
     /// Logika pro to jak se dana fobie budi a jak budi sve symptomy
     /// </summary>
     /// <param name="intensity"></param>
-    public abstract void PendNewAnxietyLevel(float intensity);
+    public void PendNewAnxietyLevel(float intensity)
+    {
+        var calculatedAnxiety = intensity * anxietyBuildupRate;
+        if (calculatedAnxiety > 0f)
+        {
+            var higher = Mathf.Max(currentAnxietyLevel, calculatedAnxiety);
+            currentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
+            Debug.Log("Set new anxiety: " + currentAnxietyLevel);
+        }
+    }
     /// <summary>
     /// Prida symptom hracovi, pokud ho uz nema
     /// </summary>

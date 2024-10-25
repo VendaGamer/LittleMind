@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class PlayerController : FPSController
 {
-    [Header("Illness")]
-    [SerializeField]
-    private MentalIllness currentIllness;
+    //PRIDAM NECO MOZNA IDK
     protected override void Start()
     {
         base.Start();
