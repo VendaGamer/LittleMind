@@ -3,10 +3,9 @@ using UnityEngine;
 
 public abstract class MentalIllness : MonoBehaviour
 {
-    [SerializeField] protected List<Symptom> symptoms = new();
-    [SerializeField] protected float triggerDistance = 5f;
     [SerializeField] protected float maxAnxietyLevel = 1f;
     [SerializeField] protected float anxietyBuildupRate = 1f;
+    protected List<Symptom> symptoms = new();
 
     protected float currentAnxietyLevel = 0f;
 
@@ -51,7 +50,7 @@ public abstract class MentalIllness : MonoBehaviour
     }
 
     /// <summary>
-    /// Logika pro to jak se dana fobie budi a jak budi sve symptomy
+    /// Nastavi intesitu uskosti, pokud jiz neni vetsi nebo nepresahuje maximalni
     /// </summary>
     /// <param name="intensity"></param>
     public void PendNewAnxietyLevel(float intensity)

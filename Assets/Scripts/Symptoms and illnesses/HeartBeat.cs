@@ -12,7 +12,7 @@ public class HeartBeat : Symptom
 
     private void Start()
     {
-        playerAudioSource = GetComponent<AudioSource>();
+        playerAudioSource = GetComponentInChildren<AudioSource>();
     }
     public override void UpdateOrTriggerSymptom(float intensity)
     {
@@ -39,6 +39,10 @@ public class HeartBeat : Symptom
                 )
             );
 
+    }
+    private IEnumerator FadeOut()
+    {
+        yield return null;
     }
     public override void StopSymptom()
     {

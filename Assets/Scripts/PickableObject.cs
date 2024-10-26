@@ -6,15 +6,17 @@ public class PickableObject : MonoBehaviour
 {
     [SerializeField]
     private string displayName;
+    [SerializeField]
+    private string description;
     public string DisplayName => displayName;
+    public string Description => description;
     private Color originalColor;
     private Rigidbody rb;
     private Collider col;
     private Renderer ren;
-
     private void Start()
     {
-        rb = GetComponentInChildren<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         col = GetComponentInChildren<Collider>();
         ren = GetComponentInChildren<Renderer>();
         originalColor = ren.material.color;
