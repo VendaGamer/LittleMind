@@ -286,6 +286,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5446493858345005440, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
+        type: 3}
+      propertyPath: displayName
+      value: Wooden Crate
+      objectReference: {fileID: 0}
     - target: {fileID: 8639437643322241686, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
         type: 3}
       propertyPath: m_Size.y
@@ -882,13 +887,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupPoint: {fileID: 1045631270855179412}
+  playerCamera: {fileID: 0}
   rayDistance: 3
+  pickupLerpDuration: 1
   moveSpeed: 5
   mouseSensitivity: 2
   maxLookUpAngle: 90
   maxLookDownAngle: -90
   playerCameraHolder: {fileID: 966916642970044201}
-  currentIllness: {fileID: 0}
 --- !u!114 &3378917312639938680
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public abstract class PickController : MonoBehaviour
@@ -7,44 +9,28 @@ public abstract class PickController : MonoBehaviour
     private Transform pickupPoint;
     private PickableObject holding;
     [SerializeField]
-    protected Camera playerCamera { get; private set;}
+    protected Camera playerCamera;
     [SerializeField]
     private float rayDistance = 3f;
+    [SerializeField]
+    private float pickupLerpDuration=1f;
 
     protected virtual void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
     }
-    private void PickUpObject(PickableObject pickableObject)
+    private void PickUpObject(PickableObject obj)
     {
-        holding = pickableObject;
-        pickableObject.transform.SetParent(pickupPoint);
-        pickableObject.transform.localPosition = Vector3.zero;
-        pickableObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        pickableObject.transform.localScale = Vector3.one;
-
-        if (pickableObject.gameObject.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.isKinematic = true;
-        }
-        if (pickableObject.gameObject.TryGetComponent<Collider>(out var col))
-        {
-            col.isTrigger = true;
-        }
+        holding = obj;
+        holding.PickObject(pickupPoint, pickupLerpDuration);
     }
     private void DropObject()
     {
-        holding.transform.SetParent(null);
-        if (holding.gameObject.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.isKinematic = false;
-        }
-        if (holding.gameObject.TryGetComponent<Collider>(out var col))
-        {
-            col.isTrigger = false;
-        }
+        if (holding == null) return;
+        holding.DropObject();
         holding = null;
     }
+
     protected virtual void Update()
     {
         if (holding == null) //pickup logic
@@ -54,12 +40,12 @@ public abstract class PickController : MonoBehaviour
             {
                 var gameObject = hit.collider.gameObject;
                 if (gameObject == null) return;
-                if (gameObject.TryGetComponent<PickableObject>(out var pickableObject))
+                var pickObj = gameObject.GetComponentInParent<PickableObject>();
+                if (pickObj != null)
                 {
-                    Debug.Log("Can pickup gameobject named: " + pickableObject.DisplayName);
                     if (Input.GetButton("Pickup"))
                     {
-                        PickUpObject(pickableObject);
+                        PickUpObject(pickObj);
                     }
                 }
             }
