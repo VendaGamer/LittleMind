@@ -781,10 +781,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ab8353b5ebd32545867da143199a814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultPosInfluence: {x: 0, y: 0, z: 0}
-  DefaultRotInfluence: {x: 0, y: 0, z: 0}
-  RestPositionOffset: {x: 0, y: 0, z: 0}
-  RestRotationOffset: {x: 0, y: 0, z: 0}
+  defaultPosInfluence: {x: 0, y: 0, z: 0}
+  defaultRotInfluence: {x: 0, y: 0, z: 0}
+  restPositionOffset: {x: 0, y: 0, z: 0}
+  restRotationOffset: {x: 0, y: 0, z: 0}
 --- !u!20 &1807906527568429914
 Camera:
   m_ObjectHideFlags: 0
@@ -908,6 +908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupPoint: {fileID: 1045631270855179412}
+  playerCamera: {fileID: 0}
   rayDistance: 3
   pickupLerpDuration: 1
   moveSpeed: 5
@@ -961,7 +962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73445fd514e28be439c0dcab30368b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinimalIntensity: 0.5
+  minimalIntensity: 0.5
   maxDistortionAmount: 0.5
 --- !u!114 &5275008820491883697
 MonoBehaviour:
@@ -1162,6 +1163,7 @@ GameObject:
   - component: {fileID: 3378917312639938680}
   - component: {fileID: 7859612809557014667}
   - component: {fileID: 2916160701546033982}
+  - component: {fileID: 8652251885321330061}
   - component: {fileID: 3177621820159656209}
   m_Layer: 0
   m_Name: Capsule
@@ -1260,6 +1262,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7193107959675088336}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &8652251885321330061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193107959675088336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3c2bdd0f3097245a72619c6e5daca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimalIntensity: 0.5
+  heartBeatLub: {fileID: 8300000, guid: bd15bf6b6a7d0a0448eee4c1d9b8d630, type: 3}
+  heartBeatDub: {fileID: 8300000, guid: d25afaab719d401429f7ec0140a90ad7, type: 3}
+  minHeartRate: 60
+  maxHeartRate: 180
+  lubDubGap: 0.15
+  fadeDuration: 10
+  heartRateBuildupSpeed: 7
+  heartbeatVolumeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 0.5
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.5
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8697996688225831729
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace EZCameraShake
 {
@@ -10,24 +11,24 @@ namespace EZCameraShake
         /// The single instance of the CameraShaker in the current scene. Do not use if you have multiple instances.
         /// </summary>
         public static CameraShaker Instance;
-        static Dictionary<string, CameraShaker> instanceList = new Dictionary<string, CameraShaker>();
+        static Dictionary<string, CameraShaker> _instanceList = new Dictionary<string, CameraShaker>();
 
         /// <summary>
         /// The default position influcence of all shakes created by this shaker.
         /// </summary>
-        public Vector3 DefaultPosInfluence = new Vector3(0.15f, 0.15f, 0.15f);
+        [FormerlySerializedAs("DefaultPosInfluence")] public Vector3 defaultPosInfluence = new Vector3(0.15f, 0.15f, 0.15f);
         /// <summary>
         /// The default rotation influcence of all shakes created by this shaker.
         /// </summary>
-        public Vector3 DefaultRotInfluence = new Vector3(1, 1, 1);
+        [FormerlySerializedAs("DefaultRotInfluence")] public Vector3 defaultRotInfluence = new Vector3(1, 1, 1);
         /// <summary>
         /// Offset that will be applied to the camera's default (0,0,0) rest position
         /// </summary>
-        public Vector3 RestPositionOffset = new Vector3(0, 0, 0);
+        [FormerlySerializedAs("RestPositionOffset")] public Vector3 restPositionOffset = new Vector3(0, 0, 0);
         /// <summary>
         /// Offset that will be applied to the camera's default (0,0,0) rest rotation
         /// </summary>
-        public Vector3 RestRotationOffset = new Vector3(0, 0, 0);
+        [FormerlySerializedAs("RestRotationOffset")] public Vector3 restRotationOffset = new Vector3(0, 0, 0);
 
         Vector3 posAddShake, rotAddShake;
 
@@ -36,7 +37,7 @@ namespace EZCameraShake
         void Awake()
         {
             Instance = this;
-            instanceList.Add(gameObject.name, this);
+            _instanceList.Add(gameObject.name, this);
         }
 
         void Update()
@@ -63,8 +64,8 @@ namespace EZCameraShake
                 }
             }
 
-            transform.localPosition = posAddShake + RestPositionOffset;
-            transform.localEulerAngles = rotAddShake + RestRotationOffset;
+            transform.localPosition = posAddShake + restPositionOffset;
+            transform.localEulerAngles = rotAddShake + restRotationOffset;
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace EZCameraShake
         {
             CameraShaker c;
 
-            if (instanceList.TryGetValue(name, out c))
+            if (_instanceList.TryGetValue(name, out c))
                 return c;
 
             Debug.LogError("CameraShake " + name + " not found!");
@@ -106,8 +107,8 @@ namespace EZCameraShake
         public CameraShakeInstance ShakeOnce(float magnitude, float roughness, float fadeInTime, float fadeOutTime)
         {
             CameraShakeInstance shake = new CameraShakeInstance(magnitude, roughness, fadeInTime, fadeOutTime);
-            shake.PositionInfluence = DefaultPosInfluence;
-            shake.RotationInfluence = DefaultRotInfluence;
+            shake.PositionInfluence = defaultPosInfluence;
+            shake.RotationInfluence = defaultRotInfluence;
             cameraShakeInstances.Add(shake);
 
             return shake;
@@ -143,8 +144,8 @@ namespace EZCameraShake
         public CameraShakeInstance StartShake(float magnitude, float roughness, float fadeInTime)
         {
             CameraShakeInstance shake = new CameraShakeInstance(magnitude, roughness);
-            shake.PositionInfluence = DefaultPosInfluence;
-            shake.RotationInfluence = DefaultRotInfluence;
+            shake.PositionInfluence = defaultPosInfluence;
+            shake.RotationInfluence = defaultRotInfluence;
             shake.StartFadeIn(fadeInTime);
             cameraShakeInstances.Add(shake);
             return shake;
@@ -177,7 +178,7 @@ namespace EZCameraShake
 
         void OnDestroy()
         {
-            instanceList.Remove(gameObject.name);
+            _instanceList.Remove(gameObject.name);
         }
     }
 }

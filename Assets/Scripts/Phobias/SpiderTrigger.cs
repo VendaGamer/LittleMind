@@ -9,6 +9,6 @@ public class SpiderTrigger : MonoBehaviour
         if (!other.gameObject.TryGetComponent<ArachnoPhobia>(out var araPho))
             return;
         var distance = Vector3.Distance(transform.position, other.transform.position);
-        araPho.PendNewAnxietyLevelBaseOnDistance(distance);
+        araPho.PendNewAnxietyLevelBasedOnDistance(distance);
     }
 }

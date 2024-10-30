@@ -151,8 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 050a2fc53ab75f149a17be02cac541aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Crate
-  description: 
+  displayName: Bedna
+  description: "D\u0159ev\u011Bn\xE1 krychle"
 --- !u!54 &1206595708968789297
 Rigidbody:
   m_ObjectHideFlags: 0

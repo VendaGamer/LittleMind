@@ -1,38 +1,24 @@
 using System.Collections.Generic;
+using Symptoms;
 using UnityEngine;
 
 public abstract class MentalIllness : MonoBehaviour
 {
     [SerializeField] protected float maxAnxietyLevel = 1f;
     [SerializeField] protected float anxietyBuildupRate = 1f;
-    protected List<Symptom> symptoms = new();
+    protected List<Symptom> Symptoms = new();
 
-    protected float currentAnxietyLevel = 0f;
+    protected float CurrentAnxietyLevel = 0f;
 
-    public float AnxietyLevel => currentAnxietyLevel;
-    /// <summary>
-    /// Tuto metodu budu <see langword="override"/>, pro to abych spoustel aktivoval jednotlivej symptom
-    /// </summary>
-    protected virtual void FixedUpdate()
-    {
-        if (currentAnxietyLevel > 0f)
-        {
-            UpdateSymptoms();
-        }
-        else
-        {
-            RecoverFromSymptoms();
-        }
-        currentAnxietyLevel = 0f;
-    }
+    public float AnxietyLevel => CurrentAnxietyLevel;
     /// <summary>
     /// Logika pro aktivitu danych symptomu, ve velke vetsine neovverridnu
     /// </summary>
     protected virtual void UpdateSymptoms()
     {
-        foreach (var symptom in symptoms)
+        foreach (var symptom in Symptoms)
         {
-            symptom.UpdateOrTriggerSymptom(currentAnxietyLevel);
+            symptom.UpdateOrTriggerSymptom(CurrentAnxietyLevel);
         }
     }
     /// <summary>
@@ -40,7 +26,7 @@ public abstract class MentalIllness : MonoBehaviour
     /// </summary>
     protected virtual void RecoverFromSymptoms()
     {
-        foreach (var symptom in symptoms)
+        foreach (var symptom in Symptoms)
         {
             if (symptom.IsActive)
             {
@@ -58,9 +44,9 @@ public abstract class MentalIllness : MonoBehaviour
         var calculatedAnxiety = intensity * anxietyBuildupRate;
         if (calculatedAnxiety > 0f)
         {
-            var higher = Mathf.Max(currentAnxietyLevel, calculatedAnxiety);
-            currentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
-            Debug.Log("Set new anxiety: " + currentAnxietyLevel);
+            var higher = Mathf.Max(CurrentAnxietyLevel, calculatedAnxiety);
+            CurrentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
+            Debug.Log("Set new anxiety: " + CurrentAnxietyLevel);
         }
     }
     /// <summary>
@@ -73,6 +59,6 @@ public abstract class MentalIllness : MonoBehaviour
         {
             gameObject.AddComponent<T>();
         }
-        symptoms.Add(GetComponent<T>()); //pridame do listu symptomu
+        Symptoms.Add(GetComponent<T>()); //pridame do listu symptomu
     }
 }

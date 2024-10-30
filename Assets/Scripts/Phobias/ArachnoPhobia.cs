@@ -1,8 +1,8 @@
+using Symptoms;
 using UnityEngine;
 
 public class ArachnoPhobia : MentalIllness
 {
-    [SerializeField] private LayerMask spiderLayer;
     [SerializeField] protected float triggerDistance = 7.5f;
     public float TriggerDistance => triggerDistance;
     private void Start()
@@ -11,8 +11,22 @@ public class ArachnoPhobia : MentalIllness
         RequireSymptom<VisualDistortion>();
         RequireSymptom<Trembling>();
         RequireSymptom<HeartBeat>();
+        RequireSymptom<Breathing>();
     }
-    public void PendNewAnxietyLevelBaseOnDistance(float distance)
+
+    private void FixedUpdate()
+    {
+        if (CurrentAnxietyLevel > 0f)
+        {
+            UpdateSymptoms();
+        }
+        else
+        {
+            RecoverFromSymptoms();
+        }
+        CurrentAnxietyLevel = 0f;
+    }
+    public void PendNewAnxietyLevelBasedOnDistance(float distance)
     {
         if (distance < maxAnxietyLevel) return;
         float intensity = 1f - ((distance / triggerDistance) /2);

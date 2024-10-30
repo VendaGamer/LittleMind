@@ -26,22 +26,22 @@ public abstract class PickController : MonoBehaviour
     }
     private void DropObject()
     {
-        if (holding == null) return;
+        if (!holding) return;
         holding.DropObject();
         holding = null;
     }
 
     protected virtual void Update()
     {
-        if (holding == null) //pickup logic
+        if (!holding) //pickup logic
         {
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
             {
-                var gameObject = hit.collider.gameObject;
-                if (gameObject == null) return;
-                var pickObj = gameObject.GetComponentInParent<PickableObject>();
-                if (pickObj != null)
+                var obj = hit.collider.gameObject;
+                if (!obj) return;
+                var pickObj = obj.GetComponentInParent<PickableObject>();
+                if (pickObj)
                 {
                     if (Input.GetButton("Pickup"))
                     {

@@ -21,7 +21,6 @@ public class FPSController : PickController
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
     protected override void Update()
     {
         base.Update();
