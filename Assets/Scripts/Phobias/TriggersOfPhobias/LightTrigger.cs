@@ -6,6 +6,6 @@ public class LightTrigger : MonoBehaviour
     {
         if (!other.gameObject.TryGetComponent<Nyctophobia>(out var nycPho))
             return;
-        nycPho.
+        nycPho.RecoverAnxiety();
     }
 }

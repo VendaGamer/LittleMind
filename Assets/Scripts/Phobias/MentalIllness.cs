@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using Symptoms;
 using UnityEngine;
 
 public abstract class MentalIllness : MonoBehaviour
 {
     [SerializeField] protected float maxAnxietyLevel = 1f;
     [SerializeField] protected float anxietyBuildupRate = 1f;
-    protected List<Symptom> Symptoms = new();
+    protected readonly List<Symptom> Symptoms = new();
 
     protected float CurrentAnxietyLevel = 0f;
 
@@ -22,7 +21,7 @@ public abstract class MentalIllness : MonoBehaviour
         }
     }
     /// <summary>
-    /// logika na postupne zastaveni (fadenuti) ze symptomu
+    /// logika na postupne zastaveni (fadenuti) ze symptomu (PREDELAT)
     /// </summary>
     protected virtual void RecoverFromSymptoms()
     {
@@ -46,7 +45,6 @@ public abstract class MentalIllness : MonoBehaviour
         {
             var higher = Mathf.Max(CurrentAnxietyLevel, calculatedAnxiety);
             CurrentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
-            Debug.Log("Set new anxiety: " + CurrentAnxietyLevel);
         }
     }
     /// <summary>

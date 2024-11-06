@@ -1,4 +1,3 @@
-using Symptoms;
 using UnityEngine;
 
 public class ArachnoPhobia : MentalIllness

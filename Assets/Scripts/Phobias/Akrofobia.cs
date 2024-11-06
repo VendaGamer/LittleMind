@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Akrofobia : MonoBehaviour
+public class Akrofobia : MentalIllness
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float maxCheckDistance = 6f;
+
+    private void Start()
     {
-        
+        RequireSymptom<VisualDistortion>();
+        RequireSymptom<Trembling>();
+        RequireSymptom<HeartBeat>();
+        RequireSymptom<Breathing>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        if (CurrentAnxietyLevel > 0f)
+        {
+            UpdateSymptoms();
+        }
+        else
+        {
+            RecoverFromSymptoms();
+        }
+        CurrentAnxietyLevel = 0f;
     }
 }

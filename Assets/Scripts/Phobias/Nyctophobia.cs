@@ -1,12 +1,12 @@
-using System.Collections;
-using Symptoms;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Nyctophobia : MentalIllness
 {
-    [SerializeField] private float lightDistanceTrigger = 6f;
     [SerializeField] private float anxietyRecoverySpeed = 1.5f;
+    [SerializeField] private float anxietyBuildUpSpeed = 0.05f;
+    
+    private bool isInLight;
+    
     private void Start()
     {
         RequireSymptom<Trembling>();
@@ -14,13 +14,33 @@ public class Nyctophobia : MentalIllness
         RequireSymptom<HeartBeat>();
         RequireSymptom<Breathing>();
     }
-    private void OnDisable()
+
+    private void FixedUpdate()
     {
-        RecoverFromSymptoms();
-        StopAllCoroutines();
-    }
-    protected override void RecoverFromSymptoms()
-    {
+
+        if (!isInLight)
+        {
+            PendNewAnxietyLevel(CurrentAnxietyLevel + (anxietyBuildUpSpeed * Time.fixedDeltaTime));
+            UpdateSymptoms();
+        }
         
+        isInLight = false;
+    }
+
+    public void RecoverAnxiety()
+    {
+        if (CurrentAnxietyLevel > 0f)
+        {
+
+            // Gradually decrease anxiety
+            CurrentAnxietyLevel = Mathf.Max(0, CurrentAnxietyLevel - (anxietyRecoverySpeed * Time.fixedDeltaTime));
+            UpdateSymptoms();
+            isInLight = true;
+        }
+        else
+        {
+            RecoverFromSymptoms();
+        }
+
     }
 }
