@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public abstract class PickController : MonoBehaviour
@@ -40,6 +38,7 @@ public abstract class PickController : MonoBehaviour
             {
                 var obj = hit.collider.gameObject;
                 if (!obj) return;
+                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                 var pickObj = obj.GetComponentInParent<PickableObject>();
                 if (pickObj)
                 {

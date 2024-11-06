@@ -1,17 +1,34 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class FPSController : PickController
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 7f;
+
+    private bool isRunning = false;
 
     [Header("Look Settings")]
     [SerializeField] private float mouseSensitivity = 2f;
     [SerializeField] private float maxLookUpAngle = 90f;
     [SerializeField] private float maxLookDownAngle = -90f;
     [SerializeField] private Transform playerCameraHolder;
-
+    private float currentSpeed;
     private Rigidbody rb;
+
+    private void toggleSprint()
+    {
+        isRunning =!isRunning;
+        if (isRunning)
+        {
+            currentSpeed = sprintSpeed;
+        }
+        else
+        {
+            currentSpeed = moveSpeed;
+        }
+    }
 
     protected override void Start()
     {
@@ -20,6 +37,7 @@ public class FPSController : PickController
         // Lock and hide the cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        currentSpeed = moveSpeed;
     }
     protected override void Update()
     {
@@ -52,11 +70,15 @@ public class FPSController : PickController
     /// </summary>
     private void HandleMovement()
     {
+        if (Input.GetButtonDown("Sprint"))
+        {
+            toggleSprint();
+        }
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
         float moveVertical = Input.GetAxisRaw("Vertical");
 
         Vector3 movement = transform.right * moveHorizontal + transform.forward * moveVertical;
 
-        rb.MovePosition(rb.position + moveSpeed * Time.deltaTime * movement.normalized);
+        rb.MovePosition(rb.position + currentSpeed * Time.deltaTime * movement.normalized);
     }
 }
