@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 public class HeartBeat : Symptom
 {
+    public override bool HasSelfManagedFadeOutAndFadeIn { get; protected set; } = true;
     [SerializeField] private AudioClip heartBeatLub;
     [SerializeField] private AudioClip heartBeatDub;
 

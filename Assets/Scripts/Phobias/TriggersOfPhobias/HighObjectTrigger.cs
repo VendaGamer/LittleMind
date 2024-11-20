@@ -16,9 +16,10 @@ public class HighObjectTrigger : MonoBehaviour
     private float GetNearestEdgeDistance(Vector3 playerPosition)
     {
         return Mathf.Min(
-            playerPosition.x - transform.position.x - transform.localScale.x /2,
-            playerPosition.z - transform.position.z - transform.localScale.z /2,
-            playerPosition.z - transform.position.z + transform.localScale.z /2,
-            playerPosition.x - transform.position.x + transform.localScale.x /2);
+            Mathf.Abs(playerPosition.x - transform.position.x - transform.localScale.x /2),
+            Mathf.Abs(playerPosition.z - transform.position.z - transform.localScale.z /2),
+            Mathf.Abs(playerPosition.z - transform.position.z + transform.localScale.z /2),
+            Mathf.Abs(playerPosition.x - transform.position.x + transform.localScale.x /2)
+            );
     }
 }

@@ -2,6 +2,7 @@ using EZCameraShake;
 using UnityEngine;
 public class Trembling : Symptom
 {
+    public override bool HasSelfManagedFadeOutAndFadeIn { get; protected set; } = false;
     [SerializeField] private float baseMagnitude = 2f;
     [SerializeField] private float baseRoughness = 5f;
     [SerializeField] private float baseFadeInTime = 3f;
