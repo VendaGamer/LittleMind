@@ -5,12 +5,12 @@ using UnityEngine;
 public abstract class MentalIllness : MonoBehaviour
 {
     [SerializeField] protected float maxAnxietyLevel = 1f;
-    [SerializeField] protected float anxietyBuildupRate = 1f;
-    [SerializeField] protected float fadeDuration = 10f; // Doba fade-out
+    [SerializeField] protected float anxietyBuildUpAndRecoveryRate = 0.1f;
+    [SerializeField] protected float fadeDuration = 5f; // Doba fade-out
     protected readonly List<Symptom> Symptoms = new();
 
     protected float CurrentAnxietyLevel = 0f;
-    private Coroutine fadeRoutine;
+    protected Coroutine fadeRoutine;
 
     public float AnxietyLevel => CurrentAnxietyLevel;
 
@@ -30,16 +30,13 @@ public abstract class MentalIllness : MonoBehaviour
     /// </summary>
     protected virtual void RecoverFromSymptoms()
     {
-        if (fadeRoutine == null)
-        {
-            fadeRoutine = StartCoroutine(FadeOutSymptoms());
-        }
+        fadeRoutine ??= StartCoroutine(FadeOutSymptoms());
     }
 
     /// <summary>
     /// Provede fade-out vsech aktivnich symptomu
     /// </summary>
-    private IEnumerator FadeOutSymptoms()
+    protected virtual IEnumerator FadeOutSymptoms()
     {
         float elapsed = 0f;
         while (elapsed < fadeDuration)
@@ -51,13 +48,20 @@ public abstract class MentalIllness : MonoBehaviour
             {
                 if (symptom.IsActive)
                 {
-                    symptom.UpdateOrTriggerSymptom(CurrentAnxietyLevel * fadeProgress);
+                    symptom.UpdateOrTriggerSymptom(CurrentAnxietyLevel);
                 }
             }
 
             yield return null;
         }
+        
+        StopAllSymptoms();
 
+        fadeRoutine = null;
+    }
+
+    protected void StopAllSymptoms()
+    {
         foreach (var symptom in Symptoms)
         {
             if (symptom.IsActive)
@@ -65,17 +69,15 @@ public abstract class MentalIllness : MonoBehaviour
                 symptom.StopSymptom();
             }
         }
-
-        fadeRoutine = null;
     }
 
     /// <summary>
-    /// Nastavi intesitu uskosti, pokud jiz neni vetsi nebo nepresahuje maximalni
+    /// Nastavi intesitu uzkosti, pokud jiz neni vetsi nebo nepresahuje maximalni
     /// </summary>
     /// <param name="intensity"></param>
     public void PendNewAnxietyLevel(float intensity)
     {
-        var calculatedAnxiety = intensity * anxietyBuildupRate;
+        var calculatedAnxiety = intensity * anxietyBuildUpAndRecoveryRate;
         if (calculatedAnxiety > 0f)
         {
             var higher = Mathf.Max(CurrentAnxietyLevel, calculatedAnxiety);

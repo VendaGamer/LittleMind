@@ -17,6 +17,7 @@ public class Trembling : Symptom
     public override void StopSymptom()
     {
         IsActive = false;
+        Intensity = 0f;
         currentShake.StartFadeOut(baseFadeOutTime * Intensity);
         currentShake = null;
     }

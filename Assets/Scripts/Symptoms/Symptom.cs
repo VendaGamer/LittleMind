@@ -2,8 +2,8 @@ using UnityEngine;
 
 public abstract class Symptom : MonoBehaviour
 {
-    [SerializeField] public float Intensity { get; protected set; } = 1f;
-    [SerializeField] protected float minimalIntensity = 0.5f;
+    public float Intensity { get; protected set; } = 0f;
+    protected float minimalIntensity = 0.1f;
     public bool IsActive { get; protected set; } = false;
 
     /// <summary>

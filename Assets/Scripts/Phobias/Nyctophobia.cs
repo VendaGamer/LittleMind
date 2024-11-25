@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class Nyctophobia : MentalIllness
 {
-    [SerializeField] private float anxietyRecoverySpeed = 1.5f;
-    [SerializeField] private float anxietyBuildUpSpeed = 0.05f;
-    
+
     private bool isInLight = false;
-    
+
     private void Start()
     {
         RequireSymptom<Trembling>();
@@ -17,24 +15,41 @@ public class Nyctophobia : MentalIllness
 
     private void FixedUpdate()
     {
-
-        if (!isInLight)
+        if (isInLight)
         {
-            CurrentAnxietyLevel += anxietyBuildUpSpeed * Time.fixedDeltaTime;
+            RecoverAnxietyLevel();
+        }
+        else
+        {
+            CurrentAnxietyLevel = Mathf.Min(
+                CurrentAnxietyLevel + (anxietyBuildUpAndRecoveryRate * Time.fixedDeltaTime),
+                maxAnxietyLevel
+            );
+            
             UpdateSymptoms();
         }
-        
-        isInLight = false;
+        isInLight = false; // Reset for the next frame
+    }
+    
+
+    /// <summary>
+    /// Snizuje uroven uzkosti, pokud je hrac ve svetle
+    /// </summary>
+    private void RecoverAnxietyLevel()
+    {
+        CurrentAnxietyLevel = Mathf.Max(CurrentAnxietyLevel - (anxietyBuildUpAndRecoveryRate * Time.fixedDeltaTime), 0f);
+
+        if (CurrentAnxietyLevel <= 0f)
+        {
+            RecoverFromSymptoms();
+        }
     }
 
+    /// <summary>
+    /// Zavolano, kdyz hrac vstoupi do svetla, signalizuje uzdravovani
+    /// </summary>
     public void RecoverAnxiety()
     {
         isInLight = true;
-        RecoverFromSymptoms();
-    }
-
-    protected override void RecoverFromSymptoms()
-    {
-        
     }
 }

@@ -4,8 +4,9 @@ public class LightTrigger : MonoBehaviour
 {
     private void OnTriggerStay(Collider other)
     {
-        if (!other.gameObject.TryGetComponent<Nyctophobia>(out var nycPho))
-            return;
-        nycPho.RecoverAnxiety();
+        if (other.TryGetComponent<Nyctophobia>(out var nyctophobia))
+        {
+            nyctophobia.RecoverAnxiety();
+        }
     }
 }
