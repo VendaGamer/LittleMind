@@ -1,14 +1,16 @@
 using UnityEngine;
+
 public abstract class Symptom : MonoBehaviour
 {
     [SerializeField] public float Intensity { get; protected set; } = 1f;
     [SerializeField] protected float minimalIntensity = 0.5f;
-    public abstract bool HasSelfManagedFadeOutAndFadeIn { get; protected set; }
     public bool IsActive { get; protected set; } = false;
+
     /// <summary>
-    /// Provadi logiku symptomu napr. (Trembling - zacne trast kamerou a i hracem, coz se projevi na pohybu)
+    /// Provadi logiku symptomu (napr. trembling, heartbeats atd.)
     /// </summary>
     public abstract void UpdateOrTriggerSymptom(float intensity);
+
     /// <summary> 
     /// Vypne provadeni logiky symptomu
     /// </summary>

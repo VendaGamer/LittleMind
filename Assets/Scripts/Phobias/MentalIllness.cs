@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,11 +6,14 @@ public abstract class MentalIllness : MonoBehaviour
 {
     [SerializeField] protected float maxAnxietyLevel = 1f;
     [SerializeField] protected float anxietyBuildupRate = 1f;
+    [SerializeField] protected float fadeDuration = 10f; // Doba fade-out
     protected readonly List<Symptom> Symptoms = new();
 
     protected float CurrentAnxietyLevel = 0f;
+    private Coroutine fadeRoutine;
 
     public float AnxietyLevel => CurrentAnxietyLevel;
+
     /// <summary>
     /// Logika pro aktivitu danych symptomu, ve velke vetsine neovverridnu
     /// </summary>
@@ -20,11 +24,40 @@ public abstract class MentalIllness : MonoBehaviour
             symptom.UpdateOrTriggerSymptom(CurrentAnxietyLevel);
         }
     }
+
     /// <summary>
-    /// logika na postupne zastaveni (fadenuti) ze symptomu (PREDELAT)
+    /// Logika na postupne zastaveni (fadenuti) symptomu
     /// </summary>
     protected virtual void RecoverFromSymptoms()
     {
+        if (fadeRoutine == null)
+        {
+            fadeRoutine = StartCoroutine(FadeOutSymptoms());
+        }
+    }
+
+    /// <summary>
+    /// Provede fade-out vsech aktivnich symptomu
+    /// </summary>
+    private IEnumerator FadeOutSymptoms()
+    {
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float fadeProgress = 1f - (elapsed / fadeDuration);
+
+            foreach (var symptom in Symptoms)
+            {
+                if (symptom.IsActive)
+                {
+                    symptom.UpdateOrTriggerSymptom(CurrentAnxietyLevel * fadeProgress);
+                }
+            }
+
+            yield return null;
+        }
+
         foreach (var symptom in Symptoms)
         {
             if (symptom.IsActive)
@@ -32,6 +65,8 @@ public abstract class MentalIllness : MonoBehaviour
                 symptom.StopSymptom();
             }
         }
+
+        fadeRoutine = null;
     }
 
     /// <summary>
@@ -47,6 +82,7 @@ public abstract class MentalIllness : MonoBehaviour
             CurrentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
         }
     }
+
     /// <summary>
     /// Prida symptom hracovi, pokud ho uz nema
     /// </summary>

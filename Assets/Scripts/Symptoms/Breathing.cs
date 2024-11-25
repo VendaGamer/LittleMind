@@ -4,7 +4,6 @@ using UnityEngine.Serialization;
 
 public class Breathing : Symptom
 {
-    public override bool HasSelfManagedFadeOutAndFadeIn { get; protected set; } = true;
     [SerializeField] private AudioClip breatheIn;
     [SerializeField] private AudioClip breatheOut;
     [SerializeField] private AudioClip heavyBreatheIn;
@@ -23,6 +22,7 @@ public class Breathing : Symptom
     private void Start()
     {
         playerAudioSource = GetComponentInChildren<AudioSource>();
+        minimalIntensity = .1f;
     }
 
    
