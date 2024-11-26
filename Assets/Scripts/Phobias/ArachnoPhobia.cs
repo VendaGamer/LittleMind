@@ -15,15 +15,7 @@ public class ArachnoPhobia : MentalIllness
 
     private void FixedUpdate()
     {
-        if (CurrentAnxietyLevel > 0f)
-        {
-            UpdateSymptoms();
-        }
-        else
-        {
-            RecoverFromSymptoms();
-        }
-        CurrentAnxietyLevel = 0f;
+        HandleAnxiety();
     }
     public void PendNewAnxietyLevelBasedOnDistance(float distance)
     {

@@ -12,12 +12,10 @@ public class Trembling : Symptom
     {
         //Nejspis optimalnejsi nez nechat na true, protoze trembling nepouziva Update
         enabled = false;
-        minimalIntensity = 0.1f;
     }
     public override void StopSymptom()
     {
         IsActive = false;
-        Intensity = 0f;
         currentShake.StartFadeOut(baseFadeOutTime * Intensity);
         currentShake = null;
     }

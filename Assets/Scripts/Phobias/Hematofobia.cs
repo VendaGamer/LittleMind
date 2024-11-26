@@ -1,43 +1,38 @@
-using System;
 using UnityEngine;
 
-public class Hematofobia : MentalIllness
+public class Hematophobia : MentalIllness
 {
+    [SerializeField] private float maxRayDistance = 5f;
+    [SerializeField] private LayerMask bloodMask;
+
     private Camera playerCamera;
-    [SerializeField]
-    private float maxRayDist = 5f;
-    [SerializeField]
-    private LayerMask bloodMask;
+
     private void Start()
     {
-        // Dame hraci vsechny symptomy
+        // Assign symptoms to the player
         RequireSymptom<VisualDistortion>();
         RequireSymptom<Trembling>();
         RequireSymptom<HeartBeat>();
         RequireSymptom<Breathing>();
+
         playerCamera = GetComponentInChildren<Camera>();
     }
 
     private void FixedUpdate()
     {
         CheckIfLookingAtBlood();
-        if (CurrentAnxietyLevel > 0f)
-        {
-            UpdateSymptoms();
-        }
-        else
-        {
-            RecoverFromSymptoms();
-        }
-        CurrentAnxietyLevel = 0f;
+        HandleAnxiety();
     }
 
+    /// <summary>
+    /// Casts a ray to check if the player is looking at blood and updates anxiety accordingly.
+    /// </summary>
     private void CheckIfLookingAtBlood()
     {
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(ray, out RaycastHit hit, maxRayDist,bloodMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance, bloodMask, QueryTriggerInteraction.Collide))
         {
-            PendNewAnxietyLevel(0.75f);
+            PendNewAnxietyLevel(1f);
         }
     }
 }

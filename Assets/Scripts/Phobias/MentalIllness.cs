@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class MentalIllness : MonoBehaviour
@@ -59,6 +60,20 @@ public abstract class MentalIllness : MonoBehaviour
 
         fadeRoutine = null;
     }
+    
+    protected virtual void HandleAnxiety()
+    {
+        if (CurrentAnxietyLevel > 0f)
+        {
+            UpdateSymptoms();
+        }
+        else
+        {
+            RecoverFromSymptoms();
+        }
+        // Reset anxiety for the next calculation cycle
+        CurrentAnxietyLevel = 0f;
+    }
 
     protected void StopAllSymptoms()
     {
@@ -77,7 +92,7 @@ public abstract class MentalIllness : MonoBehaviour
     /// <param name="intensity"></param>
     public void PendNewAnxietyLevel(float intensity)
     {
-        var calculatedAnxiety = intensity * anxietyBuildUpAndRecoveryRate;
+        var calculatedAnxiety = intensity * anxietyBuildUpAndRecoveryRate + intensity;
         if (calculatedAnxiety > 0f)
         {
             var higher = Mathf.Max(CurrentAnxietyLevel, calculatedAnxiety);
@@ -91,10 +106,6 @@ public abstract class MentalIllness : MonoBehaviour
     /// <typeparam name="T"></typeparam>
     protected void RequireSymptom<T>() where T : Symptom
     {
-        if (!GetComponent<T>())
-        {
-            gameObject.AddComponent<T>();
-        }
-        Symptoms.Add(GetComponent<T>()); //pridame do listu symptomu
+        Symptoms.Add(gameObject.GetOrAddComponent<T>());
     }
 }
