@@ -665,7 +665,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 40516e5f9c8316744a562cb49b1697b9, type: 2}
+      objectReference: {fileID: 2100000, guid: 4f54c27e6b939544bb067dd326029ad7, type: 2}
     - target: {fileID: 4486487771231862570, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1006,7 +1006,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAnxietyLevel: 1
-  anxietyBuildupRate: 1
+  anxietyBuildUpAndRecoveryRate: 0.1
+  fadeDuration: 5
   triggerDistance: 5
 --- !u!1 &3618782976301393543
 GameObject:
@@ -1036,7 +1037,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73445fd514e28be439c0dcab30368b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minimalIntensity: 0.5
   maxDistortionAmount: 0.5
 --- !u!114 &5275008820491883697
 MonoBehaviour:
@@ -1352,13 +1352,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3c2bdd0f3097245a72619c6e5daca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minimalIntensity: 0.5
   heartBeatLub: {fileID: 8300000, guid: bd15bf6b6a7d0a0448eee4c1d9b8d630, type: 3}
   heartBeatDub: {fileID: 8300000, guid: d25afaab719d401429f7ec0140a90ad7, type: 3}
   minHeartRate: 60
   maxHeartRate: 180
   lubDubGap: 0.15
-  fadeDuration: 10
   heartRateBuildupSpeed: 7
   heartbeatVolumeCurve:
     serializedVersion: 2

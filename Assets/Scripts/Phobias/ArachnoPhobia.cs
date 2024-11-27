@@ -17,6 +17,10 @@ public class ArachnoPhobia : MentalIllness
     {
         HandleAnxiety();
     }
+    /// <summary>
+    /// Vypocita, jak moc by se mel hrac bat na zaklade vzdalenosti
+    /// </summary>
+    /// <param name="distance"></param>
     public void PendNewAnxietyLevelBasedOnDistance(float distance)
     {
         if (distance < maxAnxietyLevel) return;

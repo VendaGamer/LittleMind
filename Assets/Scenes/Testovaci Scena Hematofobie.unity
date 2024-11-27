@@ -1084,8 +1084,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAnxietyLevel: 1
   anxietyBuildUpAndRecoveryRate: 0.1
-  fadeDuration: 5
-  maxRayDist: 5
+  fadeDuration: 10
+  maxRayDistance: 5
   bloodMask:
     serializedVersion: 2
     m_Bits: 128
