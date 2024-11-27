@@ -4,10 +4,8 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - lightHeartBeating: {fileID: 8300000, guid: a1f31d6bde2a77d46a81d5402ada754a, type: 3}
-  - mediumHeartBeating: {fileID: 8300000, guid: 6ba62b69543a05a4a9805c3cfd449c2d,
-      type: 3}
-  - heavyHeartBeating: {fileID: 8300000, guid: 63cebba515bebad438263bc4405f4d05, type: 3}
+  - heartBeatLub: {fileID: 8300000, guid: bd15bf6b6a7d0a0448eee4c1d9b8d630, type: 3}
+  - heartBeatDub: {fileID: 8300000, guid: d25afaab719d401429f7ec0140a90ad7, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
