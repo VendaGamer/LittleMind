@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class MentalIllness : MonoBehaviour
 {
     [SerializeField] protected float maxAnxietyLevel = 1f;
-    [SerializeField] protected float anxietyBuildUpAndRecoveryRate = 0.1f;
+    [SerializeField] protected float anxietyBuildUpRate = 0.1f;
     [SerializeField] protected float fadeDuration = 5f; // Doba fade-out
     protected readonly List<Symptom> Symptoms = new();
 
@@ -31,7 +32,10 @@ public abstract class MentalIllness : MonoBehaviour
     /// </summary>
     protected virtual void RecoverFromSymptoms()
     {
-        fadeRoutine ??= StartCoroutine(FadeOutSymptoms());
+        if (CurrentAnxietyLevel > 0)
+        {
+            fadeRoutine ??= StartCoroutine(FadeOutSymptoms());
+        }
     }
 
     /// <summary>
@@ -44,7 +48,7 @@ public abstract class MentalIllness : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float fadeProgress = 1f - (elapsed / fadeDuration);
-
+            CurrentAnxietyLevel = Mathf.Max(CurrentAnxietyLevel - (anxietyBuildUpRate * Time.fixedDeltaTime), 0f);
             foreach (var symptom in Symptoms)
             {
                 if (symptom.IsActive)
@@ -92,7 +96,7 @@ public abstract class MentalIllness : MonoBehaviour
     /// <param name="intensity"></param>
     public void PendNewAnxietyLevel(float intensity)
     {
-        var calculatedAnxiety = intensity * anxietyBuildUpAndRecoveryRate + intensity;
+        var calculatedAnxiety = intensity * anxietyBuildUpRate + intensity;
         if (calculatedAnxiety > 0f)
         {
             var higher = Mathf.Max(CurrentAnxietyLevel, calculatedAnxiety);

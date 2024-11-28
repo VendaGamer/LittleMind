@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class FPSController : PickController
 {
@@ -33,7 +32,7 @@ public class FPSController : PickController
     protected override void Start()
     {
         base.Start();
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponentInParent<Rigidbody>();
         // Lock and hide the cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

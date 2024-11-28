@@ -164,7 +164,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8476556591668560585}
   - component: {fileID: 8964724812988171379}
-  - component: {fileID: 460911416379285364}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -215,28 +214,6 @@ Rigidbody:
   m_Interpolate: 2
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!114 &460911416379285364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6185675373264984707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18528fa194f551f48a9f238f72b3f3e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickupPoint: {fileID: 3207812161120748922}
-  playerCamera: {fileID: 3539996310292855768}
-  rayDistance: 3
-  pickupLerpDuration: 1
-  moveSpeed: 5
-  sprintSpeed: 7
-  mouseSensitivity: 2
-  maxLookUpAngle: 90
-  maxLookDownAngle: -90
-  playerCameraHolder: {fileID: 2182245987986286316}
 --- !u!1 &6821856749709082757
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +226,7 @@ GameObject:
   - component: {fileID: 3336930977395823279}
   - component: {fileID: 3837785815257227122}
   - component: {fileID: 7043497485429928135}
+  - component: {fileID: 2724606609940031711}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -349,6 +327,28 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2724606609940031711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6821856749709082757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18528fa194f551f48a9f238f72b3f3e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupPoint: {fileID: 3207812161120748922}
+  playerCamera: {fileID: 3539996310292855768}
+  rayDistance: 3
+  pickupLerpDuration: 1
+  moveSpeed: 5
+  sprintSpeed: 7
+  mouseSensitivity: 2
+  maxLookUpAngle: 90
+  maxLookDownAngle: -90
+  playerCameraHolder: {fileID: 2182245987986286316}
 --- !u!1 &7384967976506936774
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-public class Diary
+public class Diary : MonoBehaviour
 {
     [Serializable]
     public class DiaryEntry
@@ -24,21 +25,11 @@ public class Diary
         entries.Add(newEntry);
     }
     
-    public bool HasMemoryNote(string memoryId)
+    public bool HasMemoryNote(DiaryEntry entry)
     {
         return entries.Exists(entry => entry.memoryId == memoryId && entry.isDiscovered);
     }
     
-    public void DisplayDiary()
-    {
-        foreach (DiaryEntry entry in entries)
-        {
-            if (entry.isDiscovered)
-            {
-                Debug.Log($"Memory ID: {entry.memoryId}\nEntry: {entry.entryText}");
-            }
-        }
-    }
     /// <summary>
     /// Udela zapis do deniku
     /// </summary>

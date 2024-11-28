@@ -15,7 +15,8 @@ public abstract class PickController : MonoBehaviour
 
     protected virtual void Start()
     {
-        playerCamera = GetComponentInChildren<Camera>();
+        if(!playerCamera)
+            playerCamera = GetComponentInChildren<Camera>();
     }
     private void PickUpObject(PickableObject obj)
     {

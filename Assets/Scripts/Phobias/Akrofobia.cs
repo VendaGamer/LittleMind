@@ -28,6 +28,6 @@ public class Akrofobia : MentalIllness
     public void SetAnxietyBasedOnDistance(float distance)
     {
         if(distance > maxCheckDistance)return;
-        PendNewAnxietyLevel(Mathf.Lerp(1,0,distance / maxCheckDistance));
+            PendNewAnxietyLevel(Mathf.Lerp(1,0,distance / maxCheckDistance));
     }
 }

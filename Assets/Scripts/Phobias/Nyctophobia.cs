@@ -22,7 +22,7 @@ public class Nyctophobia : MentalIllness
         else
         {
             CurrentAnxietyLevel = Mathf.Min(
-                CurrentAnxietyLevel + (anxietyBuildUpAndRecoveryRate * Time.fixedDeltaTime),
+                CurrentAnxietyLevel + (anxietyBuildUpRate * Time.fixedDeltaTime),
                 maxAnxietyLevel
             );
             
@@ -37,8 +37,6 @@ public class Nyctophobia : MentalIllness
     /// </summary>
     private void RecoverAnxietyLevel()
     {
-        CurrentAnxietyLevel = Mathf.Max(CurrentAnxietyLevel - (anxietyBuildUpAndRecoveryRate * Time.fixedDeltaTime), 0f);
-
         if (CurrentAnxietyLevel <= 0f)
         {
             RecoverFromSymptoms();

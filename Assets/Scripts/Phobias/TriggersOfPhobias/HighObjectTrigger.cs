@@ -4,12 +4,12 @@ public class HighObjectTrigger : MonoBehaviour
 {
     private void OnCollisionStay(Collision other)
     {
-        if (other.gameObject.TryGetComponent<Akrofobia>(out var akrofobia))
+        if (other.collider.TryGetComponent<Akrofobia>(out var akrofobia))
         {
             Vector3 playerPosition = other.transform.position;
             var dist = GetNearestEdgeDistance(playerPosition);
             akrofobia.SetAnxietyBasedOnDistance(dist);
-            Debug.Log("distance: "+dist);
+            Debug.Log("Distance: "+dist);
         }
     }
 
