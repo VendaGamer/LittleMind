@@ -730,30 +730,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7532961621002284690, guid: 9a5e2c32006d8d9488923fc2bb97c18e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1501582987}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a5e2c32006d8d9488923fc2bb97c18e, type: 3}
---- !u!1 &1501582986 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7532961621002284690, guid: 9a5e2c32006d8d9488923fc2bb97c18e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1501582985}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1501582987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1501582986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b3dabce7ba76041bda82f166e9040b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1515867437
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -824,11 +802,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6821856749709082757, guid: b1624e55951882d48ae83bdcbf1c43f3,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1515867440}
+      addedObject: {fileID: 1515867446}
     - targetCorrespondingSourceObject: {fileID: 6821856749709082757, guid: b1624e55951882d48ae83bdcbf1c43f3,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1515867439}
+      addedObject: {fileID: 1515867447}
+    - targetCorrespondingSourceObject: {fileID: 6821856749709082757, guid: b1624e55951882d48ae83bdcbf1c43f3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1515867448}
   m_SourcePrefab: {fileID: 100100000, guid: b1624e55951882d48ae83bdcbf1c43f3, type: 3}
 --- !u!1 &1515867438 stripped
 GameObject:
@@ -836,7 +818,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1515867437}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1515867439
+--- !u!114 &1515867446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -849,9 +831,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAnxietyLevel: 1
-  anxietyBuildUpAndRecoveryRate: 0.1
+  anxietyBuildUpRate: 0.1
   fadeDuration: 5
---- !u!114 &1515867440
+  Symptoms:
+  - {fileID: 1515867447}
+  - {fileID: 1515867448}
+--- !u!114 &1515867447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515867438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 089ef9dc68e87ab448c39ee31cd8c2eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseMagnitude: 2
+  baseRoughness: 5
+  baseFadeInTime: 3
+  baseFadeOutTime: 5
+  baseRotationInfluence: {x: 0.7, y: 0.7, z: 0.7}
+--- !u!114 &1515867448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

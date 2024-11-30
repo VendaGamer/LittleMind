@@ -12,15 +12,6 @@ public class Akrofobia : MentalIllness
     private Coroutine eyesClosingRoutine;
     private Coroutine eyesOpeningRoutine;
 
-    private void Start()
-    {
-        RequireSymptom<VisualDistortion>();
-        RequireSymptom<Trembling>();
-        RequireSymptom<HeartBeat>();
-        RequireSymptom<Breathing>();
-        eyeClose.enabled = false; // Ensure overlay is initially hidden
-    }
-
     private void FixedUpdate()
     {
         if (CurrentAnxietyLevel > maxAnxietyLevel - 0.1f)

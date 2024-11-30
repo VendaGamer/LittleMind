@@ -9,12 +9,6 @@ public class Hematophobia : MentalIllness
 
     private void Start()
     {
-        // Assign symptoms to the player
-        RequireSymptom<VisualDistortion>();
-        RequireSymptom<Trembling>();
-        RequireSymptom<HeartBeat>();
-        RequireSymptom<Breathing>();
-
         playerCamera = GetComponentInChildren<Camera>();
     }
 

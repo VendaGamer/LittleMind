@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public abstract class Symptom : MonoBehaviour
 {
     public float Intensity { get; protected set; } = 0f;

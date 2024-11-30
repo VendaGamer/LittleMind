@@ -4,15 +4,6 @@ public class ArachnoPhobia : MentalIllness
 {
     [SerializeField] protected float triggerDistance = 7.5f;
     public float TriggerDistance => triggerDistance;
-    private void Start()
-    {
-        // Dame hraci vsechny symptomy
-        RequireSymptom<VisualDistortion>();
-        RequireSymptom<Trembling>();
-        RequireSymptom<HeartBeat>();
-        RequireSymptom<Breathing>();
-    }
-
     private void FixedUpdate()
     {
         HandleAnxiety();

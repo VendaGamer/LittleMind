@@ -1,15 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public abstract class MentalIllness : MonoBehaviour
 {
     [SerializeField] protected float maxAnxietyLevel = 1f;
     [SerializeField] protected float anxietyBuildUpRate = 0.1f;
     [SerializeField] protected float fadeDuration = 5f; // Doba fade-out
-    protected readonly List<Symptom> Symptoms = new();
+    [SerializeField] protected Symptom[] Symptoms;
 
     protected float CurrentAnxietyLevel = 0f;
     protected Coroutine fadeRoutine;
@@ -43,12 +40,15 @@ public abstract class MentalIllness : MonoBehaviour
     /// </summary>
     protected virtual IEnumerator FadeOutSymptoms()
     {
+        float startAnxietyLevel = CurrentAnxietyLevel;
         float elapsed = 0f;
+
         while (elapsed < fadeDuration)
         {
             elapsed += Time.deltaTime;
-            float fadeProgress = 1f - (elapsed / fadeDuration);
-            CurrentAnxietyLevel = Mathf.Max(CurrentAnxietyLevel - (anxietyBuildUpRate * Time.fixedDeltaTime), 0f);
+            float t = elapsed / fadeDuration;
+            CurrentAnxietyLevel = Mathf.Lerp(startAnxietyLevel, 0f, t);
+
             foreach (var symptom in Symptoms)
             {
                 if (symptom.IsActive)
@@ -60,6 +60,8 @@ public abstract class MentalIllness : MonoBehaviour
             yield return null;
         }
         
+        CurrentAnxietyLevel = 0f;
+    
         StopAllSymptoms();
 
         fadeRoutine = null;
@@ -102,14 +104,5 @@ public abstract class MentalIllness : MonoBehaviour
             var higher = Mathf.Max(CurrentAnxietyLevel, calculatedAnxiety);
             CurrentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
         }
-    }
-
-    /// <summary>
-    /// Prida symptom hracovi, pokud ho uz nema
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    protected void RequireSymptom<T>() where T : Symptom
-    {
-        Symptoms.Add(gameObject.GetOrAddComponent<T>());
     }
 }
