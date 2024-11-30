@@ -9,7 +9,7 @@ public abstract class MentalIllness : MonoBehaviour
     [SerializeField] protected Symptom[] Symptoms;
 
     protected float CurrentAnxietyLevel = 0f;
-    protected Coroutine fadeRoutine;
+    private Coroutine fadeRoutine;
 
     public float AnxietyLevel => CurrentAnxietyLevel;
 
@@ -98,10 +98,9 @@ public abstract class MentalIllness : MonoBehaviour
     /// <param name="intensity"></param>
     public void PendNewAnxietyLevel(float intensity)
     {
-        var calculatedAnxiety = intensity * anxietyBuildUpRate + intensity;
-        if (calculatedAnxiety > 0f)
+        if (intensity > 0f)
         {
-            var higher = Mathf.Max(CurrentAnxietyLevel, calculatedAnxiety);
+            var higher = Mathf.Max(CurrentAnxietyLevel, intensity);
             CurrentAnxietyLevel = Mathf.Min(maxAnxietyLevel, higher);
         }
     }

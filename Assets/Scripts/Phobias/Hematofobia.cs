@@ -1,8 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class Hematophobia : MentalIllness
 {
-    [SerializeField] private float maxRayDistance = 5f;
+    [SerializeField] private float maxRayDistance = 10f;
     [SerializeField] private LayerMask bloodMask;
 
     private Camera playerCamera;
@@ -10,23 +11,27 @@ public class Hematophobia : MentalIllness
     private void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
+        StartCoroutine(CheckIfLookingAtBlood());
     }
-
     private void FixedUpdate()
     {
-        CheckIfLookingAtBlood();
         HandleAnxiety();
     }
 
     /// <summary>
-    /// Casts a ray to check if the player is looking at blood and updates anxiety accordingly.
+    /// Zkontroluje zda se hrace nekouka na krev
     /// </summary>
-    private void CheckIfLookingAtBlood()
+    private IEnumerator CheckIfLookingAtBlood()
     {
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance, bloodMask, QueryTriggerInteraction.Collide))
+        while (true)
         {
-            PendNewAnxietyLevel(1f);
+            Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance,
+                bloodMask, QueryTriggerInteraction.Collide))
+            {
+                PendNewAnxietyLevel(1f); 
+            }
+            yield return new WaitForFixedUpdate();
         }
     }
 }

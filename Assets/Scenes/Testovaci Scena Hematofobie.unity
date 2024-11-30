@@ -479,6 +479,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1083113134}
+    - targetCorrespondingSourceObject: {fileID: 6821856749709082757, guid: b1624e55951882d48ae83bdcbf1c43f3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1083113141}
   m_SourcePrefab: {fileID: 100100000, guid: b1624e55951882d48ae83bdcbf1c43f3, type: 3}
 --- !u!1 &1083113126 stripped
 GameObject:
@@ -543,10 +547,30 @@ MonoBehaviour:
   maxAnxietyLevel: 1
   anxietyBuildUpRate: 0.1
   fadeDuration: 5
+  Symptoms:
+  - {fileID: 1083113134}
+  - {fileID: 1083113141}
   maxRayDistance: 5
   bloodMask:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &1083113141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083113126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 089ef9dc68e87ab448c39ee31cd8c2eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseMagnitude: 2
+  baseRoughness: 5
+  baseFadeInTime: 3
+  baseFadeOutTime: 5
+  baseRotationInfluence: {x: 0.7, y: 0.7, z: 0.7}
 --- !u!1001 &1198844218
 PrefabInstance:
   m_ObjectHideFlags: 0
