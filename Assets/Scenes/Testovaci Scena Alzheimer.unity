@@ -187,6 +187,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6231675384540685157, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
+        type: 3}
+      propertyPath: displayName
+      value: Bedna
+      objectReference: {fileID: 0}
     - target: {fileID: 9079893747503162935, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
         type: 3}
       propertyPath: m_Name
@@ -202,12 +207,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e, type: 3}
---- !u!1 &18802580 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9079893747503162935, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
-    type: 3}
-  m_PrefabInstance: {fileID: 18802579}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &360292254
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -837,10 +836,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d42ee6634bd345059e3331aa1a71d2ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  memoryId: Balik
-  memoryElements:
-  - {fileID: 1680396646}
-  - {fileID: 18802580}
+  entry:
+    entryLabel: 
+    entryText: 
+    isDiscovered: 0
 --- !u!1001 &1680396645
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -924,12 +923,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e, type: 3}
---- !u!1 &1680396646 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9079893747503162935, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1680396645}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1740272607
 GameObject:
   m_ObjectHideFlags: 0

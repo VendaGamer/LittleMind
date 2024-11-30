@@ -7,7 +7,7 @@ public class Alzheimer : MonoBehaviour
 
     private void TryUnlockMemory(MemoryTrigger trigger)
     {
-        if (playerDiary.HasMemoryNote(trigger.memoryId))
+        if (trigger.entry.isDiscovered)
         {
             trigger.ActivateMemoryElements();
         }
@@ -19,15 +19,5 @@ public class Alzheimer : MonoBehaviour
         {
             playerDiary.gameObject.SetActive(!playerDiary.gameObject.activeSelf);
         }
-    }
-
-    public void unlockMemory()
-    {
-        playerDiary.UnlockMemory("Balik");
-    }
-
-    public void MakeNotesIntoJurnal()
-    {
-        
     }
 }

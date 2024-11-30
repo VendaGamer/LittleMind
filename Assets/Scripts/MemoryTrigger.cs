@@ -1,12 +1,10 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MemoryTrigger : MonoBehaviour
 {
-    public string memoryId;
-    [SerializeField]
-    public GameObject[] memoryElements;
+    [SerializeField] public GameObject[] memoryElements { get; }
+
+    [SerializeField] public Diary.DiaryEntry entry;
 
     public void ActivateMemoryElements()
     {
@@ -20,10 +18,7 @@ public class MemoryTrigger : MonoBehaviour
     {
         if (other.collider.TryGetComponent<Alzheimer>(out var alzh))
         {
-            if(Input.GetButtonDown("Remember"))
-            {
-                alzh.
-            }
+            
         }
     }
 }

@@ -73,6 +73,7 @@ public class FPSController : PickController
         {
             toggleSprint();
         }
+        
         float moveHorizontal = Input.GetAxisRaw("Horizontal");
         float moveVertical = Input.GetAxisRaw("Vertical");
 
