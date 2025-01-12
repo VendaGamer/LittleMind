@@ -1,0 +1,31 @@
+.context-menu {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    min-width: 200px;
+}
+
+.menu-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.menu-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    margin: 2px 0;
+}
+
+.key-hint {
+    color: rgb(200, 200, 200);
+    margin-left: 10px;
+    -unity-font-style: bold;
+}
+
+.action-text {
+    color: white;
+    -unity-font-style: normal;
+}

@@ -2,20 +2,9 @@ using UnityEngine;
 
 public class ArachnoPhobia : MentalIllness
 {
-    [SerializeField] protected float triggerDistance = 7.5f;
-    public float TriggerDistance => triggerDistance;
     private void FixedUpdate()
     {
         HandleAnxiety();
     }
-    /// <summary>
-    /// Vypocita, jak moc by se mel hrac bat na zaklade vzdalenosti
-    /// </summary>
-    /// <param name="distance"></param>
-    public void PendNewAnxietyLevelBasedOnDistance(float distance)
-    {
-        if (distance < maxAnxietyLevel) return;
-        float intensity = 1f - ((distance / triggerDistance) /2);
-        PendNewAnxietyLevel(intensity);
-    }
+    
 }

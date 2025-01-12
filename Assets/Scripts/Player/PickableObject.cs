@@ -1,32 +1,26 @@
 using System.Collections;
 using UnityEngine;
-
-public class PickableObject : MonoBehaviour
+using UnityEngine.InputSystem;
+public class PickableObject : InteractableObject
 {
-    [SerializeField]
-    private string displayName;
-    [SerializeField]
-    private string description;
-    public string DisplayName => displayName;
-    public string Description => description;
-    private Color originalColor;
+    protected bool IsPicked = false;
+    [SerializeField] private InputActionReference pickupAction;
+    [SerializeField] private InputActionReference dropAction;
+
     private Rigidbody rb;
     private Collider col;
-    private Renderer ren;
-    private void Start()
+    protected virtual void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        col = GetComponentInChildren<Collider>();
-        ren = GetComponentInChildren<Renderer>();
-        originalColor = ren.material.color;
+        rb = GetComponentInParent<Rigidbody>();
+        col = GetComponent<Collider>();
     }
     public void DropObject()
     {
         StopAllCoroutines();
         rb.isKinematic = false;
         col.isTrigger = false;
-        ren.material.color = originalColor;
         transform.SetParent(null);
+        OnDropped();
     }
     public void PickObject(Transform parent,float pickDur)
     {
@@ -54,6 +48,40 @@ public class PickableObject : MonoBehaviour
             );
             yield return null;
         }
-        ren.material.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0.70f);
+        
+        transform.SetLocalPositionAndRotation(
+            endPos,
+            endRot
+        );
+        OnPicked();
+    }
+
+
+    protected virtual void OnPicked() { }
+    protected virtual void OnDropped() { }
+    public override HintData[] GetContextualHints()
+    {
+        if (IsPicked)
+        {
+            return new HintData[1]
+            {
+                new HintData("Drop object", null,"Q",dropAction)
+            };
+        }
+        else
+        {
+            return new HintData[1]
+            {
+                new HintData("Pick up object", null,"E",pickupAction)
+            };
+        }
+    }
+
+    public override void Interact(InputActionReference actionReference)
+    {
+        if (IsPicked)
+        {
+            DropObject();
+        }
     }
 }

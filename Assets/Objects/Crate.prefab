@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3552814142961141708}
   - component: {fileID: 444414078652065941}
   - component: {fileID: 5977813893717753378}
+  - component: {fileID: 1660059828717523467}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -59,10 +60,13 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4f54c27e6b939544bb067dd326029ad7, type: 2}
+  - {fileID: 2100000, guid: 139e2b0648378f8439a57441b6cfdc0e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,6 +109,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1660059828717523467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7574206359477631303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050a2fc53ab75f149a17be02cac541aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: Bedna
+  pickupAction: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    type: 3}
+  dropAction: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    type: 3}
 --- !u!1 &9079893747503162935
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +135,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4486487771231862570}
-  - component: {fileID: 6231675384540685157}
   - component: {fileID: 1206595708968789297}
   m_Layer: 0
   m_Name: Crate
@@ -139,20 +159,6 @@ Transform:
   - {fileID: 9216945894970640973}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6231675384540685157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9079893747503162935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 050a2fc53ab75f149a17be02cac541aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayName: Bedna
-  description: "D\u0159ev\u011Bn\xE1 krychle"
 --- !u!54 &1206595708968789297
 Rigidbody:
   m_ObjectHideFlags: 0

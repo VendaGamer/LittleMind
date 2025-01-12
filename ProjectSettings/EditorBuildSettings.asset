@@ -8,4 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Testovaci Scena Arachnofobia.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: db72f14f598aa484c92ea5f4815e4893,
+      type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}
+  m_UseUCBPForAssetBundles: 0

@@ -6,7 +6,7 @@ public abstract class MentalIllness : MonoBehaviour
     [SerializeField] protected float maxAnxietyLevel = 1f;
     [SerializeField] protected float anxietyBuildUpRate = 0.1f;
     [SerializeField] protected float fadeDuration = 5f; // Doba fade-out
-    [SerializeField] protected Symptom[] Symptoms;
+    protected Symptom[] Symptoms;
 
     protected float CurrentAnxietyLevel = 0f;
     private Coroutine fadeRoutine;
@@ -16,6 +16,12 @@ public abstract class MentalIllness : MonoBehaviour
     /// <summary>
     /// Logika pro aktivitu danych symptomu, ve velke vetsine neovverridnu
     /// </summary>
+    ///
+
+    protected virtual void Start()
+    {
+        Symptoms = GetComponentsInChildren<Symptom>();
+    }
     protected virtual void UpdateSymptoms()
     {
         foreach (var symptom in Symptoms)
