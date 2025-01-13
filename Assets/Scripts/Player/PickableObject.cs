@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PickableObject : InteractableObject
+
+public class PickableObject : MonoBehaviour, IInteractable
 {
     protected bool IsPicked = false;
     [SerializeField] private InputActionReference pickupAction;
@@ -9,6 +10,9 @@ public class PickableObject : InteractableObject
 
     private Rigidbody rb;
     private Collider col;
+    
+    public string InteractText { get; }
+    public Interaction[] Interactions { get; }
     protected virtual void Start()
     {
         rb = GetComponentInParent<Rigidbody>();
@@ -59,29 +63,22 @@ public class PickableObject : InteractableObject
 
     protected virtual void OnPicked() { }
     protected virtual void OnDropped() { }
-    public override HintData[] GetContextualHints()
+    
+    public bool Interact(PlayerController interactor, InputAction invokedAction)
     {
-        if (IsPicked)
-        {
-            return new HintData[1]
-            {
-                new HintData("Drop object", null,"Q",dropAction)
-            };
-        }
-        else
-        {
-            return new HintData[1]
-            {
-                new HintData("Pick up object", null,"E",pickupAction)
-            };
-        }
-    }
-
-    public override void Interact(InputActionReference actionReference)
-    {
-        if (IsPicked)
+        if (IsPicked && invokedAction == pickupAction.action)
         {
             DropObject();
+            return true;
         }
+        
+        if (invokedAction == dropAction.action)
+        {
+            PickObject(interactor.PickupPoint,interactor.PickupLerpDuration);
+            return true;
+        }
+
+        return false;
     }
+    
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,18 +10,20 @@ public class PlayerController : MonoBehaviour
     [Header("Pickup Settings")]
     [SerializeField]
     private Transform pickupPoint;
+    public Transform PickupPoint=> pickupPoint;
     [SerializeField]
     protected Camera playerCamera;
     [SerializeField]
     private float rayDistance = 3f;
     [SerializeField]
     private float pickupLerpDuration=1f;
+    public float PickupLerpDuration => pickupLerpDuration;
     
     
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintSpeed = 7f;
-
+    
 
     [Header("Look Settings")]
     [SerializeField] private float maxLookUpAngle = 90f;
@@ -30,9 +33,12 @@ public class PlayerController : MonoBehaviour
     
     [Header("Interaction Settings")]
     [SerializeField] private HintManager hintManager;
-    [SerializeField] private List<HintData> globalActions;
+    [SerializeField] private Interaction[] globalInteractionsGameplay;
 
-    private InteractableObject currentInteractable;
+    [CanBeNull]private IInteractable interactableLookingAt;
+    [CanBeNull]private IInteractable interactableHolding;
+    public static event Action<Interaction[]> GlobalInteractionsChanged;
+    public static event Action<Interaction[]> ExclusiveInteractionsChanged;
     
     
     private Controls controls;
@@ -77,10 +83,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrop(InputAction.CallbackContext obj)
     {
-        if (holding)
-        {
-            DropObject();
-        }
+        if (!holding) return;
+        
+        holding.Interact(this, obj.action);
+        holding = null;
     }
 
     private void OnSprint(InputAction.CallbackContext obj)
@@ -102,12 +108,6 @@ public class PlayerController : MonoBehaviour
         holding = lookingAt;
         holding.PickObject(pickupPoint, pickupLerpDuration);
     }
-    private void DropObject()
-    {
-        if (!holding) return;
-        holding.DropObject();
-        holding = null;
-    }
 
     private void Update()
     {
@@ -122,40 +122,35 @@ public class PlayerController : MonoBehaviour
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
         {
-            if (hit.collider.TryGetComponent<InteractableObject>(out var interactable))
+            if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                if (currentInteractable != interactable)
+                if (interactableLookingAt != interactable)
                 {
-                    if (currentInteractable)
+                    if (interactableLookingAt == null)
                     {
-                        hintManager.RefreshAllHints(); // Clear previous hints
+                        hintManager.RefreshAllHints();
                     }
 
-                    currentInteractable = interactable;
-
-                    UpdateHints(currentInteractable.GetContextualHints());
+                    interactableLookingAt = interactable;
+                    SwitchExclusiveInteractions(interactable.Interactions);
                 }
             }
         }
-        else if (currentInteractable)
+        else if (interactableLookingAt == null)
         {
-            currentInteractable = null;
+            interactableLookingAt = null;
             hintManager.RefreshAllHints();
         }
     }
-    
-    private void UpdateHints(HintData[] hints)
-    {
-        hintManager.RefreshAllHints();
-        foreach (var hint in hints)
-        {
-            hintManager.AddHint(hint);
-        }
 
-        foreach (var globalHint in globalActions)
-        {
-            hintManager.AddHint(globalHint);
-        }
+    private void SwitchGlobalInteractions(Interaction[] newGlobalInteractions)
+    {
+        GlobalInteractionsChanged?.Invoke(newGlobalInteractions);
+    }
+
+    private void SwitchExclusiveInteractions(Interaction[] newExclusiveInteractions)
+    {
+        ExclusiveInteractionsChanged?.Invoke(newExclusiveInteractions);
     }
     
     private void HandleMovement()

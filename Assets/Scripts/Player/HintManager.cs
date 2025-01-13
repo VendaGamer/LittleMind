@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,102 +6,99 @@ using UnityEngine.UIElements;
 
 public class HintManager : MonoBehaviour
 {
-    private UIDocument document;
+    public static HintManager Instance { get; private set; }
+
+    [SerializeField] private UIDocument contextMenuDocument;
     private VisualElement menuContainer;
+    private Dictionary<Interaction, VisualElement> activeHints = new Dictionary<Interaction, VisualElement>();
+    private Interaction[] currentGlobalInteractions;
 
-    // Store active hints in a HashSet for efficient lookups
-    private HashSet<string> activeHintKeys = new HashSet<string>();
-    private Dictionary<string, VisualElement> hintElements = new Dictionary<string, VisualElement>();
+    private void Awake()
+    {
+        Instance = this;
 
-    private InputDevice currentDevice;
+        InitializeUI();
+    }
 
     private void OnEnable()
     {
-        document = GetComponent<UIDocument>();
-        menuContainer = document.rootVisualElement.Q("menu-container");
-
-        InputSystem.onDeviceChange += OnDeviceChange;
-        UpdateCurrentDevice();
+        PlayerController.GlobalInteractionsChanged += OnGlobalHintsChanged;
+        PlayerController.ExclusiveInteractionsChanged += OnExclusiveHintsChanged;
     }
 
     private void OnDisable()
     {
-        InputSystem.onDeviceChange -= OnDeviceChange;
+        PlayerController.GlobalInteractionsChanged -= OnGlobalHintsChanged;
+        PlayerController.ExclusiveInteractionsChanged -= OnExclusiveHintsChanged;
     }
 
-    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    private void InitializeUI()
     {
-        if (change == InputDeviceChange.UsageChanged || change == InputDeviceChange.Added)
+        var root = contextMenuDocument.rootVisualElement;
+        menuContainer = root.Q<VisualElement>("menu-container");
+        menuContainer.style.display = DisplayStyle.None;
+    }
+
+    private void OnGlobalHintsChanged(Interaction[] newGlobalInteractions)
+    {
+        
+    }
+    
+    private void OnExclusiveHintsChanged(Interaction[] newExclusiveInteractions)
+    {
+        
+    }
+    
+    public void UpdateInteractionHints(Interaction[] availableInteractions)
+    {
+        if (availableInteractions.Length == 0)
         {
-            UpdateCurrentDevice();
+            menuContainer.style.display = DisplayStyle.None;
+            ClearHints();
+            return;
         }
+
+        menuContainer.style.display = DisplayStyle.Flex;
     }
 
-    private void UpdateCurrentDevice()
+    private VisualElement CreateHintElement(Interaction interaction)
     {
-        currentDevice = InputSystem.GetDevice<Keyboard>() ?? InputSystem.GetDevice<Gamepad>() as InputDevice;
-        RefreshAllHints();
-    }
+        var container = new VisualElement();
+        container.AddToClassList("menu-item");
 
-    public void AddHint(HintData hint)
-    {
-        if (activeHintKeys.Contains(hint.ActionName)) return;
+        var actionText = new Label(interaction.);
+        actionText.AddToClassList("action-text");
 
-        activeHintKeys.Add(hint.ActionName);
-        var hintElement = CreateHintElement(hint);
-        menuContainer.Add(hintElement);
-        hintElements[hint.ActionName] = hintElement;
-    }
+        var inputDisplay = interaction.;
+        var keyHint = new VisualElement();
+        keyHint.AddToClassList("key-hint");
 
-    public void RemoveHint(string actionName)
-    {
-        if (!activeHintKeys.Contains(actionName)) return;
-
-        activeHintKeys.Remove(actionName);
-
-        if (hintElements.TryGetValue(actionName, out var element))
+        // Handle different input display types
+        if (!string.IsNullOrEmpty(inputDisplay.IconPath))
         {
-            menuContainer.Remove(element);
-            hintElements.Remove(actionName);
+            var icon = new Image();
+            icon.sprite = Resources.Load<Sprite>(inputDisplay.IconPath);
+            keyHint.Add(icon);
         }
+        else
+        {
+            var textHint = new Label(inputDisplay.Text);
+            keyHint.Add(textHint);
+        }
+
+        container.Add(actionText);
+        container.Add(keyHint);
+        return container;
+    }
+
+    private void ClearHints()
+    {
+        menuContainer.Clear();
+        activeHints.Clear();
     }
 
     public void RefreshAllHints()
     {
-        foreach (var key in activeHintKeys)
-        {
-            if (hintElements.TryGetValue(key, out var element))
-            {
-                menuContainer.Remove(element);
-            }
-        }
-
-        hintElements.Clear();
-        activeHintKeys.Clear();
-    }
-
-    private VisualElement CreateHintElement(HintData hint)
-    {
-        var hintElement = new VisualElement();
-        hintElement.AddToClassList("menu-item");
-
-        if (currentDevice is Gamepad && hint.Icon)
-        {
-            var icon = new Image { sprite = hint.Icon };
-            icon.AddToClassList("key-hint");
-            hintElement.Add(icon);
-        }
-        else
-        {
-            var keyHint = new Label(hint.KeyHint);
-            keyHint.AddToClassList("key-hint");
-            hintElement.Add(keyHint);
-        }
-
-        var actionText = new Label(hint.ActionName);
-        actionText.AddToClassList("action-text");
-        hintElement.Add(actionText);
-
-        return hintElement;
+        throw new System.NotImplementedException();
     }
 }
