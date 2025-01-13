@@ -1,28 +1,25 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 
+[System.Serializable]
+public class Interaction
+{
+    public string ActionName;
+    public InputActionReference Action;
+}
+public interface IInteractable
+{
+    string InteractText { get; }
+    Interaction[] Interactions { get; }
+    bool Interact(IInteractor interactor, InputAction invokedAction);
+}
+public interface IInteractor
+{
+    Transform PickupPoint { get; }
+    float PickupLerpDuration { get; }
+}
 public enum InputType
 {
     KeyboardMouse,
     Gamepad
-}
-
-public struct InputDisplay
-{
-    public string Text { get; set; }        // Fallback text (e.g., "E", "Q")
-    public string IconPath { get; set; }     // Path to icon asset if needed
-    public InputType InputType { get; set; }
-}
-public interface IInteractable
-{
-    Interaction[] Interactions { get;}
-    bool Interact(PlayerController interactor, InputAction invokedAction);
-    [SerializeField] string InteractText { get; }
-}
-
-public struct Interaction
-{
-    public InputDisplay Hint;
-    public InputAction InputAction;
 }

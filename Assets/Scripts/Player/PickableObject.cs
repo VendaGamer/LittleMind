@@ -64,20 +64,25 @@ public class PickableObject : MonoBehaviour, IInteractable
     protected virtual void OnPicked() { }
     protected virtual void OnDropped() { }
     
-    public bool Interact(PlayerController interactor, InputAction invokedAction)
+    public bool Interact(IInteractor interactor, InputAction invokedAction)
     {
-        if (IsPicked && invokedAction == pickupAction.action)
+        if (IsPicked)
         {
-            DropObject();
-            return true;
+            if (invokedAction.id == dropAction.action.id)
+            {
+                Debug.Log("Dropped Object");
+                DropObject();
+                IsPicked = false;
+                return true;
+            }
         }
-        
-        if (invokedAction == dropAction.action)
+        else if (invokedAction.id == pickupAction.action.id)
         {
+            Debug.Log("Picked Object");
             PickObject(interactor.PickupPoint,interactor.PickupLerpDuration);
+            IsPicked = true;
             return true;
         }
-
         return false;
     }
     

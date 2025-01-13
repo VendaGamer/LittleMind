@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IInteractor
 {
     [Header("Pickup Settings")]
     [SerializeField]
@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float pickupLerpDuration=1f;
     public float PickupLerpDuration => pickupLerpDuration;
-    
-    
+
+
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintSpeed = 7f;
@@ -45,11 +45,9 @@ public class PlayerController : MonoBehaviour
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning = false;
-    private PickableObject holding;
-    private PickableObject lookingAt;
 
 
-    protected virtual void Start()
+    private void Start()
     {
         if(!playerCamera)
             playerCamera = GetComponentInChildren<Camera>();
@@ -60,7 +58,7 @@ public class PlayerController : MonoBehaviour
         currentSpeed = moveSpeed;
     }
 
-    protected virtual void Awake()
+    private void Awake()
     {
         controls = new Controls();
     }
@@ -83,10 +81,10 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrop(InputAction.CallbackContext obj)
     {
-        if (!holding) return;
+        if (interactableHolding == null) return;
         
-        holding.Interact(this, obj.action);
-        holding = null;
+        interactableHolding.Interact(this, obj.action);
+        interactableHolding = null;
     }
 
     private void OnSprint(InputAction.CallbackContext obj)
@@ -97,16 +95,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnUse(InputAction.CallbackContext obj)
     {
-        if (lookingAt)
+        if (interactableLookingAt == null)
         {
-            PickUpObject();
+            return;
         }
-    }
 
-    private void PickUpObject()
-    {
-        holding = lookingAt;
-        holding.PickObject(pickupPoint, pickupLerpDuration);
+        var result = interactableLookingAt.Interact(this, obj.action);
+        if (result)
+        {
+            interactableHolding = interactableLookingAt;
+        }
     }
 
     private void Update()
@@ -118,28 +116,21 @@ public class PlayerController : MonoBehaviour
 
     private void HandleInteraction()
     {
-        // Raycast to check for interactable objects
+        if(interactableLookingAt == interactableHolding)return;
+        
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                if (interactableLookingAt != interactable)
-                {
-                    if (interactableLookingAt == null)
-                    {
-                        hintManager.RefreshAllHints();
-                    }
+                if (interactableLookingAt == interactable) return;
 
-                    interactableLookingAt = interactable;
+                if (interactableLookingAt?.Interactions == interactable.Interactions)
+                {
                     SwitchExclusiveInteractions(interactable.Interactions);
                 }
+                interactableLookingAt = interactable;
             }
-        }
-        else if (interactableLookingAt == null)
-        {
-            interactableLookingAt = null;
-            hintManager.RefreshAllHints();
         }
     }
 
