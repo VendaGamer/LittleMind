@@ -1,0 +1,184 @@
+Device Type: Gamepad
+ path: /Gamepad/dpad , name: dpad , variants: Default , displayName: D-Pad shortDisplayName: 
+ path: /Gamepad/buttonSouth , name: buttonSouth , variants: Default , displayName: Button South shortDisplayName: A
+ path: /Gamepad/buttonWest , name: buttonWest , variants: Default , displayName: Button West shortDisplayName: X
+ path: /Gamepad/buttonNorth , name: buttonNorth , variants: Default , displayName: Button North shortDisplayName: Y
+ path: /Gamepad/buttonEast , name: buttonEast , variants: Default , displayName: Button East shortDisplayName: B
+ path: /Gamepad/leftStickPress , name: leftStickPress , variants: Default , displayName: Left Stick Press shortDisplayName: 
+ path: /Gamepad/rightStickPress , name: rightStickPress , variants: Default , displayName: Right Stick Press shortDisplayName: 
+ path: /Gamepad/leftShoulder , name: leftShoulder , variants: Default , displayName: Left Shoulder shortDisplayName: LB
+ path: /Gamepad/rightShoulder , name: rightShoulder , variants: Default , displayName: Right Shoulder shortDisplayName: RB
+ path: /Gamepad/start , name: start , variants: Default , displayName: Start shortDisplayName: 
+ path: /Gamepad/select , name: select , variants: Default , displayName: Select shortDisplayName: 
+ path: /Gamepad/leftStick , name: leftStick , variants: Default , displayName: Left Stick shortDisplayName: LS
+ path: /Gamepad/rightStick , name: rightStick , variants: Default , displayName: Right Stick shortDisplayName: RS
+ path: /Gamepad/leftTrigger , name: leftTrigger , variants: Default , displayName: Left Trigger shortDisplayName: LT
+ path: /Gamepad/rightTrigger , name: rightTrigger , variants: Default , displayName: Right Trigger shortDisplayName: RT
+ path: /Gamepad/dpad/x , name: x , variants: Default , displayName: D-Pad X shortDisplayName: D-Pad X
+ path: /Gamepad/dpad/y , name: y , variants: Default , displayName: D-Pad Y shortDisplayName: D-Pad Y
+ path: /Gamepad/dpad/up , name: up , variants: Default , displayName: D-Pad Up shortDisplayName: D-Pad Up
+ path: /Gamepad/dpad/down , name: down , variants: Default , displayName: D-Pad Down shortDisplayName: D-Pad Down
+ path: /Gamepad/dpad/left , name: left , variants: Default , displayName: D-Pad Left shortDisplayName: D-Pad Left
+ path: /Gamepad/dpad/right , name: right , variants: Default , displayName: D-Pad Right shortDisplayName: D-Pad Right
+ path: /Gamepad/leftStick/up , name: up , variants: Default , displayName: Left Stick Up shortDisplayName: LS Up
+ path: /Gamepad/leftStick/x , name: x , variants: Default , displayName: Left Stick X shortDisplayName: LS X
+ path: /Gamepad/leftStick/y , name: y , variants: Default , displayName: Left Stick Y shortDisplayName: LS Y
+ path: /Gamepad/leftStick/down , name: down , variants: Default , displayName: Left Stick Down shortDisplayName: LS Down
+ path: /Gamepad/leftStick/left , name: left , variants: Default , displayName: Left Stick Left shortDisplayName: LS Left
+ path: /Gamepad/leftStick/right , name: right , variants: Default , displayName: Left Stick Right shortDisplayName: LS Right
+ path: /Gamepad/rightStick/up , name: up , variants: Default , displayName: Right Stick Up shortDisplayName: RS Up
+ path: /Gamepad/rightStick/x , name: x , variants: Default , displayName: Right Stick X shortDisplayName: RS X
+ path: /Gamepad/rightStick/y , name: y , variants: Default , displayName: Right Stick Y shortDisplayName: RS Y
+ path: /Gamepad/rightStick/down , name: down , variants: Default , displayName: Right Stick Down shortDisplayName: RS Down
+ path: /Gamepad/rightStick/left , name: left , variants: Default , displayName: Right Stick Left shortDisplayName: RS Left
+ path: /Gamepad/rightStick/right , name: right , variants: Default , displayName: Right Stick Right shortDisplayName: RS Right
+
+Device Type: Keyboard
+ path: /Keyboard1/anyKey , name: anyKey , variants:  , displayName: Any Key shortDisplayName: 
+ path: /Keyboard1/escape , name: escape , variants:  , displayName: Escape shortDisplayName: 
+ path: /Keyboard1/space , name: space , variants:  , displayName: Space shortDisplayName: 
+ path: /Keyboard1/enter , name: enter , variants:  , displayName: Enter shortDisplayName: 
+ path: /Keyboard1/tab , name: tab , variants:  , displayName: Tab shortDisplayName: 
+ path: /Keyboard1/backquote , name: backquote , variants:  , displayName: ` shortDisplayName: 
+ path: /Keyboard1/quote , name: quote , variants:  , displayName: ' shortDisplayName: 
+ path: /Keyboard1/semicolon , name: semicolon , variants:  , displayName: ; shortDisplayName: 
+ path: /Keyboard1/comma , name: comma , variants:  , displayName: , shortDisplayName: 
+ path: /Keyboard1/period , name: period , variants:  , displayName: . shortDisplayName: 
+ path: /Keyboard1/slash , name: slash , variants:  , displayName: / shortDisplayName: 
+ path: /Keyboard1/backslash , name: backslash , variants:  , displayName: \ shortDisplayName: 
+ path: /Keyboard1/leftBracket , name: leftBracket , variants:  , displayName: [ shortDisplayName: 
+ path: /Keyboard1/rightBracket , name: rightBracket , variants:  , displayName: ] shortDisplayName: 
+ path: /Keyboard1/minus , name: minus , variants:  , displayName: - shortDisplayName: 
+ path: /Keyboard1/equals , name: equals , variants:  , displayName: = shortDisplayName: 
+ path: /Keyboard1/upArrow , name: upArrow , variants:  , displayName: Up Arrow shortDisplayName: 
+ path: /Keyboard1/downArrow , name: downArrow , variants:  , displayName: Down Arrow shortDisplayName: 
+ path: /Keyboard1/leftArrow , name: leftArrow , variants:  , displayName: Left Arrow shortDisplayName: 
+ path: /Keyboard1/rightArrow , name: rightArrow , variants:  , displayName: Right Arrow shortDisplayName: 
+ path: /Keyboard1/a , name: a , variants:  , displayName: A shortDisplayName: 
+ path: /Keyboard1/b , name: b , variants:  , displayName: B shortDisplayName: 
+ path: /Keyboard1/c , name: c , variants:  , displayName: C shortDisplayName: 
+ path: /Keyboard1/d , name: d , variants:  , displayName: D shortDisplayName: 
+ path: /Keyboard1/e , name: e , variants:  , displayName: E shortDisplayName: 
+ path: /Keyboard1/f , name: f , variants:  , displayName: F shortDisplayName: 
+ path: /Keyboard1/g , name: g , variants:  , displayName: G shortDisplayName: 
+ path: /Keyboard1/h , name: h , variants:  , displayName: H shortDisplayName: 
+ path: /Keyboard1/i , name: i , variants:  , displayName: I shortDisplayName: 
+ path: /Keyboard1/j , name: j , variants:  , displayName: J shortDisplayName: 
+ path: /Keyboard1/k , name: k , variants:  , displayName: K shortDisplayName: 
+ path: /Keyboard1/l , name: l , variants:  , displayName: L shortDisplayName: 
+ path: /Keyboard1/m , name: m , variants:  , displayName: M shortDisplayName: 
+ path: /Keyboard1/n , name: n , variants:  , displayName: N shortDisplayName: 
+ path: /Keyboard1/o , name: o , variants:  , displayName: O shortDisplayName: 
+ path: /Keyboard1/p , name: p , variants:  , displayName: P shortDisplayName: 
+ path: /Keyboard1/q , name: q , variants:  , displayName: Q shortDisplayName: 
+ path: /Keyboard1/r , name: r , variants:  , displayName: R shortDisplayName: 
+ path: /Keyboard1/s , name: s , variants:  , displayName: S shortDisplayName: 
+ path: /Keyboard1/t , name: t , variants:  , displayName: T shortDisplayName: 
+ path: /Keyboard1/u , name: u , variants:  , displayName: U shortDisplayName: 
+ path: /Keyboard1/v , name: v , variants:  , displayName: V shortDisplayName: 
+ path: /Keyboard1/w , name: w , variants:  , displayName: W shortDisplayName: 
+ path: /Keyboard1/x , name: x , variants:  , displayName: X shortDisplayName: 
+ path: /Keyboard1/y , name: y , variants:  , displayName: Y shortDisplayName: 
+ path: /Keyboard1/z , name: z , variants:  , displayName: Z shortDisplayName: 
+ path: /Keyboard1/1 , name: 1 , variants:  , displayName: 1 shortDisplayName: 
+ path: /Keyboard1/2 , name: 2 , variants:  , displayName: 2 shortDisplayName: 
+ path: /Keyboard1/3 , name: 3 , variants:  , displayName: 3 shortDisplayName: 
+ path: /Keyboard1/4 , name: 4 , variants:  , displayName: 4 shortDisplayName: 
+ path: /Keyboard1/5 , name: 5 , variants:  , displayName: 5 shortDisplayName: 
+ path: /Keyboard1/6 , name: 6 , variants:  , displayName: 6 shortDisplayName: 
+ path: /Keyboard1/7 , name: 7 , variants:  , displayName: 7 shortDisplayName: 
+ path: /Keyboard1/8 , name: 8 , variants:  , displayName: 8 shortDisplayName: 
+ path: /Keyboard1/9 , name: 9 , variants:  , displayName: 9 shortDisplayName: 
+ path: /Keyboard1/0 , name: 0 , variants:  , displayName: 0 shortDisplayName: 
+ path: /Keyboard1/leftShift , name: leftShift , variants:  , displayName: Left Shift shortDisplayName: 
+ path: /Keyboard1/rightShift , name: rightShift , variants:  , displayName: Right Shift shortDisplayName: 
+ path: /Keyboard1/shift , name: shift , variants:  , displayName: Shift shortDisplayName: 
+ path: /Keyboard1/leftAlt , name: leftAlt , variants:  , displayName: Left Alt shortDisplayName: 
+ path: /Keyboard1/rightAlt , name: rightAlt , variants:  , displayName: Right Alt shortDisplayName: 
+ path: /Keyboard1/alt , name: alt , variants:  , displayName: Alt shortDisplayName: 
+ path: /Keyboard1/leftCtrl , name: leftCtrl , variants:  , displayName: Left Control shortDisplayName: 
+ path: /Keyboard1/rightCtrl , name: rightCtrl , variants:  , displayName: Right Control shortDisplayName: 
+ path: /Keyboard1/ctrl , name: ctrl , variants:  , displayName: Control shortDisplayName: 
+ path: /Keyboard1/leftMeta , name: leftMeta , variants:  , displayName: Left System shortDisplayName: 
+ path: /Keyboard1/rightMeta , name: rightMeta , variants:  , displayName: Right System shortDisplayName: 
+ path: /Keyboard1/contextMenu , name: contextMenu , variants:  , displayName: Context Menu shortDisplayName: 
+ path: /Keyboard1/backspace , name: backspace , variants:  , displayName: Backspace shortDisplayName: 
+ path: /Keyboard1/pageDown , name: pageDown , variants:  , displayName: Page Down shortDisplayName: 
+ path: /Keyboard1/pageUp , name: pageUp , variants:  , displayName: Page Up shortDisplayName: 
+ path: /Keyboard1/home , name: home , variants:  , displayName: Home shortDisplayName: 
+ path: /Keyboard1/end , name: end , variants:  , displayName: End shortDisplayName: 
+ path: /Keyboard1/insert , name: insert , variants:  , displayName: Insert shortDisplayName: 
+ path: /Keyboard1/delete , name: delete , variants:  , displayName: Delete shortDisplayName: 
+ path: /Keyboard1/capsLock , name: capsLock , variants:  , displayName: Caps Lock shortDisplayName: 
+ path: /Keyboard1/numLock , name: numLock , variants:  , displayName: Num Lock shortDisplayName: 
+ path: /Keyboard1/printScreen , name: printScreen , variants:  , displayName: Print Screen shortDisplayName: 
+ path: /Keyboard1/scrollLock , name: scrollLock , variants:  , displayName: Scroll Lock shortDisplayName: 
+ path: /Keyboard1/pause , name: pause , variants:  , displayName: Pause/Break shortDisplayName: 
+ path: /Keyboard1/numpadEnter , name: numpadEnter , variants:  , displayName: Numpad Enter shortDisplayName: 
+ path: /Keyboard1/numpadDivide , name: numpadDivide , variants:  , displayName: Numpad / shortDisplayName: 
+ path: /Keyboard1/numpadMultiply , name: numpadMultiply , variants:  , displayName: Numpad * shortDisplayName: 
+ path: /Keyboard1/numpadPlus , name: numpadPlus , variants:  , displayName: Numpad + shortDisplayName: 
+ path: /Keyboard1/numpadMinus , name: numpadMinus , variants:  , displayName: Numpad - shortDisplayName: 
+ path: /Keyboard1/numpadPeriod , name: numpadPeriod , variants:  , displayName: Numpad . shortDisplayName: 
+ path: /Keyboard1/numpadEquals , name: numpadEquals , variants:  , displayName: Numpad = shortDisplayName: 
+ path: /Keyboard1/numpad1 , name: numpad1 , variants:  , displayName: Numpad 1 shortDisplayName: 
+ path: /Keyboard1/numpad2 , name: numpad2 , variants:  , displayName: Numpad 2 shortDisplayName: 
+ path: /Keyboard1/numpad3 , name: numpad3 , variants:  , displayName: Numpad 3 shortDisplayName: 
+ path: /Keyboard1/numpad4 , name: numpad4 , variants:  , displayName: Numpad 4 shortDisplayName: 
+ path: /Keyboard1/numpad5 , name: numpad5 , variants:  , displayName: Numpad 5 shortDisplayName: 
+ path: /Keyboard1/numpad6 , name: numpad6 , variants:  , displayName: Numpad 6 shortDisplayName: 
+ path: /Keyboard1/numpad7 , name: numpad7 , variants:  , displayName: Numpad 7 shortDisplayName: 
+ path: /Keyboard1/numpad8 , name: numpad8 , variants:  , displayName: Numpad 8 shortDisplayName: 
+ path: /Keyboard1/numpad9 , name: numpad9 , variants:  , displayName: Numpad 9 shortDisplayName: 
+ path: /Keyboard1/numpad0 , name: numpad0 , variants:  , displayName: Numpad 0 shortDisplayName: 
+ path: /Keyboard1/f1 , name: f1 , variants:  , displayName: F1 shortDisplayName: 
+ path: /Keyboard1/f2 , name: f2 , variants:  , displayName: F2 shortDisplayName: 
+ path: /Keyboard1/f3 , name: f3 , variants:  , displayName: F3 shortDisplayName: 
+ path: /Keyboard1/f4 , name: f4 , variants:  , displayName: F4 shortDisplayName: 
+ path: /Keyboard1/f5 , name: f5 , variants:  , displayName: F5 shortDisplayName: 
+ path: /Keyboard1/f6 , name: f6 , variants:  , displayName: F6 shortDisplayName: 
+ path: /Keyboard1/f7 , name: f7 , variants:  , displayName: F7 shortDisplayName: 
+ path: /Keyboard1/f8 , name: f8 , variants:  , displayName: F8 shortDisplayName: 
+ path: /Keyboard1/f9 , name: f9 , variants:  , displayName: F9 shortDisplayName: 
+ path: /Keyboard1/f10 , name: f10 , variants:  , displayName: F10 shortDisplayName: 
+ path: /Keyboard1/f11 , name: f11 , variants:  , displayName: F11 shortDisplayName: 
+ path: /Keyboard1/f12 , name: f12 , variants:  , displayName: F12 shortDisplayName: 
+ path: /Keyboard1/OEM1 , name: OEM1 , variants:  , displayName: OEM1 shortDisplayName: 
+ path: /Keyboard1/OEM2 , name: OEM2 , variants:  , displayName: OEM2 shortDisplayName: 
+ path: /Keyboard1/OEM3 , name: OEM3 , variants:  , displayName: OEM3 shortDisplayName: 
+ path: /Keyboard1/OEM4 , name: OEM4 , variants:  , displayName: OEM4 shortDisplayName: 
+ path: /Keyboard1/OEM5 , name: OEM5 , variants:  , displayName: OEM5 shortDisplayName: 
+ path: /Keyboard1/IMESelected , name: IMESelected , variants:  , displayName: IMESelected shortDisplayName: 
+
+Device Type: Mouse
+ path: /Mouse1/position , name: position , variants:  , displayName: Position shortDisplayName: 
+ path: /Mouse1/delta , name: delta , variants:  , displayName: Delta shortDisplayName: 
+ path: /Mouse1/scroll , name: scroll , variants:  , displayName: Scroll shortDisplayName: 
+ path: /Mouse1/press , name: press , variants:  , displayName: Press shortDisplayName: 
+ path: /Mouse1/leftButton , name: leftButton , variants:  , displayName: Left Button shortDisplayName: LMB
+ path: /Mouse1/rightButton , name: rightButton , variants:  , displayName: Right Button shortDisplayName: RMB
+ path: /Mouse1/middleButton , name: middleButton , variants:  , displayName: Middle Button shortDisplayName: MMB
+ path: /Mouse1/forwardButton , name: forwardButton , variants:  , displayName: Forward shortDisplayName: 
+ path: /Mouse1/backButton , name: backButton , variants:  , displayName: Back shortDisplayName: 
+ path: /Mouse1/pressure , name: pressure , variants:  , displayName: Pressure shortDisplayName: 
+ path: /Mouse1/radius , name: radius , variants:  , displayName: Radius shortDisplayName: 
+ path: /Mouse1/pointerId , name: pointerId , variants:  , displayName: pointerId shortDisplayName: 
+ path: /Mouse1/displayIndex , name: displayIndex , variants:  , displayName: Display Index shortDisplayName: 
+ path: /Mouse1/clickCount , name: clickCount , variants:  , displayName: Click Count shortDisplayName: 
+ path: /Mouse1/position/x , name: x , variants:  , displayName: Position X shortDisplayName: Position X
+ path: /Mouse1/position/y , name: y , variants:  , displayName: Position Y shortDisplayName: Position Y
+ path: /Mouse1/delta/up , name: up , variants:  , displayName: Delta Up shortDisplayName: Delta Up
+ path: /Mouse1/delta/down , name: down , variants:  , displayName: Delta Down shortDisplayName: Delta Down
+ path: /Mouse1/delta/left , name: left , variants:  , displayName: Delta Left shortDisplayName: Delta Left
+ path: /Mouse1/delta/right , name: right , variants:  , displayName: Delta Right shortDisplayName: Delta Right
+ path: /Mouse1/delta/x , name: x , variants:  , displayName: Delta X shortDisplayName: Delta X
+ path: /Mouse1/delta/y , name: y , variants:  , displayName: Delta Y shortDisplayName: Delta Y
+ path: /Mouse1/scroll/up , name: up , variants:  , displayName: Scroll Up shortDisplayName: Scroll Up
+ path: /Mouse1/scroll/down , name: down , variants:  , displayName: Scroll Down shortDisplayName: Scroll Down
+ path: /Mouse1/scroll/left , name: left , variants:  , displayName: Scroll Left shortDisplayName: Scroll Left
+ path: /Mouse1/scroll/right , name: right , variants:  , displayName: Scroll Right shortDisplayName: Scroll Right
+ path: /Mouse1/scroll/x , name: x , variants:  , displayName: Scroll Left/Right shortDisplayName: Scroll Left/Right
+ path: /Mouse1/scroll/y , name: y , variants:  , displayName: Scroll Up/Down shortDisplayName: Scroll Wheel
+ path: /Mouse1/radius/x , name: x , variants:  , displayName: Radius X shortDisplayName: Radius X
+ path: /Mouse1/radius/y , name: y , variants:  , displayName: Radius Y shortDisplayName: Radius Y
+
