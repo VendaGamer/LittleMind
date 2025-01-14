@@ -39,13 +39,16 @@ public class PlayerController : MonoBehaviour, IInteractor
     [CanBeNull]private IInteractable interactableHolding;
     public static event Action<Interaction[]> GlobalInteractionsChanged;
     public static event Action<Interaction[]> ExclusiveInteractionsChanged;
-    
-    
-    private Controls controls;
+
+    public static Controls Controls { get; private set; }
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning = false;
 
+    private void Awake()
+    {
+        Controls = new Controls();
+    }
 
     private void Start()
     {
@@ -57,26 +60,21 @@ public class PlayerController : MonoBehaviour, IInteractor
         Cursor.visible = false;
         currentSpeed = moveSpeed;
     }
-
-    private void Awake()
-    {
-        controls = new Controls();
-    }
     
     private void OnDisable()
     {
-        controls.Disable();
-        controls.Player.Use.performed -= OnUse;
-        controls.Player.Sprint.performed -= OnSprint;
-        controls.Player.Drop.performed -= OnDrop;
+        Controls.Disable();
+        Controls.Player.Use.performed -= OnUse;
+        Controls.Player.Sprint.performed -= OnSprint;
+        Controls.Player.Drop.performed -= OnDrop;
     }
     
     private void OnEnable()
     {
-        controls.Enable();
-        controls.Player.Use.performed += OnUse;
-        controls.Player.Sprint.performed += OnSprint;
-        controls.Player.Drop.performed += OnDrop;
+        Controls.Enable();
+        Controls.Player.Use.performed += OnUse;
+        Controls.Player.Sprint.performed += OnSprint;
+        Controls.Player.Drop.performed += OnDrop;
     }
 
     private void OnDrop(InputAction.CallbackContext obj)
@@ -85,6 +83,8 @@ public class PlayerController : MonoBehaviour, IInteractor
         
         interactableHolding.Interact(this, obj.action);
         interactableHolding = null;
+        Debug.Log($"Effective path: {obj.action.bindingMask.Value.effectivePath}," +
+                  $"");
     }
 
     private void OnSprint(InputAction.CallbackContext obj)
@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     
     private void HandleMovement()
     {
-        Vector2 moveInput = controls.Player.Move.ReadValue<Vector2>();
+        Vector2 moveInput = Controls.Player.Move.ReadValue<Vector2>();
         
         Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
         
@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleLook()
     {
-        Vector2 lookInput = controls.Player.Look.ReadValue<Vector2>() * mouseSensitivity;
+        Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>() * mouseSensitivity;
         
         transform.Rotate(Vector3.up * lookInput.x, Space.Self);
 

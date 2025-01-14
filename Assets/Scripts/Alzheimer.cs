@@ -1,21 +1,29 @@
 using System;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Alzheimer : MonoBehaviour
 {
     [SerializeField] private Diary playerDiary;
     [SerializeField] private float memoryTriggerDistance = 2f;
     [CanBeNull]private MemoryTrigger currentMemoryTrigger;
+    private Controls playerControls => PlayerController.Controls;
 
-    private void Update()
+    private void OnEnable()
     {
-        // Toggle the diary display
-        if (Input.GetButtonDown("Journal"))
-        {
-            playerDiary.gameObject.SetActive(!playerDiary.gameObject.activeSelf);
-        }
+        playerControls.Player.Journal.performed += OnJournal;
+    }
 
+    private void OnJournal(InputAction.CallbackContext obj)
+    {
+        playerDiary.NegateActiveState();
+    }
+
+
+    private void OnDisable()
+    {
+        playerControls.Player.Journal.performed -= OnJournal;
     }
 
     private void OnTriggerEnter(Collider other)

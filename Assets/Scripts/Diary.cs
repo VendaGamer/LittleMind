@@ -34,6 +34,10 @@ public class Diary : MonoBehaviour
         }
     }
 
+    public void NegateActiveState()
+    {
+
+    }
     public void FlipToNextPage()
     {
         if (currentPageIndex < leftPages.Length - 1)
