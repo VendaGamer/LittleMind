@@ -33,12 +33,12 @@ public class PlayerController : MonoBehaviour, IInteractor
     
     [Header("Interaction Settings")]
     [SerializeField] private HintManager hintManager;
-    [SerializeField] private Interaction[] globalInteractionsGameplay;
+    [SerializeField] private GlobalInteractions globalInteractionsPlayerControls;
 
     [CanBeNull]private IInteractable interactableLookingAt;
     [CanBeNull]private IInteractable interactableHolding;
-    public static event Action<Interaction[]> GlobalInteractionsChanged;
-    public static event Action<Interaction[]> ExclusiveInteractionsChanged;
+    public static event Action<GlobalInteractions> GlobalInteractionsChanged;
+    public static event Action<IInteractable> ExclusiveInteractableChanged;
 
     public static Controls Controls { get; private set; }
     private float currentSpeed;
@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour, IInteractor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         currentSpeed = moveSpeed;
+        SwitchGlobalInteractions(globalInteractionsPlayerControls);
     }
     
     private void OnDisable()
@@ -83,8 +84,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         
         interactableHolding.Interact(this, obj.action);
         interactableHolding = null;
-        Debug.Log($"Effective path: {obj.action.bindingMask.Value.effectivePath}," +
-                  $"");
     }
 
     private void OnSprint(InputAction.CallbackContext obj)
@@ -125,23 +124,23 @@ public class PlayerController : MonoBehaviour, IInteractor
             {
                 if (interactableLookingAt == interactable) return;
 
-                if (interactableLookingAt?.Interactions == interactable.Interactions)
+                if (interactableLookingAt?.CurrentInteractions != interactable.CurrentInteractions)
                 {
-                    SwitchExclusiveInteractions(interactable.Interactions);
+                    SwitchExclusiveInteractions(interactable);
                 }
                 interactableLookingAt = interactable;
             }
         }
     }
 
-    private void SwitchGlobalInteractions(Interaction[] newGlobalInteractions)
+    private void SwitchGlobalInteractions(GlobalInteractions newGlobalInteractions)
     {
         GlobalInteractionsChanged?.Invoke(newGlobalInteractions);
     }
 
-    private void SwitchExclusiveInteractions(Interaction[] newExclusiveInteractions)
+    private void SwitchExclusiveInteractions(IInteractable newExclusiveInteractions)
     {
-        ExclusiveInteractionsChanged?.Invoke(newExclusiveInteractions);
+        ExclusiveInteractableChanged?.Invoke(newExclusiveInteractions);
     }
     
     private void HandleMovement()

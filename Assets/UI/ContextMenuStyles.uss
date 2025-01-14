@@ -23,9 +23,23 @@
     color: rgb(200, 200, 200);
     margin-left: 10px;
     -unity-font-style: bold;
+    font-size: 20px;
 }
 
 .action-text {
     color: white;
     -unity-font-style: normal;
+}
+.interactions-group {
+    margin: 5px 0;
+    padding: 5px;
+}
+.interactions-label {
+    color: rgb(255, 255, 255);
+    padding: 2px 5px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    -unity-font-style: bold;
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+    border-bottom-width: 3px;
 }

@@ -1,22 +1,37 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[System.Serializable]
+[Serializable]
 public class Interaction
 {
     public string ActionName;
     public InputActionReference Action;
 }
-public interface IInteractable
+public interface IInteractable : IInteractions
 {
-    string InteractText { get; }
-    Interaction[] Interactions { get; }
-    bool Interact(IInteractor interactor, InputAction invokedAction);
+    public bool Interact(IInteractor interactor, InputAction invokedAction);
+}
+
+[Serializable]
+public class GlobalInteractions : IInteractions
+{
+    [SerializeField] private string interactGroupLabel;
+    [SerializeField] private Interaction[] currentInteractions;
+    public string InteractGroupLabel => interactGroupLabel;
+    public Interaction[] CurrentInteractions => currentInteractions;
+
+}
+
+public interface IInteractions
+{
+    public string InteractGroupLabel { get;}
+    public Interaction[] CurrentInteractions { get;}
 }
 public interface IInteractor
 {
-    Transform PickupPoint { get; }
-    float PickupLerpDuration { get; }
+    public Transform PickupPoint { get; }
+    public float PickupLerpDuration { get; }
 }
 public enum InputType
 {

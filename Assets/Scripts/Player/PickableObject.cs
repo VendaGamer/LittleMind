@@ -4,15 +4,27 @@ using UnityEngine.InputSystem;
 
 public class PickableObject : MonoBehaviour, IInteractable
 {
+    [SerializeField] private string interactableLabel;
+    public string InteractGroupLabel => interactableLabel;
     protected bool IsPicked = false;
-    [SerializeField] private InputActionReference pickupAction;
-    [SerializeField] private InputActionReference dropAction;
+    [SerializeField] private Interaction pickupAction;
+    [SerializeField] private Interaction dropAction;
 
     private Rigidbody rb;
     private Collider col;
-    
-    public string InteractText { get; }
-    public Interaction[] Interactions { get; }
+
+    public Interaction[] CurrentInteractions
+    {
+        get
+        {
+            if (IsPicked)
+            {
+                return new[] {  dropAction};
+            }
+            return new[] { pickupAction };
+        }
+    }
+
     protected virtual void Start()
     {
         rb = GetComponentInParent<Rigidbody>();
@@ -68,7 +80,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     {
         if (IsPicked)
         {
-            if (invokedAction.id == dropAction.action.id)
+            if (invokedAction.id == dropAction.Action.action.id)
             {
                 Debug.Log("Dropped Object");
                 DropObject();
@@ -76,7 +88,7 @@ public class PickableObject : MonoBehaviour, IInteractable
                 return true;
             }
         }
-        else if (invokedAction.id == pickupAction.action.id)
+        else if (invokedAction.id == pickupAction.Action.action.id)
         {
             Debug.Log("Picked Object");
             PickObject(interactor.PickupPoint,interactor.PickupLerpDuration);

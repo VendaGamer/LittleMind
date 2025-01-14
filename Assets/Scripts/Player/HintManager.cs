@@ -1,27 +1,77 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 
 public class HintManager : MonoBehaviour
 {
-   public static HintManager Instance { get; private set; }
+    public static HintManager Instance { get; private set; }
 
     [SerializeField] private UIDocument contextMenuDocument;
-    [SerializeField] private Font iconFont; // Font containing input icons
+    [SerializeField] private FontAsset iconFont; // Font containing input icons
     
     private VisualElement menuContainer;
-    private Dictionary<Interaction, VisualElement> activeHints = new();
-    private Interaction[] currentGlobalInteractions;
-    private InputType currentInputType;
+    private Dictionary<IInteractions, VisualElement> interactionsAndTheirContainer = new();
+    
+    private InputType currentInputType = InputType.KeyboardMouse;
 
-    private Dictionary<string,string> XboxGamepadInputPathsNeededForIconFont= new Dictionary<string,string>
+    private Dictionary<string,string> XboxGamepadInputPathsNeededForIconFont= new ()
     {
+        {"<Gamepad>/buttonSouth","\u21D3"},
+        {"<Gamepad>/buttonWest","\u21D0"},
+        {"<Gamepad>/buttonNorth","\u21D1"},
+        {"<Gamepad>/buttonEast","\u21D2"},
+        {"<Gamepad>/dpad", "\u21CE"},
+        {"<Gamepad>/dpad/right", "\u21A0"},
+        {"<Gamepad>/dpad/left", "\u219E"},
+        {"<Gamepad>/dpad/down", "\u21A1"},
+        {"<Gamepad>/dpad/up", "\u219F"},
+        {"<Gamepad>/dpad/x", "\u21A2"},
+        {"<Gamepad>/dpad/y", "\u21A3"},
+        {"<Gamepad>/rightShoulder", "\u2199"},
+        {"<Gamepad>/rightStick", "\u21F2"},
+        {"<Gamepad>/rightStickPress", "\u21BB"},
         {"<Gamepad>/rightStick/right", "\u21C1"},
         {"<Gamepad>/rightStick/left", "\u21BD"},
         {"<Gamepad>/rightStick/down","\u21C3"},
         {"<Gamepad>/rightStick/up","\u21C3"},
+        {"<Gamepad>/rightStick/x","\u21C1"},
+        {"<Gamepad>/rightStick/y","\u21C1"},
+        {"<Gamepad>/rightTrigger","\u2197"},
+        {"<Gamepad>/leftStick", "\u21F1"},
+        {"<Gamepad>/leftShoulder", "\u2198"}, 
+        {"<Gamepad>/leftStickPress", "\u21BA"},   
+        {"<Gamepad>/leftStick/right", "\u21C0"},     
+        {"<Gamepad>/leftStick/left", "\u21BC"},      
+        {"<Gamepad>/leftStick/down","\u21C2"},       
+        {"<Gamepad>/leftStick/up","\u21BE"},
+        {"<Gamepad>/leftStick/x","\u21C0"},
+        {"<Gamepad>/leftStick/y","\u21C1"},
+        {"<Gamepad>/leftTrigger","\u2196"},
+        {"<Gamepad>/select", "\u21F7"},
+        {"<Gamepad>/start", "\u21F8"},
+    };
+    
+    private Dictionary<string,string> MouseInputPathsNeededForIconFont= new ()
+    {
+        {"<Mouse>/scroll/up","\u27F0"},
+        {"<Mouse>/scroll/down","\u27F1"},
+        {"<Mouse>/position","\u27FC"},
+        {"<Mouse>/position/x","\u27FA"},
+        {"<Mouse>/position/y","\u27FB"},
+        {"<Mouse>/leftButton","\u278A"},
+        {"<Mouse>/rightButton", "\u278B"},
+        {"<Mouse>/middleButton", "\u278C"},
+        {"<Mouse>/forwardButton", "\u278D"},
+        {"<Mouse>/backButton", "\u278E"},
+    };
+
+    private Dictionary<string, string> KeyboardInputPathsNeededForInconFont = new ()
+    {
+        { "<Keyboard>/space", "\u27B1" },
     };
 
     private void Awake()
@@ -33,108 +83,175 @@ public class HintManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerController.GlobalInteractionsChanged += OnGlobalHintsChanged;
-        PlayerController.ExclusiveInteractionsChanged += OnExclusiveHintsChanged;
+        PlayerController.ExclusiveInteractableChanged += OnExclusiveHintsChanged;
         PlayerInput.all[0].onControlsChanged += OnControlsChanged;
 
     }
 
-    private void OnExclusiveHintsChanged(Interaction[] obj)
+    private void OnExclusiveHintsChanged(IInteractable obj)
     {
+        // Find any existing exclusive interactions
+
+        if (interactionsAndTheirContainer.Keys
+                .FirstOrDefault(x => x is IInteractable) is IInteractable existingExclusive)
+        {
+            DeleteExclusiveInteractions();
+        }
+    
+
+        var container = CreateElements(obj);
+        interactionsAndTheirContainer[obj] = container;
+        menuContainer.Add(container);
+        menuContainer.style.display = DisplayStyle.Flex;
         
+        if (!interactionsAndTheirContainer.Any())
+        {
+            menuContainer.style.display = DisplayStyle.None;
+        }
     }
 
-    private void OnGlobalHintsChanged(Interaction[] obj)
+    private void OnGlobalHintsChanged(GlobalInteractions obj)
     {
+        if (interactionsAndTheirContainer.Keys
+                .FirstOrDefault(x => x is GlobalInteractions) is GlobalInteractions existingGlobal)
+        {
+            DeleteGlobalInteractions();
+        }
         
+        var container = CreateElements(obj);
+        interactionsAndTheirContainer[obj] = container;
+        menuContainer.Add(container);
+        menuContainer.style.display = DisplayStyle.Flex;
+            
+        if (!interactionsAndTheirContainer.Any())
+        {
+            menuContainer.style.display = DisplayStyle.None;
+        }
     }
 
     private void OnDisable()
     {
         PlayerController.GlobalInteractionsChanged -= OnGlobalHintsChanged;
-        PlayerController.ExclusiveInteractionsChanged -= OnExclusiveHintsChanged;
+        PlayerController.ExclusiveInteractableChanged -= OnExclusiveHintsChanged;
     }
 
     private void OnControlsChanged(PlayerInput obj)
     {
+        var newInputType = obj.currentControlScheme.Contains("Gamepad") 
+            ? InputType.Gamepad 
+            : InputType.KeyboardMouse;
         
+        if(currentInputType==newInputType)return;
+        
+        currentInputType = newInputType;
+            
+
+        foreach (var container in interactionsAndTheirContainer.Values)
+        {
+            menuContainer.Remove(container);
+        }
+
+        var tempDict = new Dictionary<IInteractions, VisualElement>(interactionsAndTheirContainer);
+        interactionsAndTheirContainer.Clear();
+        
+        // Musim znovu vytvorit elementy
+        foreach (var kvp in tempDict)
+        {
+            var newContainer = CreateElements(kvp.Key);
+            
+            interactionsAndTheirContainer[kvp.Key] = newContainer;
+            menuContainer.Add(newContainer);
+        }
     }
 
-    private string GetDisplayTextForAction(InputActionReference actionRef)
+    
+    private (bool isIcon,string text) GetDisplayTextForAction(InputActionReference actionRef)
     {
-        if (actionRef == null || actionRef.action == null) return string.Empty;
-
-        var binding = actionRef.action.GetBindingForControl(actionRef.action.activeControl);
-        if (!binding.HasValue) return string.Empty;
-        
         if (currentInputType == InputType.Gamepad)
         {
-            return GetGamepadDisplayText(binding.Value);
-        }
-        else
-        {
-            return GetKeyboardMouseDisplayText(binding.Value);
-        }
-    }
-
-    private string GetGamepadDisplayText(InputBinding binding)
-    {
-        // Map gamepad binding paths to your icon font characters
-        // This is just an example - adjust according to your icon font
-        return binding.effectivePath switch
-        {
-            "*/{PrimaryAction}" => "\ue000", // Example: A button icon
-            "*/{SecondaryAction}" => "\ue001", // Example: B button icon
-            "*/{Submit}" => "\ue002", // Example: X button icon
-            // Add more mappings as needed
-            _ => binding.ToDisplayString()
-        };
-    }
-
-    private string GetKeyboardMouseDisplayText(InputBinding binding)
-    {
-        // For mouse buttons, return icon characters
-        if (binding.effectivePath.Contains("Mouse"))
-        {
-            return binding.effectivePath switch
+            var binding = actionRef.action.bindings
+                .FirstOrDefault(inputBinding => inputBinding.effectivePath.Contains("<Gamepad>"));
+            
+            if (XboxGamepadInputPathsNeededForIconFont.TryGetValue(binding.effectivePath, out string icon))
             {
-                "*/leftButton" => "\ue020", // Example: Left mouse icon
-                "*/rightButton" => "\ue021", // Example: Right mouse icon
-                _ => binding.ToDisplayString()
-            };
+                return (true,icon);
+            }
+            
+            return (false,binding.name);
         }
-        
-        // For keyboard, return the actual key
-        return binding.ToDisplayString().ToUpper();
-    }
-
-    private VisualElement CreateHintElement(Interaction interaction)
-    {
-        var container = new VisualElement();
-        container.AddToClassList("menu-item");
-
-        var actionText = new Label(interaction.ActionName);
-        actionText.AddToClassList("action-text");
-
-        var keyHint = new Label(GetDisplayTextForAction(interaction.Action));
-        keyHint.AddToClassList("key-hint");
-        
-        // Set the icon font if using icons
-        if (currentInputType == InputType.Gamepad || 
-            (currentInputType == InputType.KeyboardMouse && IsMouseBinding(interaction.Action)))
+        else // KeyboardMouse
         {
-            keyHint.style.unityFontDefinition = new StyleFontDefinition(iconFont);
+            var binding = actionRef.action.bindings
+                .FirstOrDefault(inputBinding => inputBinding.effectivePath.Contains("<Keyboard>")||
+                                                inputBinding.effectivePath.Contains("<Mouse>"));
+            if (MouseInputPathsNeededForIconFont.TryGetValue(binding.effectivePath, out string icon))
+            {
+                return (true,binding.name);
+            }
+            
+            return (false,binding.name);
         }
-
-        container.Add(actionText);
-        container.Add(keyHint);
-        return container;
     }
 
-    private bool IsMouseBinding(InputActionReference actionRef)
+    private void DeleteGlobalInteractions()
     {
-        if (actionRef?.action == null) return false;
-        var binding = actionRef.action.GetBindingForControl(actionRef.action.activeControl);
-        return binding?.effectivePath?.Contains("Mouse") ?? false;
+        var globalInteractions = interactionsAndTheirContainer.Keys
+            .FirstOrDefault(x => x is GlobalInteractions);
+    
+        if (globalInteractions != null)
+        {
+            var container = interactionsAndTheirContainer[globalInteractions];
+            menuContainer.Remove(container);
+            interactionsAndTheirContainer.Remove(globalInteractions);
+        }
+    }
+
+    private void DeleteExclusiveInteractions()
+    {
+        var exclusiveInteractions = interactionsAndTheirContainer.Keys
+            .FirstOrDefault(x => x is IInteractable);
+    
+        if (exclusiveInteractions != null)
+        {
+            var container = interactionsAndTheirContainer[exclusiveInteractions];
+            menuContainer.Remove(container);
+            interactionsAndTheirContainer.Remove(exclusiveInteractions);
+        }
+    }
+
+    private VisualElement CreateElements(IInteractions interactable)
+    {
+        var groupContainer = new VisualElement();
+        groupContainer.AddToClassList("interactions-group");
+    
+        // Add the group label
+        var groupLabel = new Label(interactable.InteractGroupLabel);
+        groupLabel.AddToClassList("interactions-label");
+        groupContainer.Add(groupLabel);
+    
+        // Create container for interaction items
+        var interactionsContainer = new VisualElement();
+    
+        // Add each interaction
+        foreach (var interaction in interactable.CurrentInteractions)
+        {
+            var container = new VisualElement();
+            container.AddToClassList("menu-item");
+            var actionText = new Label(interaction.ActionName);
+            actionText.AddToClassList("action-text");
+            var res = GetDisplayTextForAction(interaction.Action);
+            var keyHint = new Label(res.text);
+            if (res.isIcon)
+            {
+                keyHint.style.unityFontDefinition = new StyleFontDefinition(iconFont);
+            }
+            container.Add(actionText);
+            container.Add(keyHint);
+            interactionsContainer.Add(container);
+        }
+    
+        groupContainer.Add(interactionsContainer);
+        return groupContainer;
     }
 
 
@@ -143,13 +260,6 @@ public class HintManager : MonoBehaviour
         var root = contextMenuDocument.rootVisualElement;
         menuContainer = root.Q<VisualElement>("menu-container");
         menuContainer.style.display = DisplayStyle.None;
-    }
-    
-    private void UpdateInputType(InputType newType)
-    {
-        if (currentInputType == newType) return;
-        
-        currentInputType = newType;
     }
     
 }

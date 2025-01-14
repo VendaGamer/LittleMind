@@ -1,38 +1,3 @@
-Device Type: Gamepad
- path: /Gamepad/dpad , name: dpad , variants: Default , displayName: D-Pad shortDisplayName: 
- path: /Gamepad/buttonSouth , name: buttonSouth , variants: Default , displayName: Button South shortDisplayName: A
- path: /Gamepad/buttonWest , name: buttonWest , variants: Default , displayName: Button West shortDisplayName: X
- path: /Gamepad/buttonNorth , name: buttonNorth , variants: Default , displayName: Button North shortDisplayName: Y
- path: /Gamepad/buttonEast , name: buttonEast , variants: Default , displayName: Button East shortDisplayName: B
- path: /Gamepad/leftStickPress , name: leftStickPress , variants: Default , displayName: Left Stick Press shortDisplayName: 
- path: /Gamepad/rightStickPress , name: rightStickPress , variants: Default , displayName: Right Stick Press shortDisplayName: 
- path: /Gamepad/leftShoulder , name: leftShoulder , variants: Default , displayName: Left Shoulder shortDisplayName: LB
- path: /Gamepad/rightShoulder , name: rightShoulder , variants: Default , displayName: Right Shoulder shortDisplayName: RB
- path: /Gamepad/start , name: start , variants: Default , displayName: Start shortDisplayName: 
- path: /Gamepad/select , name: select , variants: Default , displayName: Select shortDisplayName: 
- path: /Gamepad/leftStick , name: leftStick , variants: Default , displayName: Left Stick shortDisplayName: LS
- path: /Gamepad/rightStick , name: rightStick , variants: Default , displayName: Right Stick shortDisplayName: RS
- path: /Gamepad/leftTrigger , name: leftTrigger , variants: Default , displayName: Left Trigger shortDisplayName: LT
- path: /Gamepad/rightTrigger , name: rightTrigger , variants: Default , displayName: Right Trigger shortDisplayName: RT
- path: /Gamepad/dpad/x , name: x , variants: Default , displayName: D-Pad X shortDisplayName: D-Pad X
- path: /Gamepad/dpad/y , name: y , variants: Default , displayName: D-Pad Y shortDisplayName: D-Pad Y
- path: /Gamepad/dpad/up , name: up , variants: Default , displayName: D-Pad Up shortDisplayName: D-Pad Up
- path: /Gamepad/dpad/down , name: down , variants: Default , displayName: D-Pad Down shortDisplayName: D-Pad Down
- path: /Gamepad/dpad/left , name: left , variants: Default , displayName: D-Pad Left shortDisplayName: D-Pad Left
- path: /Gamepad/dpad/right , name: right , variants: Default , displayName: D-Pad Right shortDisplayName: D-Pad Right
- path: /Gamepad/leftStick/up , name: up , variants: Default , displayName: Left Stick Up shortDisplayName: LS Up
- path: /Gamepad/leftStick/x , name: x , variants: Default , displayName: Left Stick X shortDisplayName: LS X
- path: /Gamepad/leftStick/y , name: y , variants: Default , displayName: Left Stick Y shortDisplayName: LS Y
- path: /Gamepad/leftStick/down , name: down , variants: Default , displayName: Left Stick Down shortDisplayName: LS Down
- path: /Gamepad/leftStick/left , name: left , variants: Default , displayName: Left Stick Left shortDisplayName: LS Left
- path: /Gamepad/leftStick/right , name: right , variants: Default , displayName: Left Stick Right shortDisplayName: LS Right
- path: /Gamepad/rightStick/up , name: up , variants: Default , displayName: Right Stick Up shortDisplayName: RS Up
- path: /Gamepad/rightStick/x , name: x , variants: Default , displayName: Right Stick X shortDisplayName: RS X
- path: /Gamepad/rightStick/y , name: y , variants: Default , displayName: Right Stick Y shortDisplayName: RS Y
- path: /Gamepad/rightStick/down , name: down , variants: Default , displayName: Right Stick Down shortDisplayName: RS Down
- path: /Gamepad/rightStick/left , name: left , variants: Default , displayName: Right Stick Left shortDisplayName: RS Left
- path: /Gamepad/rightStick/right , name: right , variants: Default , displayName: Right Stick Right shortDisplayName: RS Right
-
 Device Type: Keyboard
  path: /Keyboard1/anyKey , name: anyKey , variants:  , displayName: Any Key shortDisplayName: 
  path: /Keyboard1/escape , name: escape , variants:  , displayName: Escape shortDisplayName: 
@@ -149,36 +114,3 @@ Device Type: Keyboard
  path: /Keyboard1/OEM4 , name: OEM4 , variants:  , displayName: OEM4 shortDisplayName: 
  path: /Keyboard1/OEM5 , name: OEM5 , variants:  , displayName: OEM5 shortDisplayName: 
  path: /Keyboard1/IMESelected , name: IMESelected , variants:  , displayName: IMESelected shortDisplayName: 
-
-Device Type: Mouse
- path: /Mouse1/position , name: position , variants:  , displayName: Position shortDisplayName: 
- path: /Mouse1/delta , name: delta , variants:  , displayName: Delta shortDisplayName: 
- path: /Mouse1/scroll , name: scroll , variants:  , displayName: Scroll shortDisplayName: 
- path: /Mouse1/press , name: press , variants:  , displayName: Press shortDisplayName: 
- path: /Mouse1/leftButton , name: leftButton , variants:  , displayName: Left Button shortDisplayName: LMB
- path: /Mouse1/rightButton , name: rightButton , variants:  , displayName: Right Button shortDisplayName: RMB
- path: /Mouse1/middleButton , name: middleButton , variants:  , displayName: Middle Button shortDisplayName: MMB
- path: /Mouse1/forwardButton , name: forwardButton , variants:  , displayName: Forward shortDisplayName: 
- path: /Mouse1/backButton , name: backButton , variants:  , displayName: Back shortDisplayName: 
- path: /Mouse1/pressure , name: pressure , variants:  , displayName: Pressure shortDisplayName: 
- path: /Mouse1/radius , name: radius , variants:  , displayName: Radius shortDisplayName: 
- path: /Mouse1/pointerId , name: pointerId , variants:  , displayName: pointerId shortDisplayName: 
- path: /Mouse1/displayIndex , name: displayIndex , variants:  , displayName: Display Index shortDisplayName: 
- path: /Mouse1/clickCount , name: clickCount , variants:  , displayName: Click Count shortDisplayName: 
- path: /Mouse1/position/x , name: x , variants:  , displayName: Position X shortDisplayName: Position X
- path: /Mouse1/position/y , name: y , variants:  , displayName: Position Y shortDisplayName: Position Y
- path: /Mouse1/delta/up , name: up , variants:  , displayName: Delta Up shortDisplayName: Delta Up
- path: /Mouse1/delta/down , name: down , variants:  , displayName: Delta Down shortDisplayName: Delta Down
- path: /Mouse1/delta/left , name: left , variants:  , displayName: Delta Left shortDisplayName: Delta Left
- path: /Mouse1/delta/right , name: right , variants:  , displayName: Delta Right shortDisplayName: Delta Right
- path: /Mouse1/delta/x , name: x , variants:  , displayName: Delta X shortDisplayName: Delta X
- path: /Mouse1/delta/y , name: y , variants:  , displayName: Delta Y shortDisplayName: Delta Y
- path: /Mouse1/scroll/up , name: up , variants:  , displayName: Scroll Up shortDisplayName: Scroll Up
- path: /Mouse1/scroll/down , name: down , variants:  , displayName: Scroll Down shortDisplayName: Scroll Down
- path: /Mouse1/scroll/left , name: left , variants:  , displayName: Scroll Left shortDisplayName: Scroll Left
- path: /Mouse1/scroll/right , name: right , variants:  , displayName: Scroll Right shortDisplayName: Scroll Right
- path: /Mouse1/scroll/x , name: x , variants:  , displayName: Scroll Left/Right shortDisplayName: Scroll Left/Right
- path: /Mouse1/scroll/y , name: y , variants:  , displayName: Scroll Up/Down shortDisplayName: Scroll Wheel
- path: /Mouse1/radius/x , name: x , variants:  , displayName: Radius X shortDisplayName: Radius X
- path: /Mouse1/radius/y , name: y , variants:  , displayName: Radius Y shortDisplayName: Radius Y
-

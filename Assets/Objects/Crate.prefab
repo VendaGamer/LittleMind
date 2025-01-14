@@ -121,11 +121,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 050a2fc53ab75f149a17be02cac541aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Bedna
-  pickupAction: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-    type: 3}
-  dropAction: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-    type: 3}
+  interactableLabel: 
+  pickupAction:
+    ActionName: Pickup
+    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}
+  dropAction:
+    ActionName: Drop
+    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}
 --- !u!1 &9079893747503162935
 GameObject:
   m_ObjectHideFlags: 0

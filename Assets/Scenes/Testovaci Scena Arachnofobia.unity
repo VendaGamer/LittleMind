@@ -642,7 +642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contextMenuDocument: {fileID: 1087210925}
-  iconFont: {fileID: 12800000, guid: 786e752106593ae4da07d2e2f13225eb, type: 3}
+  iconFont: {fileID: 11400000, guid: d3fed19fb13b9ae4abaf9aee6693c443, type: 2}
 --- !u!4 &1126140552 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3207812161120748922, guid: b1624e55951882d48ae83bdcbf1c43f3,
@@ -738,30 +738,8 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 8611680057012624822, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9079893747503162935, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1793130214}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e, type: 3}
---- !u!1 &1793130211 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9079893747503162935, guid: b5df6b4d2bcccd141b36fd5cf79c6c5e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1769163349}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1793130214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793130211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95cd8276c4664202a516c4ae34072883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2053440884
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -980,10 +958,12 @@ MonoBehaviour:
   mouseSensitivity: 0.2
   playerCameraHolder: {fileID: 1294173812}
   hintManager: {fileID: 1087210927}
-  globalInteractionsGameplay:
-  - ActionName: Sprint
-    Action: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
+  globalInteractionsPlayerControls:
+    interactGroupLabel: Player
+    currentInteractions:
+    - ActionName: Sprint
+      Action: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
 --- !u!114 &2053440895
 MonoBehaviour:
   m_ObjectHideFlags: 0

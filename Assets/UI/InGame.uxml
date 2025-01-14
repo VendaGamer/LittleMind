@@ -1,6 +1,6 @@
 <engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/ContextMenuStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#ContextMenuStyles" />
     <engine:VisualElement name="context-menu" class="context-menu">
-        <engine:VisualElement name="menu-container" enabled="false" class="menu-container" />
+        <engine:VisualElement name="menu-container" enabled="false" class="menu-container" style="-unity-font-definition: url(&quot;project://database/Assets/InputSystem/promptfont.ttf?fileID=12800000&amp;guid=786e752106593ae4da07d2e2f13225eb&amp;type=3#promptfont&quot;);" />
     </engine:VisualElement>
 </engine:UXML>
