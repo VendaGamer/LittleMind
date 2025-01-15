@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.TextCore.Text;
@@ -11,7 +12,6 @@ public class HintManager : MonoBehaviour
     public static HintManager Instance { get; private set; }
 
     [SerializeField] private UIDocument contextMenuDocument;
-    [SerializeField] private FontAsset iconFont; // Font containing input icons
     
     private VisualElement menuContainer;
     private Dictionary<IInteractions, VisualElement> interactionsAndTheirContainer = new();
@@ -85,10 +85,9 @@ public class HintManager : MonoBehaviour
         PlayerController.GlobalInteractionsChanged += OnGlobalHintsChanged;
         PlayerController.ExclusiveInteractableChanged += OnExclusiveHintsChanged;
         PlayerInput.all[0].onControlsChanged += OnControlsChanged;
-
     }
 
-    private void OnExclusiveHintsChanged(IInteractable obj)
+    private void OnExclusiveHintsChanged([CanBeNull]IInteractable obj)
     {
         // Find any existing exclusive interactions
 
@@ -97,7 +96,7 @@ public class HintManager : MonoBehaviour
         {
             DeleteExclusiveInteractions();
         }
-    
+        if(obj == null)return;
 
         var container = CreateElements(obj);
         interactionsAndTheirContainer[obj] = container;
@@ -186,10 +185,10 @@ public class HintManager : MonoBehaviour
                                                 inputBinding.effectivePath.Contains("<Mouse>"));
             if (MouseInputPathsNeededForIconFont.TryGetValue(binding.effectivePath, out string icon))
             {
-                return (true,binding.name);
+                return (true,icon);
             }
             
-            return (false,binding.name);
+            return (false,actionRef.action.GetBindingDisplayString());
         }
     }
 
@@ -243,7 +242,11 @@ public class HintManager : MonoBehaviour
             var keyHint = new Label(res.text);
             if (res.isIcon)
             {
-                keyHint.style.unityFontDefinition = new StyleFontDefinition(iconFont);
+                keyHint.AddToClassList("key-hint-icon");
+            }
+            else
+            {
+                keyHint.AddToClassList("key-hint-text");
             }
             container.Add(actionText);
             container.Add(keyHint);

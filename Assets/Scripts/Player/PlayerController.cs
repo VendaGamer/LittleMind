@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -81,9 +79,11 @@ public class PlayerController : MonoBehaviour, IInteractor
     private void OnDrop(InputAction.CallbackContext obj)
     {
         if (interactableHolding == null) return;
-        
-        interactableHolding.Interact(this, obj.action);
-        interactableHolding = null;
+
+        if (interactableHolding.Interact(this, obj.action))
+        {
+            interactableHolding = null;
+        }
     }
 
     private void OnSprint(InputAction.CallbackContext obj)
@@ -115,13 +115,18 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleInteraction()
     {
-        if(interactableLookingAt == interactableHolding)return;
+        if(interactableLookingAt == interactableHolding && interactableHolding != null)return;
         
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
+                if (interactable == null && interactableHolding != null)
+                {
+                    interactableLookingAt = null;
+                    SwitchExclusiveInteractions(null);
+                }
                 if (interactableLookingAt == interactable) return;
 
                 if (interactableLookingAt?.CurrentInteractions != interactable.CurrentInteractions)

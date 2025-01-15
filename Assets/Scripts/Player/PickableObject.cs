@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class PickableObject : MonoBehaviour, IInteractable
@@ -35,7 +36,7 @@ public class PickableObject : MonoBehaviour, IInteractable
         StopAllCoroutines();
         rb.isKinematic = false;
         col.isTrigger = false;
-        transform.SetParent(null);
+        transform.parent.SetParent(null);
         OnDropped();
     }
     public void PickObject(Transform parent,float pickDur)
@@ -47,25 +48,25 @@ public class PickableObject : MonoBehaviour, IInteractable
 
     private IEnumerator PerformPickupLerp(Transform pickupPoint, float pickDur)
     {
-        transform.SetParent(pickupPoint);
+        transform.parent.SetParent(pickupPoint);
         var endPos = Vector3.zero;
         var endRot = Quaternion.Euler(Vector3.zero);
 
-        transform.GetLocalPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
+        transform.parent.GetLocalPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
         float elapsedTime = 0f;
         while (elapsedTime < pickDur)
         {
             elapsedTime += Time.deltaTime;
             var step = Mathf.SmoothStep(0, 1, elapsedTime / pickDur);
 
-            transform.SetLocalPositionAndRotation(
+            transform.parent.SetLocalPositionAndRotation(
                 Vector3.Lerp(startPos, endPos, step),
                 Quaternion.Lerp(startRot, endRot, step)
             );
             yield return null;
         }
         
-        transform.SetLocalPositionAndRotation(
+        transform.parent.SetLocalPositionAndRotation(
             endPos,
             endRot
         );
