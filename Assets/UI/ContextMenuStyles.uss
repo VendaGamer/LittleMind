@@ -53,3 +53,11 @@
     border-bottom-color: rgba(255, 255, 255, 0.3);
     border-bottom-width: 3px;
 }
+.keyboard-key {
+    background-color: rgba(66, 65, 65, 0.75);
+    border-radius: 5px;
+    border-color: rgba(83, 82, 82, 0.75);
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+}

@@ -69,10 +69,6 @@ public class HintManager : MonoBehaviour
         {"<Mouse>/backButton", "\u278E"},
     };
 
-    private Dictionary<string, string> KeyboardInputPathsNeededForInconFont = new ()
-    {
-        { "<Keyboard>/space", "\u27B1" },
-    };
 
     private void Awake()
     {
@@ -243,13 +239,18 @@ public class HintManager : MonoBehaviour
             if (res.isIcon)
             {
                 keyHint.AddToClassList("key-hint-icon");
+                container.Add(actionText);
+                container.Add(keyHint);
             }
             else
             {
+                var keyContainer = new VisualElement();
+                keyContainer.AddToClassList("keyboard-key");
                 keyHint.AddToClassList("key-hint-text");
+                keyContainer.Add(keyHint);
+                container.Add(actionText);
+                container.Add(keyContainer);
             }
-            container.Add(actionText);
-            container.Add(keyHint);
             interactionsContainer.Add(container);
         }
     
