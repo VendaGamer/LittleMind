@@ -82,6 +82,7 @@ public class PlayerController : MonoBehaviour, IInteractor
         if (interactableHolding.Interact(this, obj.action))
         {
             interactableHolding = null;
+            SwitchExclusiveInteractions(interactableLookingAt);
         }
     }
 
@@ -93,16 +94,13 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void OnUse(InputAction.CallbackContext obj)
     {
-        if (interactableLookingAt == null)
-        {
-            return;
-        }
+        interactableLookingAt?.Interact(this, obj.action);
+    }
 
-        var result = interactableLookingAt.Interact(this, obj.action);
-        if (result)
-        {
-            interactableHolding = interactableLookingAt;
-        }
+    public void PickUp(IInteractable itemToPickUp)
+    {
+        interactableHolding = itemToPickUp;
+        SwitchExclusiveInteractions(interactableHolding);
     }
 
     private void Update()

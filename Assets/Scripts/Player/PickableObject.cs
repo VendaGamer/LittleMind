@@ -83,7 +83,6 @@ public class PickableObject : MonoBehaviour, IInteractable
         {
             if (invokedAction.id == dropAction.Action.action.id)
             {
-                Debug.Log("Dropped Object");
                 DropObject();
                 IsPicked = false;
                 return true;
@@ -91,9 +90,9 @@ public class PickableObject : MonoBehaviour, IInteractable
         }
         else if (invokedAction.id == pickupAction.Action.action.id)
         {
-            Debug.Log("Picked Object");
             PickObject(interactor.PickupPoint,interactor.PickupLerpDuration);
             IsPicked = true;
+            interactor.PickUp(this);
             return true;
         }
         return false;
