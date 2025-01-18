@@ -218,16 +218,10 @@ public class HintManager : MonoBehaviour
     {
         var groupContainer = new VisualElement();
         groupContainer.AddToClassList("interactions-group");
-    
-        // Add the group label
         var groupLabel = new Label(interactable.InteractGroupLabel);
         groupLabel.AddToClassList("interactions-label");
         groupContainer.Add(groupLabel);
-    
-        // Create container for interaction items
         var interactionsContainer = new VisualElement();
-    
-        // Add each interaction
         foreach (var interaction in interactable.CurrentInteractions)
         {
             var container = new VisualElement();

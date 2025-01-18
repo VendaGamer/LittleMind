@@ -31,7 +31,7 @@ public interface IInteractions
 public interface IInteractor
 {
     public Transform PickupPoint { get; }
-    public float PickupLerpDuration { get; }
+    public float PickupLerpDuration { get; }    
 }
 public enum InputType
 {

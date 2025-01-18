@@ -196,7 +196,7 @@
                     "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.2,y=0.2)",
                     "groups": ";Keyboard&Mouse;Touch",
                     "action": "Look",
                     "isComposite": false,
@@ -205,7 +205,7 @@
                 {
                     "name": "",
                     "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -227,7 +227,7 @@
                 {
                     "name": "",
                     "id": "cbdac61b-8c19-44a0-ab70-5c362e2e2f12",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -249,7 +249,7 @@
                 {
                     "name": "",
                     "id": "e4583348-7869-4fec-8187-629ae481832e",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -271,7 +271,7 @@
                 {
                     "name": "",
                     "id": "3aee113f-d06f-49e7-909b-8ddfe4bce661",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -282,7 +282,7 @@
                 {
                     "name": "",
                     "id": "0c2c6394-9bdb-4f2a-a3ab-595a8b7055db",
-                    "path": "<Keyboard>/leftCtrl",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -293,7 +293,7 @@
                 {
                     "name": "",
                     "id": "cb7cbb5e-f8df-4087-b19a-7bee3b550fd0",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",

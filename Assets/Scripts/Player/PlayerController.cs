@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,11 +27,9 @@ public class PlayerController : MonoBehaviour, IInteractor
     [Header("Look Settings")]
     [SerializeField] private float maxLookUpAngle = 90f;
     [SerializeField] private float maxLookDownAngle = -90f;
-    [SerializeField] private float mouseSensitivity = 0.2f;
     [SerializeField]private Transform playerCameraHolder;
     
     [Header("Interaction Settings")]
-    [SerializeField] private HintManager hintManager;
     [SerializeField] private GlobalInteractions globalInteractionsPlayerControls;
 
     [CanBeNull]private IInteractable interactableLookingAt;
@@ -115,25 +114,42 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleInteraction()
     {
-        if(interactableLookingAt == interactableHolding && interactableHolding != null)return;
-        
+        // Early return if we're looking at the same object we're holding
+        if(interactableLookingAt == interactableHolding && !interactableHolding.IsUnityNull())
+            return;
+    
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
-                if (interactable == null && interactableHolding != null)
+                // If we're looking at a different interactable, update interactions
+                if (interactableLookingAt != interactable)
+                {
+                    if (interactableLookingAt?.CurrentInteractions != interactable.CurrentInteractions)
+                    {
+                        SwitchExclusiveInteractions(interactable);
+                    }
+                    interactableLookingAt = interactable;
+                }
+            }
+            else
+            {
+                // We hit something, but it's not an interactable
+                if (!interactableLookingAt.IsUnityNull())
                 {
                     interactableLookingAt = null;
                     SwitchExclusiveInteractions(null);
                 }
-                if (interactableLookingAt == interactable) return;
-
-                if (interactableLookingAt?.CurrentInteractions != interactable.CurrentInteractions)
-                {
-                    SwitchExclusiveInteractions(interactable);
-                }
-                interactableLookingAt = interactable;
+            }
+        }
+        else
+        {
+            // We didn't hit anything
+            if (!interactableLookingAt.IsUnityNull())
+            {
+                interactableLookingAt = null;
+                SwitchExclusiveInteractions(null);
             }
         }
     }
@@ -163,7 +179,7 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleLook()
     {
-        Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>() * mouseSensitivity;
+        Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>();
         
         transform.Rotate(Vector3.up * lookInput.x, Space.Self);
 
