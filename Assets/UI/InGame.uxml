@@ -3,4 +3,7 @@
     <engine:VisualElement name="context-menu" class="context-menu">
         <engine:VisualElement name="menu-container" enabled="false" class="menu-container" />
     </engine:VisualElement>
+    <engine:VisualElement name="crosshair-container" class="crosshair-container">
+        <engine:VisualElement name="crosshair" class="crosshair" />
+    </engine:VisualElement>
 </engine:UXML>

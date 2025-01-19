@@ -17,6 +17,7 @@ public class HintManager : MonoBehaviour
     private Dictionary<IInteractions, VisualElement> interactionsAndTheirContainer = new();
     
     private InputType currentInputType = InputType.KeyboardMouse;
+    private VisualElement crosshair;
 
     private Dictionary<string,string> XboxGamepadInputPathsNeededForIconFont= new ()
     {
@@ -92,16 +93,22 @@ public class HintManager : MonoBehaviour
         {
             DeleteExclusiveInteractions();
         }
-        if(obj == null)return;
+
+        if (obj == null)
+        {
+            crosshair.RemoveFromClassList("crosshair--interactive");
+            return;
+        }
 
         var container = CreateElements(obj);
         interactionsAndTheirContainer[obj] = container;
         menuContainer.Add(container);
         menuContainer.style.display = DisplayStyle.Flex;
-        
+        crosshair.AddToClassList("crosshair--interactive");
         if (!interactionsAndTheirContainer.Any())
         {
             menuContainer.style.display = DisplayStyle.None;
+            crosshair.RemoveFromClassList("crosshair--interactive");
         }
     }
 
@@ -258,6 +265,7 @@ public class HintManager : MonoBehaviour
         var root = contextMenuDocument.rootVisualElement;
         menuContainer = root.Q<VisualElement>("menu-container");
         menuContainer.style.display = DisplayStyle.None;
+        crosshair = root.Q<VisualElement>("crosshair");
     }
     
 }

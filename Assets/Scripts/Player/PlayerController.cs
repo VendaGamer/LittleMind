@@ -113,11 +113,7 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleInteraction()
     {
-        // Early return if we're looking at the same object we're holding
-        if(interactableLookingAt == interactableHolding && !interactableHolding.IsUnityNull())
-            return;
-    
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, playerCamera.nearClipPlane));
         if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
