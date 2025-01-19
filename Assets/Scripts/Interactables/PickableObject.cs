@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class PickableObject : MonoBehaviour, IInteractable
@@ -31,7 +30,7 @@ public class PickableObject : MonoBehaviour, IInteractable
         rb = GetComponentInParent<Rigidbody>();
         col = GetComponent<Collider>();
     }
-    public void DropObject()
+    private void DropObject()
     {
         StopAllCoroutines();
         rb.isKinematic = false;
@@ -39,16 +38,17 @@ public class PickableObject : MonoBehaviour, IInteractable
         transform.parent.SetParent(null);
         OnDropped();
     }
-    public void PickObject(Transform parent,float pickDur)
+    private void PickObject(Transform parent,float pickDur)
     {
         rb.isKinematic = true;
         col.isTrigger = true;
-        StartCoroutine(PerformPickupLerp(parent, pickDur));
+        transform.parent.SetParent(parent);
+        StartCoroutine(PerformPickupLerp(pickDur));
     }
 
-    private IEnumerator PerformPickupLerp(Transform pickupPoint, float pickDur)
+    private IEnumerator PerformPickupLerp(float pickDur)
     {
-        transform.parent.SetParent(pickupPoint);
+
         var endPos = Vector3.zero;
         var endRot = Quaternion.Euler(Vector3.zero);
 
@@ -77,7 +77,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     protected virtual void OnPicked() { }
     protected virtual void OnDropped() { }
     
-    public bool Interact(IInteractor interactor, InputAction invokedAction)
+    public virtual bool Interact(IInteractor interactor, InputAction invokedAction)
     {
         if (IsPicked)
         {

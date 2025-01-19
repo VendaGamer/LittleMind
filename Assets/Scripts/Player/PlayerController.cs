@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     [CanBeNull]private IInteractable interactableLookingAt;
     [CanBeNull]private IInteractable interactableHolding;
+    public IInteractable InteractableHolding => interactableHolding;
     public static event Action<GlobalInteractions> GlobalInteractionsChanged;
     public static event Action<IInteractable> ExclusiveInteractableChanged;
 
