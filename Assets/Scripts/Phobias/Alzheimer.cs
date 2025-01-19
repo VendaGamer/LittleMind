@@ -6,25 +6,31 @@ using UnityEngine.InputSystem;
 public class Alzheimer : MonoBehaviour
 {
     [SerializeField] private Diary playerDiary;
-    [SerializeField] private float memoryTriggerDistance = 2f;
     [CanBeNull]private MemoryTrigger currentMemoryTrigger;
-    private Controls playerControls => PlayerController.Controls;
 
+    private void Start()
+    {
+        PlayerController.Controls.Player.Journal.performed += OnJournal;
+    }
     private void OnEnable()
     {
-        playerControls.Player.Journal.performed += OnJournal;
+        if (PlayerController.Controls != null)
+        {
+            PlayerController.Controls.Player.Journal.performed += OnJournal;
+        }
     }
 
+    
+    private void OnDisable()
+    {
+        PlayerController.Controls.Player.Journal.performed -= OnJournal;
+    }
     private void OnJournal(InputAction.CallbackContext obj)
     {
         playerDiary.NegateActiveState();
     }
 
 
-    private void OnDisable()
-    {
-        playerControls.Player.Journal.performed -= OnJournal;
-    }
 
     private void OnTriggerEnter(Collider other)
     {

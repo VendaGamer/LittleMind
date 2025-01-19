@@ -36,7 +36,7 @@ public class Diary : MonoBehaviour
 
     public void NegateActiveState()
     {
-
+        gameObject.SetActive(!gameObject.activeSelf);
     }
     public void FlipToNextPage()
     {

@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     {
         Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>();
         
-        transform.Rotate(Vector3.up * lookInput.x, Space.Self);
+        transform.Rotate(Vector3.up * lookInput.x);
 
 
         float newXRotation = playerCameraHolder.localEulerAngles.x - lookInput.y;
