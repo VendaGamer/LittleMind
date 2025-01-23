@@ -399,9 +399,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAnxietyLevel: 1
   anxietyBuildUpRate: 0.1
-  fadeDuration: 5
+  fadeDuration: 10
   maxCheckDistance: 6
   eyesCloseTriggerDelay: 5
+  eyesOpenDelay: 3
   eyeClose: {fileID: 1382766511}
 --- !u!1 &645489710
 GameObject:

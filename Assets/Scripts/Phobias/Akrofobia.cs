@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class Akrofobia : MentalIllness
 {
     [SerializeField] private float maxCheckDistance = 6f;

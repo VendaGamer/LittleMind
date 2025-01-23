@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
-
 public class HintManager : MonoBehaviour
 {
     public static HintManager Instance { get; private set; }

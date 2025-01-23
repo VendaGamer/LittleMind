@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class HighObjectTrigger : MonoBehaviour
 {
     private void OnCollisionStay(Collision other)
@@ -9,7 +8,6 @@ public class HighObjectTrigger : MonoBehaviour
             Vector3 playerPosition = other.transform.position;
             var dist = GetNearestEdgeDistance(playerPosition);
             akrofobia.SetAnxietyBasedOnDistance(dist);
-            Debug.Log("Distance: "+dist);
         }
     }
 

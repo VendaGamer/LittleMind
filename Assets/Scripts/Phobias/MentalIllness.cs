@@ -10,17 +10,9 @@ public abstract class MentalIllness : MonoBehaviour
 
     protected float CurrentAnxietyLevel = 0f;
     private Coroutine fadeRoutine;
-
-    public float AnxietyLevel => CurrentAnxietyLevel;
-
-    /// <summary>
-    /// Logika pro aktivitu danych symptomu, ve velke vetsine neovverridnu
-    /// </summary>
-    ///
-
     protected virtual void Start()
     {
-        Symptoms = GetComponentsInChildren<Symptom>();
+        Symptoms = GetComponents<Symptom>();
     }
     protected virtual void UpdateSymptoms()
     {
@@ -33,12 +25,9 @@ public abstract class MentalIllness : MonoBehaviour
     /// <summary>
     /// Logika na postupne zastaveni (fadenuti) symptomu
     /// </summary>
-    protected virtual void RecoverFromSymptoms()
+    protected void RecoverFromSymptoms()
     {
-        if (CurrentAnxietyLevel > 0)
-        {
-            fadeRoutine ??= StartCoroutine(FadeOutSymptoms());
-        }
+        fadeRoutine ??= StartCoroutine(FadeOutSymptoms());
     }
 
     /// <summary>
@@ -51,7 +40,8 @@ public abstract class MentalIllness : MonoBehaviour
 
         while (elapsed < fadeDuration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.fixedDeltaTime;
+            Debug.Log("Elapsed time: "+elapsed);
             float t = elapsed / fadeDuration;
             CurrentAnxietyLevel = Mathf.Lerp(startAnxietyLevel, 0f, t);
 
@@ -63,7 +53,7 @@ public abstract class MentalIllness : MonoBehaviour
                 }
             }
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
         
         CurrentAnxietyLevel = 0f;
@@ -83,7 +73,6 @@ public abstract class MentalIllness : MonoBehaviour
         {
             RecoverFromSymptoms();
         }
-        // Reset anxiety for the next calculation cycle
         CurrentAnxietyLevel = 0f;
     }
 

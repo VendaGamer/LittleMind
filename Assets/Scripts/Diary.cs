@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class Diary : MonoBehaviour
 {
     [SerializeField] private Transform leftPageContainer; // Left pages

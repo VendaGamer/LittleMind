@@ -4,13 +4,11 @@
     right: 20px;
     min-width: 200px;
 }
-
 .menu-container {
     background-color: rgba(0, 0, 0, 0.75);
     border-radius: 5px;
     padding: 10px;
 }
-
 .menu-item {
     flex-direction: row;
     justify-content: space-between;
@@ -18,13 +16,11 @@
     padding: 5px;
     margin: 2px 0;
 }
-
 .key-hint-text {
     color: rgb(200, 200, 200);
     margin-left: 10px;
     -unity-font-style: bold;
 }
-
 .key-hint-icon {
     color: rgb(255, 255, 255);
     margin-left: 10px;
@@ -33,17 +29,14 @@
     -unity-font-definition: url("project://database/Assets/InputSystem/promptfont.ttf?fileID=12800000&guid=786e752106593ae4da07d2e2f13225eb&type=3#promptfont");
     -unity-text-outline-width: 2px;
 }
-
 .action-text {
     color: white;
     -unity-font-style: normal;
 }
-
 .interactions-group {
     margin: 5px 0;
     padding: 5px;
 }
-
 .interactions-label {
     color: rgb(255, 255, 255);
     padding: 2px 5px;
@@ -61,14 +54,12 @@
     justify-content: center;
     align-items: center;
 }
-
 .crosshair-container {
     position: absolute;
     left: 50%;
     top: 50%;
     translate: -50% -50%;
 }
-
 .crosshair {
     width: 8px;
     height: 8px;
@@ -76,9 +67,8 @@
     background-color: white;
     transition-property: border-width, border-color;
     transition-duration: 0.5s;
-    transition-timing-function: ease-out;
+    transition-timing-function: ease;
 }
-
 .crosshair--interactive {
     border-color: white;
     border-width: 2px;

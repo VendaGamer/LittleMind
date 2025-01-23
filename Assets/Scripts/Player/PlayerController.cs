@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour, IInteractor
 {
@@ -32,6 +33,8 @@ public class PlayerController : MonoBehaviour, IInteractor
     [Header("Interaction Settings")]
     [SerializeField] private GlobalInteractions globalInteractionsPlayerControls;
 
+    [SerializeField] private LayerMask interactableLayerMask;
+
     [CanBeNull]private IInteractable interactableLookingAt;
     [CanBeNull]private IInteractable interactableHolding;
     public IInteractable InteractableHolding => interactableHolding;
@@ -54,7 +57,7 @@ public class PlayerController : MonoBehaviour, IInteractor
             playerCamera = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
         
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
         currentSpeed = moveSpeed;
         SwitchGlobalInteractions(globalInteractionsPlayerControls);
@@ -114,7 +117,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     private void HandleInteraction()
     {
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, playerCamera.nearClipPlane));
-        if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
+        if (Physics.Raycast(ray, out RaycastHit hit, rayDistance,interactableLayerMask))
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
@@ -172,19 +175,19 @@ public class PlayerController : MonoBehaviour, IInteractor
         }
     }
 
+    private float yRotation = 0f;
+    private float xRotation = 0f;
+    
     private void HandleLook()
     {
         Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>();
-        
-        transform.Rotate(Vector3.up * lookInput.x);
-
-
-        float newXRotation = playerCameraHolder.localEulerAngles.x - lookInput.y;
-        
-        if (newXRotation > 180f) newXRotation -= 360f;
-        newXRotation = Mathf.Clamp(newXRotation, maxLookDownAngle, maxLookUpAngle);
-        
-        playerCameraHolder.localEulerAngles = new Vector3(newXRotation, 0f, 0f);
+    
+        yRotation += lookInput.x;
+        xRotation -= lookInput.y;
+        xRotation = Mathf.Clamp(xRotation, maxLookDownAngle, maxLookUpAngle);
+    
+        transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        playerCameraHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
     }
     
 }

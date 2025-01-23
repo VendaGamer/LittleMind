@@ -220,7 +220,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contextMenuDocument: {fileID: 508031141465379402}
-  iconFont: {fileID: 11400000, guid: d3fed19fb13b9ae4abaf9aee6693c443, type: 2}
 --- !u!1 &6185675373264984707
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,15 +303,16 @@ MonoBehaviour:
   sprintSpeed: 7
   maxLookUpAngle: 90
   maxLookDownAngle: -90
-  mouseSensitivity: 0.2
   playerCameraHolder: {fileID: 2182245987986286316}
-  hintManager: {fileID: 6385844956333866479}
   globalInteractionsPlayerControls:
     interactGroupLabel: Player
     currentInteractions:
     - ActionName: Sprint
       Action: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
         type: 3}
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &2330484725698535383
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class LightTrigger : MonoBehaviour
 {
     [SerializeField] private Transform returnPoint;
