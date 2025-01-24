@@ -18,7 +18,7 @@ public class HintManager : MonoBehaviour
     private InputType currentInputType = InputType.KeyboardMouse;
     private VisualElement crosshair;
 
-    private Dictionary<string,string> XboxGamepadInputPathsNeededForIconFont= new ()
+    private readonly Dictionary<string,string> xboxGamepadInputPathsNeededForIconFont= new ()
     {
         {"<Gamepad>/buttonSouth","\u21D3"},
         {"<Gamepad>/buttonWest","\u21D0"},
@@ -55,7 +55,7 @@ public class HintManager : MonoBehaviour
         {"<Gamepad>/start", "\u21F8"},
     };
     
-    private Dictionary<string,string> MouseInputPathsNeededForIconFont= new ()
+    private readonly Dictionary<string,string> mouseInputPathsNeededForIconFont= new ()
     {
         {"<Mouse>/scroll/up","\u27F0"},
         {"<Mouse>/scroll/down","\u27F1"},
@@ -67,6 +67,9 @@ public class HintManager : MonoBehaviour
         {"<Mouse>/middleButton", "\u278C"},
         {"<Mouse>/forwardButton", "\u278D"},
         {"<Mouse>/backButton", "\u278E"},
+    };
+    private readonly Dictionary<string,string> keyboardInputPathsNeededForIconFont= new ()
+    {
     };
 
 
@@ -173,25 +176,25 @@ public class HintManager : MonoBehaviour
             var binding = actionRef.action.bindings
                 .FirstOrDefault(inputBinding => inputBinding.effectivePath.Contains("<Gamepad>"));
             
-            if (XboxGamepadInputPathsNeededForIconFont.TryGetValue(binding.effectivePath, out string icon))
+            if (xboxGamepadInputPathsNeededForIconFont.TryGetValue(binding.effectivePath, out string icon))
             {
                 return (true,icon);
             }
-            
-            return (false,binding.name);
         }
         else // KeyboardMouse
         {
             var binding = actionRef.action.bindings
                 .FirstOrDefault(inputBinding => inputBinding.effectivePath.Contains("<Keyboard>")||
                                                 inputBinding.effectivePath.Contains("<Mouse>"));
-            if (MouseInputPathsNeededForIconFont.TryGetValue(binding.effectivePath, out string icon))
+            if (mouseInputPathsNeededForIconFont.TryGetValue(binding.effectivePath, out string icon))
             {
                 return (true,icon);
             }
-            
-            return (false,actionRef.action.GetBindingDisplayString());
+
         }
+                    
+        return (false,actionRef.action.GetBindingDisplayString(
+            InputBinding.DisplayStringOptions.IgnoreBindingOverrides));
     }
 
     private void DeleteGlobalInteractions()

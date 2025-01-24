@@ -1,4 +1,5 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     protected bool IsPicked = false;
     [SerializeField] private Interaction pickupAction;
     [SerializeField] private Interaction dropAction;
+    [CanBeNull] private Coroutine pickupCoroutine;
 
     private Rigidbody rb;
     private Collider col;
@@ -17,11 +19,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     {
         get
         {
-            if (IsPicked)
-            {
-                return new[] {  dropAction};
-            }
-            return new[] { pickupAction };
+            return IsPicked ? new[] {  dropAction } : new[] { pickupAction };
         }
     }
 
@@ -32,7 +30,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     }
     private void DropObject()
     {
-        StopAllCoroutines();
+        StopCoroutine(pickupCoroutine);
         rb.isKinematic = false;
         col.isTrigger = false;
         transform.parent.SetParent(null);
@@ -43,12 +41,11 @@ public class PickableObject : MonoBehaviour, IInteractable
         rb.isKinematic = true;
         col.isTrigger = true;
         transform.parent.SetParent(parent);
-        StartCoroutine(PerformPickupLerp(pickDur));
+        pickupCoroutine = StartCoroutine(PerformPickupLerp(pickDur));
     }
 
     private IEnumerator PerformPickupLerp(float pickDur)
     {
-
         var endPos = Vector3.zero;
         var endRot = Quaternion.Euler(Vector3.zero);
 

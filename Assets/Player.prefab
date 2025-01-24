@@ -310,7 +310,10 @@ MonoBehaviour:
     - ActionName: Sprint
       Action: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
         type: 3}
-  interactableLayer:
+    - ActionName: Crouch
+      Action: {fileID: 8909975673403271220, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+  interactableLayerMask:
     serializedVersion: 2
     m_Bits: 512
 --- !u!114 &2330484725698535383
