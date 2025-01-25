@@ -650,6 +650,11 @@ PrefabInstance:
       propertyPath: interactableLayer.m_Bits
       value: 512
       objectReference: {fileID: 0}
+    - target: {fileID: 6385844956333866479, guid: b1624e55951882d48ae83bdcbf1c43f3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8476556591668560585, guid: b1624e55951882d48ae83bdcbf1c43f3,
         type: 3}
       propertyPath: m_LocalPosition.x

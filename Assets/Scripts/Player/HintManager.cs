@@ -1,19 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UIElements;
 public class HintManager : MonoBehaviour
 {
-    public static HintManager Instance { get; private set; }
-
     [SerializeField] private UIDocument contextMenuDocument;
     
     private VisualElement menuContainer;
-    private Dictionary<IInteractions, VisualElement> interactionsAndTheirContainer = new();
+    private readonly Dictionary<IInteractions, VisualElement> interactionsAndTheirContainer = new();
     
     private InputType currentInputType = InputType.KeyboardMouse;
     private VisualElement crosshair;
@@ -70,12 +66,11 @@ public class HintManager : MonoBehaviour
     };
     private readonly Dictionary<string,string> keyboardInputPathsNeededForIconFont= new ()
     {
-    };
+    };  
 
 
     private void Awake()
     {
-        Instance = this;
         InitializeUI();
     }
 
