@@ -10,10 +10,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     [SerializeField]
     private Transform pickupPoint;
     public Transform PickupPoint=> pickupPoint;
-    [SerializeField]
-    protected Camera playerCamera;
-    [SerializeField]
-    private float rayDistance = 3f;
+    private static Camera Camera => PlayerCamera.Camera;
     [SerializeField]
     private float pickupLerpDuration=1f;
     public float PickupLerpDuration => pickupLerpDuration;
@@ -27,16 +24,18 @@ public class PlayerController : MonoBehaviour, IInteractor
     [Header("Look Settings")]
     [SerializeField] private float maxLookUpAngle = 90f;
     [SerializeField] private float maxLookDownAngle = -90f;
-    [SerializeField]private Transform playerCameraHolder;
+    [SerializeField] private Transform playerCameraHolder;
     
     [Header("Interaction Settings")]
     [SerializeField] private GlobalInteractions globalInteractionsPlayerControls;
-
     [SerializeField] private LayerMask interactableLayerMask;
+    [SerializeField] private float sphereCastDistance = 3f;
+    [SerializeField] private float sphereCastRadius = 0.1f;
+    
+    private readonly RaycastHit[] raycastHits = new RaycastHit[1];
+    [CanBeNull] private IInteractable interactableLookingAt;
+    [CanBeNull] public IInteractable InteractableHolding { get; private set; }
 
-    [CanBeNull]private IInteractable interactableLookingAt;
-    [CanBeNull]private IInteractable interactableHolding;
-    public IInteractable InteractableHolding => interactableHolding;
     public static event Action<GlobalInteractions> GlobalInteractionsChanged;
     public static event Action<IInteractable> ExclusiveInteractableChanged;
 
@@ -52,8 +51,6 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void Start()
     {
-        if(!playerCamera)
-            playerCamera = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
         
         Cursor.lockState = CursorLockMode.Confined;
@@ -80,11 +77,11 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void OnDrop(InputAction.CallbackContext obj)
     {
-        if (interactableHolding == null) return;
+        if (InteractableHolding == null) return;
 
-        if (interactableHolding.Interact(this, obj.action))
+        if (InteractableHolding.Interact(this, obj.action))
         {
-            interactableHolding = null;
+            InteractableHolding = null;
             SwitchExclusiveInteractions(interactableLookingAt);
         }
     }
@@ -102,8 +99,8 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     public void PickUp(IInteractable itemToPickUp)
     {
-        interactableHolding = itemToPickUp;
-        SwitchExclusiveInteractions(interactableHolding);
+        InteractableHolding = itemToPickUp;
+        SwitchExclusiveInteractions(InteractableHolding);
     }
 
     private void Update()
@@ -115,9 +112,12 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleInteraction()
     {
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, playerCamera.nearClipPlane));
-        if (Physics.Raycast(ray, out RaycastHit hit, rayDistance,interactableLayerMask))
+        Ray ray = Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, Camera.nearClipPlane));
+        int hitCount = Physics.SphereCastNonAlloc(ray, sphereCastRadius, raycastHits, sphereCastDistance, interactableLayerMask);
+
+        if (hitCount > 0)
         {
+            RaycastHit hit = raycastHits[0];
             if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
                 // If we're looking at a different interactable, update interactions

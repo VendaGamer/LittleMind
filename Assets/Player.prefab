@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8905889870824980091}
   - component: {fileID: 6552653891599695681}
   - component: {fileID: 279045986975452862}
+  - component: {fileID: 6572192723100917483}
   m_Layer: 0
   m_Name: PlayerView
   m_TagString: MainCamera
@@ -154,6 +155,18 @@ MonoBehaviour:
   defaultRotInfluence: {x: 0, y: 0, z: 0}
   restPositionOffset: {x: 0, y: 0, z: 0}
   restRotationOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &6572192723100917483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1027583509779653667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97aa3d249312441eb1feef62cddc1cbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1872757697264497400
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,7 +309,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupPoint: {fileID: 3207812161120748922}
-  playerCamera: {fileID: 3539996310292855768}
   rayDistance: 3
   pickupLerpDuration: 1
   moveSpeed: 5

@@ -69,7 +69,7 @@ public class HintManager : MonoBehaviour
     };  
 
 
-    private void Awake()
+    private void Start()
     {
         InitializeUI();
     }
