@@ -1,14 +1,27 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// </summary>
 public class PlayerCamera : MonoBehaviour
 {
-    public static Camera Camera { get; private set; }
-    public static Plane[] FrustumPlanes { get; private set; } = new Plane[6];
-
-    public static float FrustumExpansionFactor { get; private set; }= 1.3f; // 10% wider on each side
+    public static PlayerCamera Instance { get; private set; }
+    public Camera Camera { get; private set; }
+    public Plane[] FrustumPlanes { get; } = new Plane[6];
+    private float frustumExpansionFactor = 1.1f;
+    
+    public float FrustumExpansionFactor
+    {
+        get => frustumExpansionFactor;
+        set
+        {
+            frustumExpansionFactor = value;
+            UpdateFrustum();
+        }
+    }
+    
     private Vector3 lastCameraPosition;
     private Quaternion lastCameraRotation;
 
@@ -22,6 +35,11 @@ public class PlayerCamera : MonoBehaviour
             transform.position == lastCameraPosition)
             return;
         
+        UpdateFrustum();
+    }
+
+    private void UpdateFrustum()
+    {
         lastCameraPosition = transform.position;
         lastCameraRotation = transform.rotation;
         var originalFOV = Camera.fieldOfView;
@@ -31,5 +49,15 @@ public class PlayerCamera : MonoBehaviour
         GeometryUtility.CalculateFrustumPlanes(Camera, FrustumPlanes);
 
         Camera.fieldOfView = originalFOV;
+    }
+
+    private void Awake()
+    {
+        if (Instance)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
     }
 }

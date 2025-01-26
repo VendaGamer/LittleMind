@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     [SerializeField]
     private Transform pickupPoint;
     public Transform PickupPoint=> pickupPoint;
-    private static Camera Camera => PlayerCamera.Camera;
+    private static Camera Camera => PlayerCamera.Instance.Camera;
     [SerializeField]
     private float pickupLerpDuration=1f;
     public float PickupLerpDuration => pickupLerpDuration;
@@ -52,8 +52,6 @@ public class PlayerController : MonoBehaviour, IInteractor
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        
-        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
         currentSpeed = moveSpeed;
         SwitchGlobalInteractions(globalInteractionsPlayerControls);

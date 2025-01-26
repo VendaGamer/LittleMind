@@ -15,7 +15,7 @@ public class CameraVisibilityDetector : MonoBehaviour
     private void LateUpdate()
     {
         renderer.material.color = 
-        GeometryUtility.TestPlanesAABB(PlayerCamera.FrustumPlanes, collider.bounds)
+        GeometryUtility.TestPlanesAABB(PlayerCamera.Instance.FrustumPlanes, collider.bounds)
             ? Color.green
             : Color.red;
     }
