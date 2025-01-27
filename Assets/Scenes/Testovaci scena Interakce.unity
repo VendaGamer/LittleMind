@@ -670,6 +670,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6284207477169610776, guid: b1624e55951882d48ae83bdcbf1c43f3,
         type: 3}
+      propertyPath: jumpForce
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: b1624e55951882d48ae83bdcbf1c43f3,
+        type: 3}
+      propertyPath: sphereCastRadius
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: b1624e55951882d48ae83bdcbf1c43f3,
+        type: 3}
       propertyPath: interactableLayer.m_Bits
       value: 512
       objectReference: {fileID: 0}

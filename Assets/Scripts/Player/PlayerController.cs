@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,6 +21,14 @@ public class PlayerController : MonoBehaviour, IInteractor
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintSpeed = 7f;
+    [SerializeField] private float jumpForce = 2f;
+    [SerializeField] private Transform jumpPoint;
+    [SerializeField] private float maxJumpPointDist = 0.2f;
+    [SerializeField] private float jumpCooldown = 0.1f;
+    [SerializeField] private LayerMask groundLayerMask;
+    private bool canJump = true;
+    private bool isGrounded;
+    private bool isCrouching;
     
 
     [Header("Look Settings")]
@@ -42,7 +52,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     public static Controls Controls { get; private set; }
     private float currentSpeed;
     private Rigidbody rb;
-    private bool isRunning = false;
+    private bool isRunning;
 
     private void Awake()
     {
@@ -53,24 +63,27 @@ public class PlayerController : MonoBehaviour, IInteractor
     {
         rb = GetComponent<Rigidbody>();
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
         SwitchGlobalInteractions(globalInteractionsPlayerControls);
     }
     
     private void OnDisable()
     {
-        Controls.Disable();
+        Controls.Player.Disable();
         Controls.Player.Use.performed -= OnUse;
         Controls.Player.Sprint.performed -= OnSprint;
         Controls.Player.Drop.performed -= OnDrop;
+        Controls.Player.Crouch.performed -= OnCrouch;
     }
-    
+
     private void OnEnable()
     {
-        Controls.Enable();
+        Controls.Player.Enable();
         Controls.Player.Use.performed += OnUse;
         Controls.Player.Sprint.performed += OnSprint;
         Controls.Player.Drop.performed += OnDrop;
+        Controls.Player.Crouch.performed += OnCrouch;
     }
 
     private void OnDrop(InputAction.CallbackContext obj)
@@ -82,6 +95,12 @@ public class PlayerController : MonoBehaviour, IInteractor
             InteractableHolding = null;
             SwitchExclusiveInteractions(interactableLookingAt);
         }
+    }
+    
+    private void OnCrouch(InputAction.CallbackContext obj)
+    {
+        isCrouching =! isCrouching;
+        
     }
 
     private void OnSprint(InputAction.CallbackContext obj)
@@ -105,7 +124,31 @@ public class PlayerController : MonoBehaviour, IInteractor
     {
         HandleLook();
         HandleMovement();
+        CheckGrounded(); // Split ground check into its own method
+        HandleJump();
         HandleInteraction();
+    }
+
+    private void CheckGrounded()
+    {
+        isGrounded = Physics.Raycast(new Ray(jumpPoint.position, Vector3.down), maxJumpPointDist, groundLayerMask);
+    }
+
+    private void HandleJump()
+    {
+        if (Controls.Player.Jump.IsPressed() && isGrounded && canJump)
+        {
+            rb.AddForce(Vector3.up * jumpForce * 100f, ForceMode.Force);
+            
+            StartCoroutine(JumpCooldown());
+        }
+    }
+
+    private IEnumerator JumpCooldown()
+    {
+        canJump = false;
+        yield return new WaitForSeconds(jumpCooldown);
+        canJump = true;
     }
 
     private void HandleInteraction()
