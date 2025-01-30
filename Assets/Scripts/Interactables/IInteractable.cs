@@ -31,7 +31,6 @@ public interface IInteractions
 public interface IInteractor
 {
     public Transform PickupPoint { get; }
-    public float PickupLerpDuration { get; }
     public void PickUp(IInteractable itemToPickUp);
     public IInteractable InteractableHolding { get; }
 }

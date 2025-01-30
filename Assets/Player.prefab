@@ -313,7 +313,7 @@ MonoBehaviour:
   pickupLerpDuration: 1
   moveSpeed: 5
   sprintSpeed: 7
-  jumpForce: 1
+  jumpForce: 2.5
   jumpPoint: {fileID: 7955756814250554620}
   maxJumpPointDist: 0.2
   jumpCooldown: 0.1

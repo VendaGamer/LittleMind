@@ -1,52 +1,44 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.Serialization;
 
 public class Door : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string interactGroupLabel;
-    [SerializeField] private float rotationDuration = 1f;
-    [SerializeField] private float openAngle = 90f;
-    [SerializeField] private Interaction openDoorInteraction;
-    [SerializeField] private Interaction closeDoorInteraction;
-    [SerializeField] protected Interaction lookThroughKeyHoleInteraction;
-    
+    [SerializeField] protected DoorInfo info;
     private Quaternion closedRotation;
     private Quaternion openRotation;
-
-
+    protected bool IsOpen = false;
+    public string InteractGroupLabel => info.InteractableGroupLabel;
     private void Start()
     {
         closedRotation = transform.parent.rotation;
-        openRotation = closedRotation * Quaternion.Euler(0f, openAngle, 0f);
+        openRotation = closedRotation * Quaternion.Euler(0f, info.OpenAngle, 0f);
     }
-
-    protected bool isOpen = false;
-    public string InteractGroupLabel => interactGroupLabel;
 
     public virtual Interaction[] CurrentInteractions
     {
         get
         {
-            return isOpen ? new[] { closeDoorInteraction } : new[] { openDoorInteraction, lookThroughKeyHoleInteraction };
+            return IsOpen ? new[] { info.CloseDoorInteraction } : new[] { info.OpenDoorInteraction, info.LookThroughKeyHoleInteraction };
         }
     }
 
     public virtual bool Interact(IInteractor interactor, InputAction invokedAction)
     {
-        if (isOpen)
+        if (IsOpen)
         {
-            if (invokedAction.id == closeDoorInteraction.Action.action.id)
+            if (invokedAction.id == info.CloseDoorInteraction.Action.action.id)
             {
                 CloseDoor();
-                isOpen = false;
+                IsOpen = false;
                 return true;
             }
         }
-        else
+        else if(invokedAction.id == info.OpenDoorInteraction.Action.action.id)
         {
             OpenDoor();
-            isOpen = true;
+            IsOpen = true;
             return true;
         }
         return false;
@@ -68,7 +60,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         Quaternion startRotation = transform.parent.rotation;
         float angleToRotate = Quaternion.Angle(startRotation, openRotation);
-        float adjustedDuration = rotationDuration * (angleToRotate / openAngle);
+        float adjustedDuration = info.LerpDuration * (angleToRotate / info.OpenAngle);
     
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
@@ -87,7 +79,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         Quaternion startRotation = transform.parent.rotation;
         float angleToRotate = Quaternion.Angle(startRotation, closedRotation);
-        float adjustedDuration = rotationDuration * (angleToRotate / openAngle);
+        float adjustedDuration = info.LerpDuration * (angleToRotate / info.OpenAngle);
     
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)

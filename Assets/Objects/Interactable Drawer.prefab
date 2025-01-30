@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 1.8, z: 0}
-  m_LocalScale: {x: 91.74524, y: 91.74524, z: 91.74524}
+  m_LocalScale: {x: 91.75, y: 91.75, z: 91.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1705172551980190807}
@@ -100,17 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
-  lerpDur: 1
-  openInteraction:
-    ActionName: Open
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  closeInteraction:
-    ActionName: Close
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  openX: -1.5
 --- !u!64 &2150116367026849780
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -272,7 +263,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 91.74524, y: 91.74524, z: 91.74524}
+  m_LocalScale: {x: 91.75, y: 91.75, z: 91.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1705172551980190807}
@@ -364,17 +355,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
-  lerpDur: 1
-  openInteraction:
-    ActionName: Open
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  closeInteraction:
-    ActionName: Close
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  openX: -1.5
 --- !u!1 &7347965874230616000
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +387,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 91.74524, y: 91.74524, z: 91.74524}
+  m_LocalScale: {x: 91.75, y: 91.75, z: 91.75}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1705172551980190807}
@@ -497,17 +479,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
-  lerpDur: 1
-  openInteraction:
-    ActionName: Open
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  closeInteraction:
-    ActionName: Close
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  openX: -1.5
 --- !u!1 &8579271860399894947
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,7 +506,7 @@ Transform:
   m_GameObject: {fileID: 8579271860399894947}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.1759253, y: 2.775557e-18, z: 5.9003925}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

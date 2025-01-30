@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1e5b87118e445899e175ab998ad1249, type: 3}
+  m_Name: UnlockableDoor
+  m_EditorClassIdentifier: 
+  <InteractableGroupLabel>k__BackingField: 
+  <LerpDuration>k__BackingField: 0
+  <OpenAngle>k__BackingField: 0
+  <OpenDoorInteraction>k__BackingField:
+    ActionName: Open
+    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}
+  <CloseDoorInteraction>k__BackingField:
+    ActionName: Close
+    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}
+  <LookThroughKeyHoleInteraction>k__BackingField:
+    ActionName: Look through keyhole
+    Action: {fileID: 6194689430586984020, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}
+  <UnlockDoorInteraction>k__BackingField:
+    ActionName: Unlock
+    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}

@@ -153,18 +153,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f5d93a2d0857a64682336394193a122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactGroupLabel: White Doors
-  rotationDuration: 1
-  openAngle: 90
-  openDoorInteraction:
-    ActionName: Open
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  closeDoorInteraction:
-    ActionName: Close
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  lookThroughKeyHoleInteraction:
-    ActionName: Look through keyhole
-    Action: {fileID: 6194689430586984020, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
+  info: {fileID: 11400000, guid: 613c7e559e14b3841bbf27371fa56771, type: 2}

@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 public class UnlockableDoor : Door
 {
     [SerializeField] private DoorKey requiredKey;
-    [SerializeField] private Interaction unlockDoorInteraction;
     private bool isLocked = true;
     public override Interaction[] CurrentInteractions
     {
@@ -12,7 +11,7 @@ public class UnlockableDoor : Door
         {
             if (isLocked)
             {
-                return new[] { unlockDoorInteraction, lookThroughKeyHoleInteraction };
+                return new[] { ((UnlockableDoorInfo)info).UnlockDoorInteraction, info.LookThroughKeyHoleInteraction };
             }
             return base.CurrentInteractions;
         }
@@ -22,9 +21,9 @@ public class UnlockableDoor : Door
     {
         if (isLocked)
         {
-            if (invokedAction.id == unlockDoorInteraction.Action.action.id)
+            if (invokedAction.id == ((UnlockableDoorInfo)info).UnlockDoorInteraction.Action.action.id)
             {
-                if (interactor.InteractableHolding == requiredKey)
+                if (ReferenceEquals(interactor.InteractableHolding, requiredKey))
                 {
                     isLocked = false;
                     return true;
