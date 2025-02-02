@@ -1,19 +1,18 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
-using UnityEngine.Serialization;
 
 public class Door : MonoBehaviour, IInteractable
 {
     [SerializeField] protected DoorInfo info;
     private Quaternion closedRotation;
-    private Quaternion openRotation;
     protected bool IsOpen = false;
     public string InteractGroupLabel => info.InteractableGroupLabel;
+    private CancellationTokenSource canTokSrc;
     private void Start()
     {
         closedRotation = transform.parent.rotation;
-        openRotation = closedRotation * Quaternion.Euler(0f, info.OpenAngle, 0f);
     }
 
     public virtual Interaction[] CurrentInteractions
@@ -28,69 +27,48 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (IsOpen)
         {
-            if (invokedAction.id == info.CloseDoorInteraction.Action.action.id)
+            if (invokedAction.id == info.CloseDoorInteraction.ActionRef.action.id)
             {
-                CloseDoor();
+                canTokSrc = canTokSrc.CancelCurrentActionAndCreateNewSrc();
+                RotateDoor(closedRotation, canTokSrc.Token);
                 IsOpen = false;
                 return true;
             }
         }
-        else if(invokedAction.id == info.OpenDoorInteraction.Action.action.id)
+        else if(invokedAction.id == info.OpenDoorInteraction.ActionRef.action.id)
         {
-            OpenDoor();
+            canTokSrc = canTokSrc.CancelCurrentActionAndCreateNewSrc();
+            RotateDoor(
+                closedRotation * Quaternion.Euler(0f, info.OpenAngle, 0f),
+                canTokSrc.Token);
             IsOpen = true;
             return true;
         }
         return false;
     }
 
-    private void OpenDoor()
+    public bool ToggleOutline(bool value)
     {
-        StopAllCoroutines();
-        StartCoroutine(OpenDoorRoutine());
+        return false;
     }
 
-    private void CloseDoor()
-    {
-        StopAllCoroutines();
-        StartCoroutine(CloseDoorRoutine());
-    }
-
-    private IEnumerator OpenDoorRoutine()
+    private async Task RotateDoor(Quaternion desiredRotation, CancellationToken canTok)
     {
         Quaternion startRotation = transform.parent.rotation;
-        float angleToRotate = Quaternion.Angle(startRotation, openRotation);
+        float angleToRotate = Quaternion.Angle(startRotation, desiredRotation);
         float adjustedDuration = info.LerpDuration * (angleToRotate / info.OpenAngle);
-    
+        
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
         {
+            canTok.ThrowIfCancellationRequested();
             elapsedTime += Time.deltaTime;
             float step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
-
-            transform.parent.rotation = Quaternion.Lerp(startRotation, openRotation, step);
-            yield return null;
+            
+            transform.parent.rotation = Quaternion.Lerp(startRotation, desiredRotation, step);
+            await Task.Yield();
         }
 
-        transform.parent.rotation = openRotation;
-    }
-
-    private IEnumerator CloseDoorRoutine()
-    {
-        Quaternion startRotation = transform.parent.rotation;
-        float angleToRotate = Quaternion.Angle(startRotation, closedRotation);
-        float adjustedDuration = info.LerpDuration * (angleToRotate / info.OpenAngle);
-    
-        float elapsedTime = 0f;
-        while (elapsedTime < adjustedDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
-
-            transform.parent.rotation = Quaternion.Lerp(startRotation, closedRotation, step);
-            yield return null;
-        }
-
-        transform.parent.rotation = closedRotation;
+        transform.parent.rotation = desiredRotation;
     }
 }

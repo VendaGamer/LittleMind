@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 444414078652065941}
   - component: {fileID: 5977813893717753378}
   - component: {fileID: 2154449976842013744}
+  - component: {fileID: 3375378042812564751}
   m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
@@ -121,16 +122,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532e994a0bcb4f9b8e53e6d2e1924f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactableLabel: Crate
-  pickupAction:
-    ActionName: Pickup
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  dropAction:
-    ActionName: Drop
-    Action: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
-      type: 3}
-  transparencyOnPick: 0.6
+  info: {fileID: 11400000, guid: c777e19b922aa8e409829d55a3ebcbd1, type: 2}
+--- !u!114 &3375378042812564751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7574206359477631303}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 1
 --- !u!1 &9079893747503162935
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,16 +1,18 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class Interaction
 {
     public string ActionName;
-    public InputActionReference Action;
+    [FormerlySerializedAs("Action")] public InputActionReference ActionRef;
 }
 public interface IInteractable : IInteractions
 {
     public bool Interact(IInteractor interactor, InputAction invokedAction);
+    public bool ToggleOutline(bool value);
 }
 
 [Serializable]

@@ -317,6 +317,7 @@ MonoBehaviour:
   jumpPoint: {fileID: 7955756814250554620}
   maxJumpPointDist: 0.2
   jumpCooldown: 0.1
+  jumpPointRadius: 0.3
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 1015
@@ -336,7 +337,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   sphereCastDistance: 3
-  sphereCastRadius: 0.1
+  sphereCastRadius: 0.3
 --- !u!114 &2330484725698535383
 MonoBehaviour:
   m_ObjectHideFlags: 0

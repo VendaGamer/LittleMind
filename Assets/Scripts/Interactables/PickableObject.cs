@@ -1,17 +1,18 @@
-using System.Collections;
-using JetBrains.Annotations;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PickableObject : MonoBehaviour, IInteractable
 {
-    [SerializeField] private PickableObjectInfo info;
+    [SerializeField] protected PickableObjectInfo info;
     protected bool IsPicked = false;
-    [CanBeNull] private Coroutine pickupCoroutine;
+    private CancellationTokenSource curTokScr;
     public string InteractGroupLabel => info.InteractableGroupLabel;
 
     private Rigidbody rb;
     private Collider col;
+    private Outline outline;
 
     public Interaction[] CurrentInteractions
     {
@@ -25,24 +26,26 @@ public class PickableObject : MonoBehaviour, IInteractable
     {
         rb = GetComponentInParent<Rigidbody>();
         col = GetComponent<Collider>();
+        outline = GetComponent<Outline>();
     }
     private void DropObject()
     {
-        StopCoroutine(pickupCoroutine);
+        curTokScr.CancelAndDispose();
         rb.isKinematic = false;
         col.isTrigger = false;
         transform.parent.SetParent(null);
         OnDropped();
     }
-    private void PickObject(Transform parent)
+    private async void PickObject(Transform parent)
     {
         rb.isKinematic = true;
         col.isTrigger = true;
         transform.parent.SetParent(parent);
-        pickupCoroutine = StartCoroutine(PerformPickupLerp());
+        curTokScr = curTokScr.CancelCurrentActionAndCreateNewSrc();
+        await PerformPickupLerp(curTokScr.Token);
     }
 
-    private IEnumerator PerformPickupLerp()
+    private async Task PerformPickupLerp(CancellationToken curTokSrc)
     {
         var endPos = Vector3.zero;
         var endRot = Quaternion.Euler(Vector3.zero);
@@ -51,6 +54,8 @@ public class PickableObject : MonoBehaviour, IInteractable
         float elapsedTime = 0f;
         while (elapsedTime < info.LerpDuration)
         {
+            curTokSrc.ThrowIfCancellationRequested();
+            
             elapsedTime += Time.deltaTime;
             var step = Mathf.SmoothStep(0, 1, elapsedTime / info.LerpDuration);
 
@@ -58,7 +63,7 @@ public class PickableObject : MonoBehaviour, IInteractable
                 Vector3.Lerp(startPos, endPos, step),
                 Quaternion.Lerp(startRot, endRot, step)
             );
-            yield return null;
+            await Task.Yield();
         }
         
         transform.parent.SetLocalPositionAndRotation(
@@ -76,14 +81,14 @@ public class PickableObject : MonoBehaviour, IInteractable
     {
         if (IsPicked)
         {
-            if (invokedAction.id == info.DropInteraction.Action.action.id)
+            if (invokedAction.id == info.DropInteraction.ActionRef.action.id)
             {
                 DropObject();
                 IsPicked = false;
                 return true;
             }
         }
-        else if (invokedAction.id == info.PickupInteraction.Action.action.id)
+        else if (invokedAction.id == info.PickupInteraction.ActionRef.action.id)
         {
             PickObject(interactor.PickupPoint);
             IsPicked = true;
@@ -92,5 +97,10 @@ public class PickableObject : MonoBehaviour, IInteractable
         }
         return false;
     }
-    
+
+    public bool ToggleOutline(bool value)
+    {
+        outline.enabled = value;
+        return true;
+    }
 }

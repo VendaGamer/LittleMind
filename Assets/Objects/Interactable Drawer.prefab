@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 1435184207451288433}
   - component: {fileID: 8372571066058421863}
   - component: {fileID: 2048021350606313878}
-  - component: {fileID: 4164001237827722048}
   - component: {fileID: 2150116367026849780}
+  - component: {fileID: 4164001237827722048}
+  - component: {fileID: 6234053588813373976}
   m_Layer: 9
   m_Name: Suplik 1
   m_TagString: Untagged
@@ -88,20 +89,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4164001237827722048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5714615095868628266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
-  <InteractGroupLabel>k__BackingField: Drawer
 --- !u!64 &2150116367026849780
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -124,6 +111,36 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2212009239438826721, guid: adb21d30fd8706540a81e0769fd67764, type: 3}
+--- !u!114 &4164001237827722048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714615095868628266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
+  <InteractGroupLabel>k__BackingField: Drawer
+--- !u!114 &6234053588813373976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714615095868628266}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 1
 --- !u!1 &6562256963235089880
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +153,7 @@ GameObject:
   - component: {fileID: 8837913356478990622}
   - component: {fileID: 8565801723526884673}
   - component: {fileID: 9029132391194795548}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,6 +263,7 @@ GameObject:
   - component: {fileID: 6183307859838987422}
   - component: {fileID: 739178165685926334}
   - component: {fileID: 4513940029555660380}
+  - component: {fileID: 6140128877222027086}
   m_Layer: 9
   m_Name: Suplik 2
   m_TagString: Untagged
@@ -357,6 +375,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
+--- !u!114 &6140128877222027086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6906079442326424072}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 1
 --- !u!1 &7347965874230616000
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,6 +404,7 @@ GameObject:
   - component: {fileID: 2554018683054189284}
   - component: {fileID: 2675179569601423787}
   - component: {fileID: 4230379010399137331}
+  - component: {fileID: 4424204187031954786}
   m_Layer: 9
   m_Name: Suplik 3
   m_TagString: Untagged
@@ -481,6 +516,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
+--- !u!114 &4424204187031954786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7347965874230616000}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 1
 --- !u!1 &8579271860399894947
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +541,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1705172551980190807}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Interactable Drawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

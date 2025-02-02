@@ -1,7 +1,10 @@
-<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/ContextMenuStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#ContextMenuStyles" />
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML 
+    xmlns:engine="UnityEngine.UIElements">
+    <Style src="project://database/Assets/UI/ContextMenuStyles.uss" />
     <engine:VisualElement name="context-menu" class="context-menu">
-        <engine:VisualElement name="menu-container" enabled="false" class="menu-container" />
+        <!-- This container will be data-bound to the Groups collection -->
+        <engine:VisualElement name="groups-container" binding-path="Groups"/>
     </engine:VisualElement>
     <engine:VisualElement name="crosshair-container" class="crosshair-container">
         <engine:VisualElement name="crosshair" class="crosshair" />

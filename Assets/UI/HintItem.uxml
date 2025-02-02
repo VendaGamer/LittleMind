@@ -1,0 +1,13 @@
+<engine:UXML xmlns:engine="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/ContextMenuStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#ContextMenuStyles" />
+    <engine:VisualElement data-source-type="Interaction, Assembly-CSharp" class="menu-item">
+        <engine:Label text="Label" class="action-text" />
+        <engine:VisualElement class="keyboard-key">
+            <engine:Label text="Label" class="key-hint-text">
+                <Bindings>
+                    <engine:DataBinding property="text" data-source-path="ActionName" binding-mode="ToTarget" />
+                </Bindings>
+            </engine:Label>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e5b87118e445899e175ab998ad1249, type: 3}
   m_Name: UnlockableDoor
   m_EditorClassIdentifier: 
-  <InteractableGroupLabel>k__BackingField: 
-  <LerpDuration>k__BackingField: 0
-  <OpenAngle>k__BackingField: 0
+  <InteractableGroupLabel>k__BackingField: Locked Door
+  <LerpDuration>k__BackingField: 1
+  <OpenAngle>k__BackingField: 90
   <OpenDoorInteraction>k__BackingField:
     ActionName: Open
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    ActionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}
   <CloseDoorInteraction>k__BackingField:
     ActionName: Close
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    ActionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}
   <LookThroughKeyHoleInteraction>k__BackingField:
     ActionName: Look through keyhole
-    Action: {fileID: 6194689430586984020, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    ActionRef: {fileID: 6194689430586984020, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}
   <UnlockDoorInteraction>k__BackingField:
     ActionName: Unlock
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    ActionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}

@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+[Singleton]
 public class HintManager : MonoBehaviour
 {
     [SerializeField] private UIDocument contextMenuDocument;
@@ -232,7 +234,7 @@ public class HintManager : MonoBehaviour
             container.AddToClassList("menu-item");
             var actionText = new Label(interaction.ActionName);
             actionText.AddToClassList("action-text");
-            var res = GetDisplayTextForAction(interaction.Action);
+            var res = GetDisplayTextForAction(interaction.ActionRef);
             var keyHint = new Label(res.text);
             if (res.isIcon)
             {

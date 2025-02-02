@@ -21,7 +21,7 @@ public class UnlockableDoor : Door
     {
         if (isLocked)
         {
-            if (invokedAction.id == ((UnlockableDoorInfo)info).UnlockDoorInteraction.Action.action.id)
+            if (invokedAction.id == ((UnlockableDoorInfo)info).UnlockDoorInteraction.ActionRef.action.id)
             {
                 if (ReferenceEquals(interactor.InteractableHolding, requiredKey))
                 {

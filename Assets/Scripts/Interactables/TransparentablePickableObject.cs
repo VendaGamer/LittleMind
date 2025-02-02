@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class TransparentablePickableObject : PickableObject
 {
-    [SerializeField] private float transparencyOnPick;
     private float originalTransparency;
 
     private Renderer rend;
@@ -17,7 +16,11 @@ public class TransparentablePickableObject : PickableObject
     protected override void OnPicked()
     {
         var col = rend.material.color;
-        rend.material.color = new Color(col.r, col.g, col.b, transparencyOnPick);
+        
+        rend.material.color = new Color(
+        col.r, col.g, col.b,
+        Mathf.Lerp(originalTransparency, 0f, ((TransparentablePickableObjectInfo)info).TransparencyPercentage)
+        );
     }
 
     protected override void OnDropped()

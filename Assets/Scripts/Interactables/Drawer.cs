@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,13 +10,13 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     [field:SerializeField] public string InteractGroupLabel { get; private set; }
     private bool isOpen = false;
     private Vector3 closedPosition;
-    private Vector3 openPosition;
     private CancellationTokenSource curTokSrc;
+    private Outline outline;
     
     private void Start()
     {
         closedPosition = transform.position;
-        openPosition = closedPosition + new Vector3(info.OpenX, 0f, 0f) * transform.parent.localScale.x;
+        outline = GetComponent<Outline>();
     }
     public Interaction[] CurrentInteractions
     {
@@ -46,38 +45,35 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
 
         transform.position = destination;
     }
-    private void CancelCurrentAction()
-    {
-        if (curTokSrc == null)
-            return;
-        
-        curTokSrc.Cancel();
-        curTokSrc.Dispose();
-        curTokSrc = null;
-    }
     
     public bool Interact(IInteractor interactor, InputAction invokedAction)
     {
         if (isOpen)
         {
-            if (invokedAction.id == info.CloseDrawerInteraction.Action.action.id)
+            if (invokedAction.id == info.CloseDrawerInteraction.ActionRef.action.id)
             {
-                CancelCurrentAction();
-                curTokSrc = new CancellationTokenSource();
+                curTokSrc = curTokSrc.CancelCurrentActionAndCreateNewSrc();
                 Move(closedPosition, curTokSrc.Token);
                 isOpen = false;
                 return true;
             }
         }
-        else if(invokedAction.id == info.OpenDrawerInteraction.Action.action.id)
+        else if(invokedAction.id == info.OpenDrawerInteraction.ActionRef.action.id)
         {
-            CancelCurrentAction();
-            curTokSrc = new CancellationTokenSource();
-            Move(openPosition, curTokSrc.Token);
+            curTokSrc = curTokSrc.CancelCurrentActionAndCreateNewSrc();
+            Move(
+                closedPosition + new Vector3(info.OpenX, 0f, 0f) * transform.parent.localScale.x,
+                curTokSrc.Token);
             isOpen = true;
             return true;
         }
         return false;
+    }
+
+    public bool ToggleOutline(bool value)
+    {
+        outline.enabled = value;
+        return true;
     }
 
     public void Dispose()

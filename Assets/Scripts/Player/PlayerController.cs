@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     [SerializeField] private Transform jumpPoint;
     [SerializeField] private float maxJumpPointDist = 0.2f;
     [SerializeField] private float jumpCooldown = 0.1f;
+    [SerializeField] private float jumpPointRadius = 0.3f;
     [SerializeField] private LayerMask groundLayerMask;
     private bool canJump = true;
     private bool isGrounded;
@@ -131,14 +132,14 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.Raycast(new Ray(jumpPoint.position, Vector3.down), maxJumpPointDist, groundLayerMask);
+        isGrounded = Physics.SphereCast(new Ray(jumpPoint.position, Vector3.down), jumpPointRadius,maxJumpPointDist,groundLayerMask);
     }
 
     private void HandleJump()
     {
         if (Controls.Player.Jump.IsPressed() && isGrounded && canJump)
         {
-            rb.AddForce(Vector3.up * jumpForce * 100f, ForceMode.Force);
+            rb.AddForce(Vector3.up * (jumpForce * 100f), ForceMode.Force);
             
             StartCoroutine(JumpCooldown());
         }
@@ -164,10 +165,17 @@ public class PlayerController : MonoBehaviour, IInteractor
                 // If we're looking at a different interactable, update interactions
                 if (interactableLookingAt != interactable)
                 {
-                    if (interactableLookingAt?.CurrentInteractions != interactable.CurrentInteractions)
+                    
+                    if (!interactableLookingAt.IsUnityNull())
                     {
-                        SwitchExclusiveInteractions(interactable);
+                        interactableLookingAt.ToggleOutline(false);
+                        if (interactableLookingAt.CurrentInteractions != interactable.CurrentInteractions)
+                        {
+                            SwitchExclusiveInteractions(interactable);
+                        }
                     }
+
+                    interactable.ToggleOutline(true);
                     interactableLookingAt = interactable;
                 }
             }
@@ -176,6 +184,7 @@ public class PlayerController : MonoBehaviour, IInteractor
                 // We hit something, but it's not an interactable
                 if (!interactableLookingAt.IsUnityNull())
                 {
+                    interactableLookingAt.ToggleOutline(false);
                     interactableLookingAt = null;
                     SwitchExclusiveInteractions(null);
                 }
@@ -186,6 +195,7 @@ public class PlayerController : MonoBehaviour, IInteractor
             // We didn't hit anything
             if (!interactableLookingAt.IsUnityNull())
             {
+                interactableLookingAt.ToggleOutline(false);
                 interactableLookingAt = null;
                 SwitchExclusiveInteractions(null);
             }
