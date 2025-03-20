@@ -1,17 +1,11 @@
-<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+<engine:UXML xmlns:engine="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/ContextMenuStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#ContextMenuStyles" />
-    <engine:VisualElement name="Container" class="interactions-group">
-        <engine:VisualElement name="GlobalInteractions" data-source-type="IInteractions, Assembly-CSharp">
-            <engine:Label text="Label" name="GroupLabel" class="interactions-label">
-                <Bindings>
-                    <engine:DataBinding property="text" data-source-path="interactGroupLabel" binding-mode="ToTarget" />
-                </Bindings>
-            </engine:Label>
-            <engine:ListView item-template="project://database/Assets/UI/HintItem.uxml?fileID=9197481963319205126&amp;guid=fe8085d39552ba54e8b1fbc47f237af5&amp;type=3#HintItem" binding-source-selection-mode="AutoAssign" data-source-type="IInteractions, Assembly-CSharp" show-border="false" data-source-path="currentInteractions" />
-        </engine:VisualElement>
-        <engine:VisualElement name="CurrentInteractions" data-source-type="BaseInteractions, Assembly-CSharp">
-            <engine:Label text="Label" name="GroupLabel" class="interactions-label" />
-            <engine:ListView item-template="project://database/Assets/UI/HintItem.uxml?fileID=9197481963319205126&amp;guid=fe8085d39552ba54e8b1fbc47f237af5&amp;type=3#HintItem" binding-source-selection-mode="AutoAssign" />
-        </engine:VisualElement>
+    <engine:VisualElement class="interactions-group">
+        <engine:Label name="GroupLabel" class="interactions-label">
+            <Bindings>
+                <engine:DataBinding property="text" binding-path="GroupLabel" binding-mode="ToTarget" />
+            </Bindings>
+        </engine:Label>
+        <engine:ListView name="interactions-list" binding-path="Interactions" data-source="project://database/Assets/UI/InteractionItem.uxml?fileID=9197481963319205126&amp;guid=fe8085d39552ba54e8b1fbc47f237af5&amp;type=3#InteractionItem" />
     </engine:VisualElement>
 </engine:UXML>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML 
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+    editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/ContextMenuStyles.uss" />
+    <engine:VisualElement class="menu-item">
+        <engine:Label name="ActionName" class="action-text">
+            <Bindings>
+                <engine:DataBinding property="text" binding-path="ActionName" binding-mode="ToTarget" />
+            </Bindings>
+        </engine:Label>
+        
+        <!-- Icon Key Display -->
+        <engine:Label name="KeyIcon" class="key-hint-icon" binding-path="">
+            <Bindings>
+                <engine:DataBinding property="text" binding-path="DisplayText" binding-mode="ToTarget" />
+                <engine:DataBinding property="display" binding-path="IsIcon" binding-mode="ToTarget" />
+            </Bindings>
+        </engine:Label>
+        
+        <!-- Text Key Display -->
+        <engine:VisualElement name="KeyContainer" class="keyboard-key">
+            <Bindings>
+                <engine:DataBinding property="display" binding-path="IsIcon" binding-mode="ToTarget" binding-condition="Inverse" />
+            </Bindings>
+            <engine:Label name="KeyText" class="key-hint-text">
+                <Bindings>
+                    <engine:DataBinding property="text" binding-path="DisplayText" binding-mode="ToTarget" />
+                </Bindings>
+            </engine:Label>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

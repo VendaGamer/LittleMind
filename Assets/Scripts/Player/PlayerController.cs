@@ -46,14 +46,13 @@ public class PlayerController : MonoBehaviour, IInteractor
     private readonly RaycastHit[] raycastHits = new RaycastHit[1];
     [CanBeNull] private IInteractable interactableLookingAt;
     [CanBeNull] public IInteractable InteractableHolding { get; private set; }
-
-    public static event Action<GlobalInteractions> GlobalInteractionsChanged;
-    public static event Action<IInteractable> ExclusiveInteractableChanged;
+    [SerializeField] private UIInteractionsData uiData;
 
     public static Controls Controls { get; private set; }
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning;
+    private Animator animator;
 
     private void Awake()
     {
@@ -62,11 +61,24 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
         SwitchGlobalInteractions(globalInteractionsPlayerControls);
+        
+        if (uiData == null)
+        {
+            uiData = GetComponent<UIInteractionsData>();
+            if (uiData == null)
+            {
+                uiData = gameObject.AddComponent<UIInteractionsData>();
+            }
+        }
+    
+        // Initialize UI with global interactions
+        uiData.UpdateInteractions(globalInteractionsPlayerControls, null);
     }
     
     private void OnDisable()
@@ -202,14 +214,16 @@ public class PlayerController : MonoBehaviour, IInteractor
         }
     }
 
+
+// Replace your SwitchGlobalInteractions and SwitchExclusiveInteractions methods:
     private void SwitchGlobalInteractions(GlobalInteractions newGlobalInteractions)
     {
-        GlobalInteractionsChanged?.Invoke(newGlobalInteractions);
+        uiData.UpdateInteractions(newGlobalInteractions, interactableLookingAt);
     }
 
     private void SwitchExclusiveInteractions(IInteractable newExclusiveInteractions)
     {
-        ExclusiveInteractableChanged?.Invoke(newExclusiveInteractions);
+        uiData.UpdateInteractions(globalInteractionsPlayerControls, newExclusiveInteractions);
     }
     
     private void HandleMovement()
