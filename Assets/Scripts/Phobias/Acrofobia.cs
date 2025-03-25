@@ -1,15 +1,19 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
-public class Akrofobia : AnxietyManager
+public class Acrofobia : AnxietyManager
 {
+    [Header("Acrophobia Settings")]
     [SerializeField] private float maxCheckDistance = 6f;
-    [SerializeField] private float eyesCloseTriggerDelay = 5f; // Delay before turning on the overlay
-    [SerializeField] private float eyesOpenDelay = 3f; // Delay before turning off the overlay
-    [SerializeField] private RawImage eyeClose; // Overlay for simulating closed eyes
+    [SerializeField] private float eyesCloseTriggerDelay = 5f;
+    [SerializeField] private float eyesOpenDelay = 3f;
+    [SerializeField] private RawImage eyeOverlay;
 
     private Coroutine eyesClosingRoutine;
     private Coroutine eyesOpeningRoutine;
+    
+
     
     /// <summary>
     /// Simulates closing eyes by enabling the overlay after a delay.
@@ -17,7 +21,7 @@ public class Akrofobia : AnxietyManager
     private IEnumerator CloseEyesAfterDelay()
     {
         yield return new WaitForSeconds(eyesCloseTriggerDelay);
-        eyeClose.enabled = true;
+        eyeOverlay.enabled = true;
     }
 
     /// <summary>
@@ -26,6 +30,6 @@ public class Akrofobia : AnxietyManager
     private IEnumerator OpenEyesAfterDelay()
     {
         yield return new WaitForSeconds(eyesOpenDelay);
-        eyeClose.enabled = false;
+        eyeOverlay.enabled = false;
     }
 }

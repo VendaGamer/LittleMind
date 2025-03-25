@@ -8,12 +8,6 @@ public class Trembling : AnxietySymptom
     [SerializeField] private float baseFadeOutTime = 5f;
     [SerializeField] private Vector3 baseRotationInfluence = new Vector3(0.7f, 0.7f, 0.7f);
     private CameraShakeInstance currentShake;
-    private void Start()
-    {
-        //Nejspis optimalnejsi nez nechat na true, protoze trembling nepouziva Update
-        enabled = false;
-    }
-
     protected override void ActivateSymptom(float intensity)
     {
         if (currentShake == null)
@@ -29,7 +23,7 @@ public class Trembling : AnxietySymptom
 
     public override void StopSymptom()
     {
-        IsActive = false;
+        enabled = false;
         currentShake.StartFadeOut(baseFadeOutTime * Intensity);
         currentShake = null;
     }

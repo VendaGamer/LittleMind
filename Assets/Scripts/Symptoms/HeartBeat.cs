@@ -37,7 +37,7 @@ public class HeartBeatSymptom : AnxietySymptom
     private IEnumerator HeartBeatRoutine()
     {
         float currentHeartRate = MinHeartRate;
-        while (IsActive)
+        while (enabled)
         {
             float volume = HeartbeatVolumeCurve.Evaluate(Intensity);
             currentHeartRate = Mathf.Lerp(currentHeartRate, targetHeartRate, Time.deltaTime * HeartRateBuildupSpeed);
@@ -54,7 +54,7 @@ public class HeartBeatSymptom : AnxietySymptom
 
     public override void StopSymptom()
     {
-        IsActive = false;
+        enabled = false;
         if (heartBeatRoutine != null)
         {
             StopCoroutine(heartBeatRoutine);

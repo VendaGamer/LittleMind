@@ -2,10 +2,6 @@ using UnityEngine;
 
 public abstract class AnxietySymptom : MonoBehaviour
 {
-    [Header("Symptom Settings")]
-    [SerializeField] protected float MinimalIntensity = 0.1f;
-
-    protected bool IsActive { get; set; } = false;
     protected float Intensity { get; set; } = 0f;
 
     /// <summary>
@@ -13,16 +9,8 @@ public abstract class AnxietySymptom : MonoBehaviour
     /// </summary>
     public virtual void OnAnxietyChanged(float newAnxiety)
     {
-        if (newAnxiety >= MinimalIntensity)
-        {
-            IsActive = true;
-            Intensity = newAnxiety;
-            ActivateSymptom(newAnxiety);
-        }
-        else
-        {
-            DeactivateSymptom();
-        }
+        Intensity = newAnxiety;
+        ActivateSymptom(newAnxiety);
     }
 
     /// <summary>
@@ -35,7 +23,7 @@ public abstract class AnxietySymptom : MonoBehaviour
     /// </summary>
     protected virtual void DeactivateSymptom()
     {
-        IsActive = false;
+        enabled = false;
         Intensity = 0f;
         StopSymptom();
     }
