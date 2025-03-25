@@ -53,7 +53,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
             if (invokedAction.id == info.CloseDrawerInteraction.ActionRef.action.id)
             {
                 curTokSrc = curTokSrc.CancelCurrentActionAndCreateNewSrc();
-                Move(closedPosition, curTokSrc.Token);
+               _ = Move(closedPosition, curTokSrc.Token);
                 isOpen = false;
                 return true;
             }
@@ -61,7 +61,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         else if(invokedAction.id == info.OpenDrawerInteraction.ActionRef.action.id)
         {
             curTokSrc = curTokSrc.CancelCurrentActionAndCreateNewSrc();
-            Move(
+            _ = Move(
                 closedPosition + new Vector3(info.OpenX, 0f, 0f) * transform.parent.localScale.x,
                 curTokSrc.Token);
             isOpen = true;

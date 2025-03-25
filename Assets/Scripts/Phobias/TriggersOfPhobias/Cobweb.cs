@@ -6,6 +6,6 @@ public class Cobweb : MonoBehaviour
     {
         if (!other.gameObject.TryGetComponent<ArachnoPhobia>(out var araPho)) 
             return;
-        araPho.PendNewAnxietyLevel(1f);
+        araPho.IncreaseAnxiety(0.05f);
     }
 }

@@ -7,7 +7,7 @@ public class HighObjectTrigger : MonoBehaviour
         {
             Vector3 playerPosition = other.transform.position;
             var dist = GetNearestEdgeDistance(playerPosition);
-            akrofobia.SetAnxietyBasedOnDistance(dist);
+            akrofobia.IncreaseAnxiety(0.5f * GetNearestEdgeDistance(playerPosition));
         }
     }
 

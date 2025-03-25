@@ -46,7 +46,6 @@ public class PlayerController : MonoBehaviour, IInteractor
     private readonly RaycastHit[] raycastHits = new RaycastHit[1];
     [CanBeNull] private IInteractable interactableLookingAt;
     [CanBeNull] public IInteractable InteractableHolding { get; private set; }
-    [SerializeField] private UIInteractionsData uiData;
 
     public static Controls Controls { get; private set; }
     private float currentSpeed;
@@ -67,18 +66,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
         SwitchGlobalInteractions(globalInteractionsPlayerControls);
-        
-        if (uiData == null)
-        {
-            uiData = GetComponent<UIInteractionsData>();
-            if (uiData == null)
-            {
-                uiData = gameObject.AddComponent<UIInteractionsData>();
-            }
-        }
-    
-        // Initialize UI with global interactions
-        uiData.UpdateInteractions(globalInteractionsPlayerControls, null);
     }
     
     private void OnDisable()
@@ -218,12 +205,12 @@ public class PlayerController : MonoBehaviour, IInteractor
 // Replace your SwitchGlobalInteractions and SwitchExclusiveInteractions methods:
     private void SwitchGlobalInteractions(GlobalInteractions newGlobalInteractions)
     {
-        uiData.UpdateInteractions(newGlobalInteractions, interactableLookingAt);
+        //uiData.UpdateInteractions(newGlobalInteractions, interactableLookingAt);
     }
 
     private void SwitchExclusiveInteractions(IInteractable newExclusiveInteractions)
     {
-        uiData.UpdateInteractions(globalInteractionsPlayerControls, newExclusiveInteractions);
+        //uiData.UpdateInteractions(globalInteractionsPlayerControls, newExclusiveInteractions);
     }
     
     private void HandleMovement()

@@ -30,7 +30,7 @@ public class Door : MonoBehaviour, IInteractable
             if (invokedAction.id == info.CloseDoorInteraction.ActionRef.action.id)
             {
                 canTokSrc = canTokSrc.CancelCurrentActionAndCreateNewSrc();
-                RotateDoor(closedRotation, canTokSrc.Token);
+                _ = RotateDoor(closedRotation, canTokSrc.Token);
                 IsOpen = false;
                 return true;
             }
@@ -38,7 +38,7 @@ public class Door : MonoBehaviour, IInteractable
         else if(invokedAction.id == info.OpenDoorInteraction.ActionRef.action.id)
         {
             canTokSrc = canTokSrc.CancelCurrentActionAndCreateNewSrc();
-            RotateDoor(
+            _ = RotateDoor(
                 closedRotation * Quaternion.Euler(0f, info.OpenAngle, 0f),
                 canTokSrc.Token);
             IsOpen = true;

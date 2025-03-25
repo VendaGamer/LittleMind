@@ -6,6 +6,6 @@ public class BloodTrigger : MonoBehaviour
     {
         if (!other.gameObject.TryGetComponent<Hematophobia>(out var hemaPho))
             return;
-        hemaPho.PendNewAnxietyLevel(1.5f);
+        hemaPho.IncreaseAnxiety(0.05f);
     }
 }

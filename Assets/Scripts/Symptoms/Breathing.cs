@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Breathing : Symptom
+public class Breathing : AnxietySymptom
 {
     [SerializeField] private AudioClip breatheIn;
     [SerializeField] private AudioClip breatheOut;
@@ -22,17 +22,10 @@ public class Breathing : Symptom
     private void Start()
     {
         playerAudioSource = GetComponentInChildren<AudioSource>();
-        minimalIntensity = .1f;
     }
 
-   
-    public override void StopSymptom()
+    protected override void ActivateSymptom(float intensity)
     {
-        
-    }
 
-    public override void UpdateOrTriggerSymptom(float intensity)
-    {
-        
     }
 }

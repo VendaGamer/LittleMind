@@ -1,21 +1,23 @@
-using System.Linq;
-
 using System;
 using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.Events;
+
 
 [Serializable]
 public class UIInteractionItem
 {
-    public string ActionName { get; set; }
-    public string DisplayText { get; set; }
-    public bool IsIcon { get; set; }
+    public string ActionName;
+    public string DisplayText;
+    public bool IsIcon;
+    [CreateProperty]
+    public bool IsNotIcon => !IsIcon;
 }
 
 [Serializable]
 public class UIInteractionGroup
 {
-    public string GroupLabel { get; set; }
-    public List<UIInteractionItem> Interactions { get; set; } = new List<UIInteractionItem>();
+    public string GroupLabel;
+    public List<UIInteractionItem> Interactions = new ();
 }
