@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-public class SpiderTrigger : MonoBehaviour
+public class SpiderTrigger : RegisterableAnxietyTrigger<ArachnoPhobia>
 {
-    private void OnTriggerStay(Collider other)
-    {
-        if (!other.gameObject.TryGetComponent<ArachnoPhobia>(out var araPho))
-            return;
-        araPho.IncreaseAnxiety(0.05f);
-    }
+
 }

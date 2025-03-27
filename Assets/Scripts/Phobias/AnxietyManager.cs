@@ -1,141 +1,110 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract class AnxietyManager : MonoBehaviour
 {
-    [Header("Anxiety Settings")] 
-    [SerializeField] protected float MaxAnxietyLevel = 1f;
-    [SerializeField] protected float FadeDuration = 20f;
-    [SerializeField] protected float FadeOutDelay = 5f;
-
+    [Header("Anxiety Settings")]
+    [SerializeField] protected AnxietyManagerData Data;
+    
+    #region Protected props
     protected AnxietySymptom[] Symptoms;
-
-    private float currentAnxiety = 0f;
-    private float lastAnxiety;
-    private float fadeOutTime;
+    #endregion
+    #region Private props
     private CancellationTokenSource fadeCancellationTokenSource;
-    private bool wasAnxious = false;
+    private float currentAnxiety = 0f;
+    private readonly HashSet<IAnxietySource> activeAnxietySources = new();
+    #endregion
+    public void RegisterAnxietySource(IAnxietySource anxietySource)
+    {
+        fadeCancellationTokenSource?.Cancel();
+        activeAnxietySources.Add(anxietySource);
+        IncreaseAnxiety(anxietySource.InitialAnxietyAmount);
+        OnAnxietySourcesChanged();
+    }
 
-    public float CurrentAnxiety
+    public void UnRegisterAnxietySource(IAnxietySource anxietySource)
+    {
+        activeAnxietySources.Remove(anxietySource);
+        if (activeAnxietySources.Count == 0)
+        {
+            StartFadeAnxiety();
+        }
+        OnAnxietySourcesChanged();
+    }
+
+
+    protected float CurrentAnxiety
     {
         get => currentAnxiety;
-        protected set
+        set
         {
-            var newValue = Mathf.Clamp(value, 0f, MaxAnxietyLevel);
-            if (!Mathf.Approximately(newValue, currentAnxiety))
-            {
-                currentAnxiety = newValue;
-                OnAnxietyValueChanged(currentAnxiety);
-            }
+            var newValue = Mathf.Clamp(value, 0f, Data.MaxAnxietyLevel);
+            if (Mathf.Approximately(newValue, currentAnxiety)) return;
+            
+            currentAnxiety = newValue;
+            OnAnxietyValueChanged();
         }
     }
-    
-    public event Action<float> AnxietyChanged;
+    /// <summary>
+    /// Maybe will be useful, but rn idk
+    /// </summary>
+    protected virtual void OnAnxietySourcesChanged()
+    {
+        
+    }
 
+    protected virtual void OnAnxietyChanged()
+    {
+        foreach (var symptom in Symptoms)
+        {
+            symptom.OnAnxietyChanged(CurrentAnxiety);
+        }
+    }
     protected virtual void Start()
     {
         Symptoms = GetComponentsInChildren<AnxietySymptom>();
-        foreach (var symptom in Symptoms)
-        {
-            AnxietyChanged += symptom.OnAnxietyChanged;
-        }
-        
-        // Initialize fade out time
-        fadeOutTime = FadeOutDelay;
     }
 
     /// <summary>
     /// Centralized method to handle anxiety value changes
     /// </summary>
-    protected virtual void OnAnxietyValueChanged(float newAnxiety)
+    protected virtual void OnAnxietyValueChanged()
     {
-        // Trigger event
-        AnxietyChanged?.Invoke(newAnxiety);
-
-        // Check if anxiety state has changed
-        bool isCurrentlyAnxious = newAnxiety > 0;
-        if (isCurrentlyAnxious != wasAnxious)
+        foreach (var symptom in Symptoms)
         {
-            if (isCurrentlyAnxious)
-            {
-                // Anxiety is starting
-                foreach (var symptom in Symptoms)
-                {
-                    symptom.enabled = true;
-                }
-            }
-            else
-            {
-                // Anxiety is ending
-                foreach (var symptom in Symptoms)
-                {
-                    symptom.StopSymptom();
-                }
-            }
-
-            // Update the anxiety state
-            wasAnxious = isCurrentlyAnxious;
+            symptom.OnAnxietyChanged(CurrentAnxiety);
         }
     }
-
-    protected virtual void LateUpdate()
-    {
-        // Check if anxiety is not increasing
-        bool isAnxietyStable = Mathf.Approximately(lastAnxiety, CurrentAnxiety);
-        
-        // Determine if we should start fade out
-        if (isAnxietyStable && CurrentAnxiety > 0)
-        {
-            fadeOutTime -= Time.deltaTime;
-
-            // Start fade out if delay has passed
-            if (fadeOutTime <= 0)
-            {
-                StartFadeAnxiety();
-            }
-        }
-        else
-        {
-            // Reset fade out time when anxiety changes or increases
-            fadeOutTime = FadeOutDelay;
-        }
-    }
-
     protected virtual void Update()
     {
-        lastAnxiety = CurrentAnxiety;
-    }
-
-    /// <summary>
-    /// Increase anxiety to a new value (if higher) and restart the fade timer.
-    /// </summary>
-    public virtual void IncreaseAnxiety(float amount)
-    {
-        float previousAnxiety = CurrentAnxiety;
-        CurrentAnxiety = Mathf.Clamp(currentAnxiety + amount, 0f, MaxAnxietyLevel);
-        
-        // If anxiety has increased, cancel ongoing fade and reset timer
-        if (CurrentAnxiety > previousAnxiety)
+        if (activeAnxietySources.Count > 0)
         {
-            fadeCancellationTokenSource?.Cancel();
-            fadeOutTime = FadeOutDelay;
+            IncreaseAnxiety(activeAnxietySources.Max(anxietySource => anxietySource.AnxietyAmount));
         }
     }
 
     /// <summary>
-    /// Start the async anxiety fade out process
+    /// Increases anxiety value if it has not reached maximum
+    /// </summary>
+    public virtual void IncreaseAnxiety(float InitialAnxietyAmount)
+    {
+        var previousAnxiety = CurrentAnxiety;
+        CurrentAnxiety = Mathf.Clamp(currentAnxiety + InitialAnxietyAmount, 0f, Data.MaxAnxietyLevel);
+    }
+
+    /// <summary>
+    /// Starts the anxiety fade out process
     /// </summary>
     protected virtual void StartFadeAnxiety()
     {
-        // Cancel any existing fade task
         fadeCancellationTokenSource?.Cancel();
-        
-        // Create a new cancellation token source
+
         fadeCancellationTokenSource = new CancellationTokenSource();
         
-        // Start the fade task
         _ = FadeAnxietyAsync(fadeCancellationTokenSource.Token);
     }
 
@@ -144,55 +113,30 @@ public abstract class AnxietyManager : MonoBehaviour
     /// </summary>
     protected virtual async Task FadeAnxietyAsync(CancellationToken cancellationToken)
     {
+        await Task.Delay(Data.FadeOutDelayInMs, cancellationToken);
         float startAnxiety = CurrentAnxiety;
         float elapsed = 0f;
-
-        try 
+        
+        while (elapsed < Data.FadeDuration)
         {
-            while (elapsed < FadeDuration)
+            if (cancellationToken.IsCancellationRequested)
             {
-                // Check for cancellation
-                cancellationToken.ThrowIfCancellationRequested();
-
-                await Task.Yield();
-                
-                elapsed += Time.deltaTime;
-                float t = elapsed / FadeDuration;
-                CurrentAnxiety = Mathf.Lerp(startAnxiety, 0f, t);
+                fadeCancellationTokenSource?.Dispose();
+                return;
             }
 
-            // Ensure anxiety reaches zero
-            CurrentAnxiety = 0f;
+            await Task.Yield();
+            elapsed += Time.deltaTime;
+            float t = elapsed / Data.FadeDuration;
+            CurrentAnxiety = Mathf.Lerp(startAnxiety, 0f, t);
         }
-        catch (OperationCanceledException)
-        {
-            // Fade was interrupted, do nothing special
-        }
-        finally
-        {
-            // Clean up the cancellation token source
-            fadeCancellationTokenSource?.Dispose();
-            fadeCancellationTokenSource = null;
-        }
-    }
 
-    /// <summary>
-    /// Directly set anxiety value
-    /// </summary>
-    protected virtual void SetAnxiety(float value)
-    {
-        CurrentAnxiety = Mathf.Clamp(value, 0f, MaxAnxietyLevel);
+        // Ensure anxiety reaches zero
+        CurrentAnxiety = 0f;
     }
-
     protected virtual void OnDestroy()
     {
-        // Unsubscribe from events
-        foreach (var symptom in Symptoms)
-        {
-            AnxietyChanged -= symptom.OnAnxietyChanged;
-        }
-
-        // Cancel any ongoing fade
-        fadeCancellationTokenSource?.Cancel();
+        fadeCancellationTokenSource?.Dispose();
     }
 }
+

@@ -601,9 +601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 938ebd01073026548a03cc4264c2fa61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxAnxietyLevel: 1
-  FadeDuration: 10
-  FadeOutDelay: 5
+  Data: {fileID: 11400000, guid: e1a10cd221c50ba4191dd618034b4cdd, type: 2}
 --- !u!114 &1165244307
 MonoBehaviour:
   m_ObjectHideFlags: 0

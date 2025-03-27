@@ -1,14 +1,12 @@
 using UnityEngine;
-public class HighObjectTrigger : MonoBehaviour
+
+public class HighObjectTrigger : ObservableAnxietyTrigger<Acrofobia>
 {
-    private void OnCollisionStay(Collision other)
+    protected override void OnPlayerWithAnxietyStay(Acrofobia other)
     {
-        if (other.collider.TryGetComponent<Acrofobia>(out var akrofobia))
-        {
-            Vector3 playerPosition = other.transform.position;
-            var dist = GetNearestEdgeDistance(playerPosition);
-            akrofobia.IncreaseAnxiety(0.5f * GetNearestEdgeDistance(playerPosition));
-        }
+        var playerPosition = other.transform.position;
+        var dist = GetNearestEdgeDistance(playerPosition);
+        other.IncreaseAnxiety(0.5f * GetNearestEdgeDistance(playerPosition));
     }
 
     private float GetNearestEdgeDistance(Vector3 playerPosition)
@@ -18,6 +16,8 @@ public class HighObjectTrigger : MonoBehaviour
             Mathf.Abs(playerPosition.z - transform.position.z - transform.localScale.z /2),
             Mathf.Abs(playerPosition.z - transform.position.z + transform.localScale.z /2),
             Mathf.Abs(playerPosition.x - transform.position.x + transform.localScale.x /2)
-            );
+        );
     }
+
+
 }
