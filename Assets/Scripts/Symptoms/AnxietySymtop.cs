@@ -16,7 +16,7 @@ public abstract class AnxietySymptom : MonoBehaviour
     /// <summary>
     /// Implement this method to define how the symptom activates.
     /// </summary>
-    protected abstract void ActivateSymptom(float intensity);
+    public abstract void ActivateSymptom(float intensity);
 
     /// <summary>
     /// Optionally override to define cleanup behavior.

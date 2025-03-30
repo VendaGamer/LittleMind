@@ -1,5 +1,4 @@
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +8,8 @@ public class Door : MonoBehaviour, IInteractable
     private Quaternion closedRotation;
     protected bool IsOpen = false;
     public string InteractGroupLabel => info.InteractableGroupLabel;
-    private CancellationTokenSource canTokSrc;
+    private Coroutine currentRotateCoroutine;
+    
     private void Start()
     {
         closedRotation = transform.parent.rotation;
@@ -29,18 +29,21 @@ public class Door : MonoBehaviour, IInteractable
         {
             if (invokedAction.id == info.CloseDoorInteraction.ActionRef.action.id)
             {
-                canTokSrc = canTokSrc.CancelCurrentActionAndCreateNewSrc();
-                _ = RotateDoor(closedRotation, canTokSrc.Token);
+                if (currentRotateCoroutine != null)
+                    StopCoroutine(currentRotateCoroutine);
+                    
+                currentRotateCoroutine = StartCoroutine(RotateDoor(closedRotation));
                 IsOpen = false;
                 return true;
             }
         }
         else if(invokedAction.id == info.OpenDoorInteraction.ActionRef.action.id)
         {
-            canTokSrc = canTokSrc.CancelCurrentActionAndCreateNewSrc();
-            _ = RotateDoor(
-                closedRotation * Quaternion.Euler(0f, info.OpenAngle, 0f),
-                canTokSrc.Token);
+            if (currentRotateCoroutine != null)
+                StopCoroutine(currentRotateCoroutine);
+                
+            currentRotateCoroutine = StartCoroutine(RotateDoor(
+                closedRotation * Quaternion.Euler(0f, info.OpenAngle, 0f)));
             IsOpen = true;
             return true;
         }
@@ -52,7 +55,7 @@ public class Door : MonoBehaviour, IInteractable
         return false;
     }
 
-    private async Task RotateDoor(Quaternion desiredRotation, CancellationToken canTok)
+    private IEnumerator RotateDoor(Quaternion desiredRotation)
     {
         Quaternion startRotation = transform.parent.rotation;
         float angleToRotate = Quaternion.Angle(startRotation, desiredRotation);
@@ -61,12 +64,11 @@ public class Door : MonoBehaviour, IInteractable
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
         {
-            canTok.ThrowIfCancellationRequested();
             elapsedTime += Time.deltaTime;
             float step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
             
             transform.parent.rotation = Quaternion.Lerp(startRotation, desiredRotation, step);
-            await Task.Yield();
+            yield return null;
         }
 
         transform.parent.rotation = desiredRotation;

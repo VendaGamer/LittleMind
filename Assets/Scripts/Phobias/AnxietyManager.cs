@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public abstract class AnxietyManager : MonoBehaviour
@@ -12,21 +14,24 @@ public abstract class AnxietyManager : MonoBehaviour
     
     #region Protected props
     protected AnxietySymptom[] Symptoms;
+    protected readonly HashSet<IAnxietySource> activeAnxietySources = new();
+    [CanBeNull] protected Coroutine FadeCoroutine;
     #endregion
     #region Private props
-    private CancellationTokenSource fadeCancellationTokenSource;
     private float currentAnxiety = 0f;
-    private readonly HashSet<IAnxietySource> activeAnxietySources = new();
     #endregion
-    public void RegisterAnxietySource(IAnxietySource anxietySource)
+    public virtual void RegisterAnxietySource(IAnxietySource anxietySource)
     {
-        fadeCancellationTokenSource?.Cancel();
+        if (FadeCoroutine != null)
+        {
+            StopCoroutine(FadeCoroutine);
+        }
         activeAnxietySources.Add(anxietySource);
         IncreaseAnxiety(anxietySource.InitialAnxietyAmount);
         OnAnxietySourcesChanged();
     }
 
-    public void UnRegisterAnxietySource(IAnxietySource anxietySource)
+    public virtual void UnRegisterAnxietySource(IAnxietySource anxietySource)
     {
         activeAnxietySources.Remove(anxietySource);
         if (activeAnxietySources.Count == 0)
@@ -54,7 +59,7 @@ public abstract class AnxietyManager : MonoBehaviour
     /// </summary>
     protected virtual void OnAnxietySourcesChanged()
     {
-        
+        Debug.Log($"Current sources count {activeAnxietySources.Count}");
     }
 
     protected virtual void OnAnxietyChanged()
@@ -92,8 +97,7 @@ public abstract class AnxietyManager : MonoBehaviour
     /// </summary>
     public virtual void IncreaseAnxiety(float InitialAnxietyAmount)
     {
-        var previousAnxiety = CurrentAnxiety;
-        CurrentAnxiety = Mathf.Clamp(currentAnxiety + InitialAnxietyAmount, 0f, Data.MaxAnxietyLevel);
+        CurrentAnxiety = Mathf.Clamp(currentAnxiety + (InitialAnxietyAmount * Time.deltaTime), 0f, Data.MaxAnxietyLevel);
     }
 
     /// <summary>
@@ -101,31 +105,25 @@ public abstract class AnxietyManager : MonoBehaviour
     /// </summary>
     protected virtual void StartFadeAnxiety()
     {
-        fadeCancellationTokenSource?.Cancel();
-
-        fadeCancellationTokenSource = new CancellationTokenSource();
-        
-        _ = FadeAnxietyAsync(fadeCancellationTokenSource.Token);
+        if (FadeCoroutine != null)
+        {
+            StopCoroutine(FadeCoroutine);
+        }
+        FadeCoroutine = StartCoroutine(FadeAnxietyCoroutine());
     }
 
     /// <summary>
     /// Async method to fade anxiety over time
     /// </summary>
-    protected virtual async Task FadeAnxietyAsync(CancellationToken cancellationToken)
+    protected virtual IEnumerator FadeAnxietyCoroutine()
     {
-        await Task.Delay(Data.FadeOutDelayInMs, cancellationToken);
+        yield return new WaitForSeconds(Data.FadeOutDelayInMs / 1000f);
         float startAnxiety = CurrentAnxiety;
         float elapsed = 0f;
         
         while (elapsed < Data.FadeDuration)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                fadeCancellationTokenSource?.Dispose();
-                return;
-            }
-
-            await Task.Yield();
+            yield return null;
             elapsed += Time.deltaTime;
             float t = elapsed / Data.FadeDuration;
             CurrentAnxiety = Mathf.Lerp(startAnxiety, 0f, t);
@@ -133,10 +131,23 @@ public abstract class AnxietyManager : MonoBehaviour
 
         // Ensure anxiety reaches zero
         CurrentAnxiety = 0f;
+        StopAllSymtoms();
+        FadeCoroutine = null;
     }
-    protected virtual void OnDestroy()
+
+    protected void StopAllSymtoms()
     {
-        fadeCancellationTokenSource?.Dispose();
+        foreach (var symptom in Symptoms)
+        {
+            symptom.StopSymptom();
+        }
+    }
+    protected void StartAllSymtoms()
+    {
+        foreach (var symptom in Symptoms)
+        {
+            symptom.ActivateSymptom(CurrentAnxiety);
+        }
     }
 }
 

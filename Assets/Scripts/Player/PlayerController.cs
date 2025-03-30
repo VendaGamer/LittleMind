@@ -54,12 +54,13 @@ public class PlayerController : MonoBehaviour, IInteractor
     private void Awake()
     {
         Controls = new Controls();
+        animator = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        animator = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody>();
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
@@ -123,23 +124,12 @@ public class PlayerController : MonoBehaviour, IInteractor
         HandleLook();
         HandleMovement();
         CheckGrounded();
-        HandleJump();
         HandleInteraction();
     }
 
     private void CheckGrounded()
     {
         isGrounded = Physics.SphereCast(new Ray(jumpPoint.position, Vector3.down), jumpPointRadius,maxJumpPointDist,groundLayerMask);
-    }
-
-    private void HandleJump()
-    {
-        if (Controls.Player.Jump.IsPressed() && isGrounded && canJump)
-        {
-            rb.AddForce(Vector3.up * (jumpForce * 100f), ForceMode.Force);
-            
-            StartCoroutine(JumpCooldown());
-        }
     }
 
     private IEnumerator JumpCooldown()

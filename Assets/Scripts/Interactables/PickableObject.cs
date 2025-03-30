@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     private Rigidbody rb;
     private Collider col;
     private Outline outline;
+    private Coroutine currentPickupCoroutine;
 
     public Interaction[] CurrentInteractions
     {
@@ -30,32 +32,36 @@ public class PickableObject : MonoBehaviour, IInteractable
     }
     private void DropObject()
     {
-        curTokScr.CancelAndDispose();
+        if (currentPickupCoroutine != null)
+            StopCoroutine(currentPickupCoroutine);
+        
         rb.isKinematic = false;
         col.isTrigger = false;
         transform.parent.SetParent(null);
         OnDropped();
     }
-    private async void PickObject(Transform parent)
+    private void PickObject(Transform parent)
     {
         rb.isKinematic = true;
         col.isTrigger = true;
         transform.parent.SetParent(parent);
-        curTokScr = curTokScr.CancelCurrentActionAndCreateNewSrc();
-        await PerformPickupLerp(curTokScr.Token);
+    
+        if (currentPickupCoroutine != null)
+            StopCoroutine(currentPickupCoroutine);
+        
+        currentPickupCoroutine = StartCoroutine(PerformPickupLerp());
     }
 
-    private async Task PerformPickupLerp(CancellationToken curTokSrc)
+    private IEnumerator PerformPickupLerp()
     {
         var endPos = Vector3.zero;
         var endRot = Quaternion.Euler(Vector3.zero);
 
         transform.parent.GetLocalPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
         float elapsedTime = 0f;
+    
         while (elapsedTime < info.LerpDuration)
         {
-            curTokSrc.ThrowIfCancellationRequested();
-            
             elapsedTime += Time.deltaTime;
             var step = Mathf.SmoothStep(0, 1, elapsedTime / info.LerpDuration);
 
@@ -63,13 +69,11 @@ public class PickableObject : MonoBehaviour, IInteractable
                 Vector3.Lerp(startPos, endPos, step),
                 Quaternion.Lerp(startRot, endRot, step)
             );
-            await Task.Yield();
-        }
         
-        transform.parent.SetLocalPositionAndRotation(
-            endPos,
-            endRot
-        );
+            yield return null;
+        }
+    
+        transform.parent.SetLocalPositionAndRotation(endPos, endRot);
         OnPicked();
     }
 

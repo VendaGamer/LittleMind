@@ -1,6 +1,5 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,7 +9,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     [field:SerializeField] public string InteractGroupLabel { get; private set; }
     private bool isOpen = false;
     private Vector3 closedPosition;
-    private CancellationTokenSource curTokSrc;
+    private Coroutine currentMoveCoroutine;
     private Outline outline;
     
     private void Start()
@@ -18,6 +17,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         closedPosition = transform.position;
         outline = GetComponent<Outline>();
     }
+    
     public Interaction[] CurrentInteractions
     {
         get
@@ -26,7 +26,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         }
     }
     
-    private async Task Move(Vector3 destination,CancellationToken ctk)
+    private IEnumerator Move(Vector3 destination)
     {
         Vector3 startPos = transform.position;
         float distanceToMove = Vector3.Distance(startPos, destination);
@@ -35,12 +35,11 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
         {
-            ctk.ThrowIfCancellationRequested();
             elapsedTime += Time.deltaTime;
             float step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
 
             transform.position = Vector3.Lerp(startPos, destination, step);
-            await Task.Yield();
+            yield return null;
         }
 
         transform.position = destination;
@@ -52,18 +51,21 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         {
             if (invokedAction.id == info.CloseDrawerInteraction.ActionRef.action.id)
             {
-                curTokSrc = curTokSrc.CancelCurrentActionAndCreateNewSrc();
-               _ = Move(closedPosition, curTokSrc.Token);
+                if (currentMoveCoroutine != null)
+                    StopCoroutine(currentMoveCoroutine);
+                    
+                currentMoveCoroutine = StartCoroutine(Move(closedPosition));
                 isOpen = false;
                 return true;
             }
         }
         else if(invokedAction.id == info.OpenDrawerInteraction.ActionRef.action.id)
         {
-            curTokSrc = curTokSrc.CancelCurrentActionAndCreateNewSrc();
-            _ = Move(
-                closedPosition + new Vector3(info.OpenX, 0f, 0f) * transform.parent.localScale.x,
-                curTokSrc.Token);
+            if (currentMoveCoroutine != null)
+                StopCoroutine(currentMoveCoroutine);
+                
+            currentMoveCoroutine = StartCoroutine(Move(
+                closedPosition + new Vector3(info.OpenX, 0f, 0f) * transform.parent.localScale.x));
             isOpen = true;
             return true;
         }
@@ -78,6 +80,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
 
     public void Dispose()
     {
-        curTokSrc?.Dispose();
+        if (currentMoveCoroutine != null)
+            StopCoroutine(currentMoveCoroutine);
     }
 }

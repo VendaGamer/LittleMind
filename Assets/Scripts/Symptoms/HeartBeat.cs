@@ -25,8 +25,9 @@ public class HeartBeatSymptom : AnxietySymptom
         audioSource = GetComponentInChildren<AudioSource>();
     }
 
-    protected override void ActivateSymptom(float intensity)
+    public override void ActivateSymptom(float intensity)
     {
+        enabled = true;
         targetHeartRate = Mathf.Lerp(MinHeartRate, MaxHeartRate, intensity);
         if (heartBeatRoutine == null)
         {
