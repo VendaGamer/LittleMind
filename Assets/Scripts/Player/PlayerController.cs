@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -124,7 +122,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     {
         HandleLook();
         HandleMovement();
-        CheckGrounded(); // Split ground check into its own method
+        CheckGrounded();
         HandleJump();
         HandleInteraction();
     }
@@ -200,9 +198,7 @@ public class PlayerController : MonoBehaviour, IInteractor
             }
         }
     }
-
-
-// Replace your SwitchGlobalInteractions and SwitchExclusiveInteractions methods:
+    
     private void SwitchGlobalInteractions(GlobalInteractions newGlobalInteractions)
     {
         //uiData.UpdateInteractions(newGlobalInteractions, interactableLookingAt);

@@ -177,7 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 625776105621231333}
   - component: {fileID: 508031141465379402}
-  - component: {fileID: 6385844956333866479}
+  - component: {fileID: 1490345562164638815}
   m_Layer: 3
   m_Name: UI
   m_TagString: Untagged
@@ -220,7 +220,7 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
---- !u!114 &6385844956333866479
+--- !u!114 &1490345562164638815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -229,10 +229,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1872757697264497400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae88abde866acff4ea8cf08d89927905, type: 3}
+  m_Script: {fileID: 11500000, guid: f612f2f1b5c841a1b94d3c30d4009517, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contextMenuDocument: {fileID: 508031141465379402}
+  uiDocument: {fileID: 508031141465379402}
+  interactions: {fileID: 11400000, guid: 8354aec3e80db6c4b93b57951eba3dd1, type: 2}
 --- !u!1 &6185675373264984707
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,10 +329,10 @@ MonoBehaviour:
     interactGroupLabel: Player
     currentInteractions:
     - ActionName: Sprint
-      Action: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      ActionRef: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
         type: 3}
     - ActionName: Crouch
-      Action: {fileID: 8909975673403271220, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      ActionRef: {fileID: 8909975673403271220, guid: d28e1abc489e3544d8273f9d2a57ed9e,
         type: 3}
   interactableLayerMask:
     serializedVersion: 2
