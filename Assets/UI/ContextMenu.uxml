@@ -1,9 +1,9 @@
 <engine:UXML xmlns:engine="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/ContextMenuStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#ContextMenuStyles" />
-    <engine:VisualElement name="Container" data-source="project://database/Assets/UI/Interactions.asset?fileID=11400000&amp;guid=8354aec3e80db6c4b93b57951eba3dd1&amp;type=2#Interactions" style="flex-grow: 1;">
+    <Style src="project://database/Assets/UI/ContextMenuStyles.uss" />
+    <engine:VisualElement name="Container" data-source="project://database/Assets/UI/Interactions.asset?fileID=11400000&amp;guid=8354aec3e80db6c4b93b57951eba3dd1&amp;type=2#Interactions">
         <engine:VisualElement name="context-menu" class="context-menu">
             <engine:VisualElement name="menu-container" data-source-type="UIInteractionGroup, Assembly-CSharp" class="menu-container">
-                <engine:ListView name="groups-list" binding-source-selection-mode="Manual" item-template="project://database/Assets/UI/InteractionGroup.uxml?fileID=9197481963319205126&amp;guid=1abfd54f0ba92f64d82472129b772a26&amp;type=3#InteractionGroup" reorder-mode="Animated" show-bound-collection-size="false" virtualization-method="DynamicHeight" focusable="false" data-source-type="UIInteractionGroup, Assembly-CSharp" data-source-path="uiInteractionGroups" />
+                <engine:ListView name="groups-list" binding-source-selection-mode="Manual" item-template="project://database/Assets/UI/InteractionGroup.uxml" reorder-mode="Animated" show-bound-collection-size="false" virtualization-method="DynamicHeight" focusable="false" data-source-type="UIInteractionGroup, Assembly-CSharp" data-source-path="uiInteractionGroups" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="crosshair-container" class="crosshair-container">
