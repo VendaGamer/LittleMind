@@ -1,6 +1,6 @@
 using UnityEngine;
 [CreateAssetMenu(menuName = "InteractableInfo",fileName = "Drawer")]
-public class DrawerInfo : InteractableInfoBase
+public class DrawerData : InteractableDataBase
 {
     [field:SerializeField] public float LerpDuration { get; private set; }
     [field:SerializeField] public float OpenX { get; private set; }

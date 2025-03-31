@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
+  data: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
 --- !u!114 &6234053588813373976
 MonoBehaviour:
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
+  data: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
 --- !u!114 &6140128877222027086
 MonoBehaviour:
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47791adb0fa04b648f239a7b51997e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  info: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
+  data: {fileID: 11400000, guid: 8e52f9f9b2d5de346a930bf42873f344, type: 2}
   <InteractGroupLabel>k__BackingField: Drawer
 --- !u!114 &4424204187031954786
 MonoBehaviour:

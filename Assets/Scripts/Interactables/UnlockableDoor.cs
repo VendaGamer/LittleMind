@@ -11,7 +11,7 @@ public class UnlockableDoor : Door
         {
             if (isLocked)
             {
-                return new[] { ((UnlockableDoorInfo)info).UnlockDoorInteraction, info.LookThroughKeyHoleInteraction };
+                return new[] { ((UnlockableDoorData)Data).UnlockDoorInteraction, Data.LookThroughKeyHoleInteraction };
             }
             return base.CurrentInteractions;
         }
@@ -21,7 +21,7 @@ public class UnlockableDoor : Door
     {
         if (isLocked)
         {
-            if (invokedAction.id == ((UnlockableDoorInfo)info).UnlockDoorInteraction.ActionRef.action.id)
+            if (invokedAction.id == ((UnlockableDoorData)Data).UnlockDoorInteraction.ActionRef.action.id)
             {
                 if (ReferenceEquals(interactor.InteractableHolding, requiredKey))
                 {

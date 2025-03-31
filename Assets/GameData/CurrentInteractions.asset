@@ -10,23 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43c0a4b6c28b435cbd7ebeaf63061af5, type: 3}
-  m_Name: Interactions
+  m_Name: CurrentInteractions
   m_EditorClassIdentifier: 
   uiInteractionGroups:
-  - GroupLabel: asd
+  - GroupLabel: sdasd
     Interactions:
-    - ActionName: s
-      DisplayText: sa
-      IsIcon: 1
-    - ActionName: s
-      DisplayText: sa
-      IsIcon: 1
-  - GroupLabel: pop
-    Interactions:
-    - ActionName: s
-      DisplayText: sa
-      IsIcon: 1
-    - ActionName: s
-      DisplayText: asdasdfvjj
+    - ActionName: dsa
+      DisplayText: F
+      IsIcon: 0
+    - ActionName: a
+      DisplayText: s
       IsIcon: 0
   crosshairVisible: 1

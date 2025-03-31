@@ -19,7 +19,7 @@ public class TransparentablePickableObject : PickableObject
         
         rend.material.color = new Color(
         col.r, col.g, col.b,
-        Mathf.Lerp(originalTransparency, 0f, ((TransparentablePickableObjectInfo)info).TransparencyPercentage)
+        Mathf.Lerp(originalTransparency, 0f, ((TransparentablePickableObjectData)Data).TransparencyPercentage)
         );
     }
 

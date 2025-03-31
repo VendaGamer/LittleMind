@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 
 public class Door : MonoBehaviour, IInteractable
 {
-    [SerializeField] protected DoorInfo info;
+    [SerializeField] protected DoorData Data;
     private Quaternion closedRotation;
     protected bool IsOpen = false;
-    public string InteractGroupLabel => info.InteractableGroupLabel;
+    public string InteractGroupLabel => Data.InteractableGroupLabel;
     private Coroutine currentRotateCoroutine;
     
     private void Start()
@@ -19,7 +19,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         get
         {
-            return IsOpen ? new[] { info.CloseDoorInteraction } : new[] { info.OpenDoorInteraction, info.LookThroughKeyHoleInteraction };
+            return IsOpen ? new[] { Data.CloseDoorInteraction } : new[] { Data.OpenDoorInteraction, Data.LookThroughKeyHoleInteraction };
         }
     }
 
@@ -27,7 +27,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (IsOpen)
         {
-            if (invokedAction.id == info.CloseDoorInteraction.ActionRef.action.id)
+            if (invokedAction.id == Data.CloseDoorInteraction.ActionRef.action.id)
             {
                 if (currentRotateCoroutine != null)
                     StopCoroutine(currentRotateCoroutine);
@@ -37,13 +37,13 @@ public class Door : MonoBehaviour, IInteractable
                 return true;
             }
         }
-        else if(invokedAction.id == info.OpenDoorInteraction.ActionRef.action.id)
+        else if(invokedAction.id == Data.OpenDoorInteraction.ActionRef.action.id)
         {
             if (currentRotateCoroutine != null)
                 StopCoroutine(currentRotateCoroutine);
                 
             currentRotateCoroutine = StartCoroutine(RotateDoor(
-                closedRotation * Quaternion.Euler(0f, info.OpenAngle, 0f)));
+                closedRotation * Quaternion.Euler(0f, Data.OpenAngle, 0f)));
             IsOpen = true;
             return true;
         }
@@ -59,7 +59,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         Quaternion startRotation = transform.parent.rotation;
         float angleToRotate = Quaternion.Angle(startRotation, desiredRotation);
-        float adjustedDuration = info.LerpDuration * (angleToRotate / info.OpenAngle);
+        float adjustedDuration = Data.LerpDuration * (angleToRotate / Data.OpenAngle);
         
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
