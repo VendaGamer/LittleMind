@@ -1,17 +1,10 @@
 using UnityEngine;
-
-public class LightTrigger : MonoBehaviour
+public class LightTrigger : RegisterableAnxietyTrigger<Nyctophobia>
 {
     [SerializeField] private Transform returnPoint;
     /// <summary>
-    /// Bod ke kteremu hrac dojde
+    /// Bod ke kteremu hrac dojde pokud ztrati kontrolu a bude tato louce nejbliz
     /// </summary>
     public Transform ReturnPoint => returnPoint;
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.TryGetComponent<Nyctophobia>(out var nyctophobia))
-        {
-            nyctophobia.RecoverAnxiety();
-        }
-    }
+
 }

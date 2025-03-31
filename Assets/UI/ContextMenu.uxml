@@ -1,0 +1,20 @@
+<engine:UXML xmlns:engine="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/ContextMenuStyles.uss" />
+    <engine:VisualElement name="Container" data-source="project://database/Assets/UI/Interactions.asset?fileID=11400000&amp;guid=8354aec3e80db6c4b93b57951eba3dd1&amp;type=2#Interactions">
+        <engine:VisualElement name="context-menu" class="context-menu">
+            <engine:VisualElement name="menu-container" data-source-type="UIInteractionGroup, Assembly-CSharp" class="menu-container">
+                <engine:ListView name="groups-list" binding-source-selection-mode="Manual" item-template="project://database/Assets/UI/InteractionGroup.uxml" reorder-mode="Animated" show-bound-collection-size="false" virtualization-method="DynamicHeight" focusable="false" data-source-type="UIInteractionGroup, Assembly-CSharp" data-source-path="uiInteractionGroups" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="crosshair-container" class="crosshair-container">
+            <engine:VisualElement name="crosshair" class="crosshair">
+                <Bindings>
+                    <engine:DataBinding property="class-crosshair--interactive" binding-path="HasInteractableCrosshair" binding-mode="ToTarget" />
+                </Bindings>
+            </engine:VisualElement>
+            <Bindings>
+                <engine:DataBinding property="enabledSelf" data-source-path="CrosshairVisible" binding-mode="ToTarget" data-source-type="UIInteractionGroup, Assembly-CSharp" />
+            </Bindings>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

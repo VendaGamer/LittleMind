@@ -1,32 +1,34 @@
+using System.Linq;
 using UnityEngine;
 
-public class Nyctophobia : MentalIllness
+public class Nyctophobia : AnxietyManager
 {
 
-    private bool isInLight = false;
-    private void FixedUpdate()
+    protected override void Update()
     {
-        if (isInLight)
+        if (activeAnxietySources.Count == 0)
         {
-            RecoverFromSymptoms();
+            IncreaseAnxiety(0.01f);
         }
-        else
-        {
-            CurrentAnxietyLevel = Mathf.Min(
-                CurrentAnxietyLevel + (anxietyBuildUpRate * Time.fixedDeltaTime),
-                maxAnxietyLevel
-            );
-            
-            UpdateSymptoms();
-        }
-        isInLight = false; // Reset for the next frame
     }
 
-    /// <summary>
-    /// Zavolano, kdyz hrac vstoupi do svetla, signalizuje uzdravovani
-    /// </summary>
-    public void RecoverAnxiety()
+    public override void UnRegisterAnxietySource(IAnxietySource anxietySource)
     {
-        isInLight = true;
+        if (FadeCoroutine != null)
+        {
+            StopCoroutine(FadeCoroutine);
+        }
+        activeAnxietySources.Remove(anxietySource);
+        OnAnxietySourcesChanged();
+    }
+
+    public override void RegisterAnxietySource(IAnxietySource anxietySource)
+    {
+        if (activeAnxietySources.Count == 0)
+        {
+            StartFadeAnxiety();
+        }
+        activeAnxietySources.Add(anxietySource);
+        OnAnxietySourcesChanged();
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Hematophobia : MentalIllness
+public class Hematophobia : AnxietyManager
 {
     [SerializeField] private float maxRayDistance = 10f;
     [SerializeField] private LayerMask bloodMask;
@@ -12,10 +12,6 @@ public class Hematophobia : MentalIllness
     {
         playerCamera = GetComponentInChildren<Camera>();
         StartCoroutine(CheckIfLookingAtBlood());
-    }
-    private void FixedUpdate()
-    {
-        HandleAnxiety();
     }
 
     /// <summary>
@@ -29,7 +25,7 @@ public class Hematophobia : MentalIllness
             if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance,
                 bloodMask, QueryTriggerInteraction.Collide))
             {
-                PendNewAnxietyLevel(1f); 
+                IncreaseAnxiety(0.05f);
             }
             yield return new WaitForFixedUpdate();
         }

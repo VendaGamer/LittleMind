@@ -1,58 +1,65 @@
 using System.Collections;
 using UnityEngine;
 
-public class HeartBeat : Symptom
+public class HeartBeatSymptom : AnxietySymptom
 {
-    [SerializeField] private AudioClip heartBeatLub;
-    [SerializeField] private AudioClip heartBeatDub;
+    [Header("Audio Clips")]
+    [SerializeField] private AudioClip HeartBeatLub;
+    [SerializeField] private AudioClip HeartBeatDub;
 
     [Header("Timing Settings")]
-    [SerializeField] private float minHeartRate = 60f;  // beats per minute
-    [SerializeField] private float maxHeartRate = 180f; // beats per minute
-    [SerializeField] private float lubDubGap = 0.15f;   // time between lub and dub
-    [SerializeField] private float heartRateBuildupSpeed = 7f;
+    [SerializeField] private float MinHeartRate = 60f;  // beats per minute
+    [SerializeField] private float MaxHeartRate = 180f; // beats per minute
+    [SerializeField] private float LubDubGap = 0.15f;
+    [SerializeField] private float HeartRateBuildupSpeed = 7f;
 
     [Header("Volume Settings")]
-    [SerializeField] private AnimationCurve heartbeatVolumeCurve = AnimationCurve.Linear(0, 0.5f, 1, 1f);
+    [SerializeField] private AnimationCurve HeartbeatVolumeCurve = AnimationCurve.Linear(0, 0.5f, 1, 1f);
 
-    private Coroutine currentHeartBeatRoutine;
-    private AudioSource playerAudioSource;
+    private Coroutine heartBeatRoutine;
+    private AudioSource audioSource;
     private float targetHeartRate;
 
-    private void Start()
+    private void Awake()
     {
-        playerAudioSource = GetComponentInChildren<AudioSource>();
+        audioSource = GetComponentInChildren<AudioSource>();
     }
 
-    public override void UpdateOrTriggerSymptom(float intensity)
+    public override void ActivateSymptom(float intensity)
     {
-        IsActive = true;
-        Intensity = intensity;
-
-        targetHeartRate = Mathf.Lerp(minHeartRate, maxHeartRate, intensity);
-        currentHeartBeatRoutine ??= StartCoroutine(StartHeartBeat());
-    }
-
-    private IEnumerator StartHeartBeat()
-    {
-        float currentHeartRate = minHeartRate;
-        while (IsActive)
+        enabled = true;
+        targetHeartRate = Mathf.Lerp(MinHeartRate, MaxHeartRate, intensity);
+        if (heartBeatRoutine == null)
         {
-            float volume = heartbeatVolumeCurve.Evaluate(Intensity);
+            heartBeatRoutine = StartCoroutine(HeartBeatRoutine());
+        }
+    }
 
-            currentHeartRate = Mathf.Lerp(currentHeartRate, targetHeartRate, Time.deltaTime * heartRateBuildupSpeed);
-            playerAudioSource.PlayOneShot(heartBeatLub, volume);
-            yield return new WaitForSeconds(lubDubGap);
+    private IEnumerator HeartBeatRoutine()
+    {
+        float currentHeartRate = MinHeartRate;
+        while (enabled)
+        {
+            float volume = HeartbeatVolumeCurve.Evaluate(Intensity);
+            currentHeartRate = Mathf.Lerp(currentHeartRate, targetHeartRate, Time.deltaTime * HeartRateBuildupSpeed);
 
-            playerAudioSource.PlayOneShot(heartBeatDub, volume);
-            yield return new WaitForSeconds((60f / currentHeartRate) - lubDubGap);
+            audioSource.PlayOneShot(HeartBeatLub, volume);
+            yield return new WaitForSeconds(LubDubGap);
+
+            audioSource.PlayOneShot(HeartBeatDub, volume);
+            yield return new WaitForSeconds((60f / currentHeartRate) - LubDubGap);
         }
 
-        currentHeartBeatRoutine = null;
+        heartBeatRoutine = null;
     }
 
     public override void StopSymptom()
     {
-        IsActive = false;
+        enabled = false;
+        if (heartBeatRoutine != null)
+        {
+            StopCoroutine(heartBeatRoutine);
+            heartBeatRoutine = null;
+        }
     }
 }
