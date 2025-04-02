@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour, IInteractor
     [SerializeField] private float sprintSpeed = 7f;
     [SerializeField] private float jumpForce = 2f;
     [SerializeField] private Transform jumpPoint;
-    [SerializeField] private float maxJumpPointDist = 0.2f;
+    [SerializeField] private float maxJumpPointDist = 0.001f;
     [SerializeField] private float jumpCooldown = 0.1f;
     [SerializeField] private float jumpPointRadius = 0.3f;
     [SerializeField] private LayerMask groundLayerMask;
@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed -= OnSprint;
         Controls.Player.Drop.performed -= OnDrop;
         Controls.Player.Crouch.performed -= OnCrouch;
+        Controls.Player.Jump.performed -= OnJump;
+        Controls.Player.Jump.started -= OnJump;
     }
 
     private void OnEnable()
@@ -83,6 +85,15 @@ public class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed += OnSprint;
         Controls.Player.Drop.performed += OnDrop;
         Controls.Player.Crouch.performed += OnCrouch;
+        Controls.Player.Jump.started += OnJump;
+    }
+
+    private void OnJump(InputAction.CallbackContext obj)
+    {
+        if (canJump && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
     private void OnDrop(InputAction.CallbackContext obj)
@@ -129,7 +140,7 @@ public class PlayerController : MonoBehaviour, IInteractor
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.SphereCast(new Ray(jumpPoint.position, Vector3.down), jumpPointRadius,maxJumpPointDist,groundLayerMask);
+        isGrounded = Physics.Raycast(new Ray(jumpPoint.position, Vector3.down),maxJumpPointDist,groundLayerMask);
     }
 
     private IEnumerator JumpCooldown()

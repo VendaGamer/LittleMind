@@ -12,7 +12,8 @@
                                  allow-add="true"
                                  binding-source-selection-mode="AutoAssign"
                                  item-template="project://database/Assets/UI/InteractionGroup.uxml"
-                                 reorder-mode="Animated" show-bound-collection-size="false"
+                                 reorder-mode="Animated"
+                                 show-bound-collection-size="false"
                                  virtualization-method="DynamicHeight"
                                  focusable="false"
                                  data-source-type="UIInteractionGroup, Assembly-CSharp" >
@@ -20,6 +21,7 @@
                         <engine:DataBinding property="itemsSource"
                                             binding-path="UIInteractionGroups"
                                             binding-mode="ToTarget"
+                                            binding-source-selection-mode="AutoAssign"
                                             data-source-path="UIInteractionGroups"/>
                     </Bindings>
                 </engine:ListView>

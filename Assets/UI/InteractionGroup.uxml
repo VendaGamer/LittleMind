@@ -26,12 +26,13 @@
                          allow-add="true"
                          allow-remove="true"
                          virtualization-method="DynamicHeight"
-                         data-source-type="UIInteractionGroup, Assembly-CSharp">
+                         data-source-type="UIInteractionGroup, Assembly-CSharp"
+                         data-source-path="UIInteractionGroups[0]" >
             <Bindings>
                 <engine:DataBinding property="itemsSource"
                                     binding-path="Interactions"
                                     binding-mode="ToTarget"
-                                    data-source-path="UIInteractionGroups[0]Interactions"/>
+                                    data-source-path="Interactions"/>
             </Bindings>
         </engine:ListView>
     </engine:VisualElement>
