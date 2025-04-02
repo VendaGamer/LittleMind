@@ -10,8 +10,10 @@ public class PlayerCamera : MonoBehaviour
     public static PlayerCamera Instance { get; private set; }
     public Camera Camera { get; private set; }
     public Plane[] FrustumPlanes { get; } = new Plane[6];
+
+    [SerializeField]
     private float frustumExpansionFactor = 1.1f;
-    
+
     public float FrustumExpansionFactor
     {
         get => frustumExpansionFactor;
@@ -21,7 +23,7 @@ public class PlayerCamera : MonoBehaviour
             UpdateFrustum();
         }
     }
-    
+
     private Vector3 lastCameraPosition;
     private Quaternion lastCameraRotation;
 
@@ -29,12 +31,12 @@ public class PlayerCamera : MonoBehaviour
     {
         Camera = GetComponent<Camera>();
     }
+
     private void LateUpdate()
     {
-        if (transform.rotation == lastCameraRotation &&
-            transform.position == lastCameraPosition)
+        if (transform.rotation == lastCameraRotation && transform.position == lastCameraPosition)
             return;
-        
+
         UpdateFrustum();
     }
 
@@ -43,7 +45,7 @@ public class PlayerCamera : MonoBehaviour
         lastCameraPosition = transform.position;
         lastCameraRotation = transform.rotation;
         var originalFOV = Camera.fieldOfView;
-        
+
         Camera.fieldOfView = originalFOV * FrustumExpansionFactor;
 
         GeometryUtility.CalculateFrustumPlanes(Camera, FrustumPlanes);

@@ -13,12 +13,20 @@ MonoBehaviour:
   m_Name: CurrentInteractions
   m_EditorClassIdentifier: 
   uiInteractionGroups:
-  - GroupLabel: sdasd
+  - GroupLabel: a
     Interactions:
-    - ActionName: dsa
-      DisplayText: F
-      IsIcon: 0
-    - ActionName: a
+    - ActionName: d
       DisplayText: s
       IsIcon: 0
+    - ActionName: ffffffffffffffffff
+      DisplayText: gg
+      IsIcon: 1
+  - GroupLabel: a
+    Interactions:
+    - ActionName: d
+      DisplayText: s
+      IsIcon: 0
+    - ActionName: ffffffffffffffffff
+      DisplayText: gg
+      IsIcon: 1
   crosshairVisible: 1

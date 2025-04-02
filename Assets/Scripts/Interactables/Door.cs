@@ -4,12 +4,13 @@ using UnityEngine.InputSystem;
 
 public class Door : MonoBehaviour, IInteractable
 {
-    [SerializeField] protected DoorData Data;
+    [SerializeField]
+    protected DoorData Data;
     private Quaternion closedRotation;
     protected bool IsOpen = false;
     public string InteractGroupLabel => Data.InteractableGroupLabel;
     private Coroutine currentRotateCoroutine;
-    
+
     private void Start()
     {
         closedRotation = transform.parent.rotation;
@@ -19,7 +20,9 @@ public class Door : MonoBehaviour, IInteractable
     {
         get
         {
-            return IsOpen ? new[] { Data.CloseDoorInteraction } : new[] { Data.OpenDoorInteraction, Data.LookThroughKeyHoleInteraction };
+            return IsOpen
+                ? new[] { Data.CloseDoorInteraction }
+                : new[] { Data.OpenDoorInteraction, Data.LookThroughKeyHoleInteraction };
         }
     }
 
@@ -29,25 +32,36 @@ public class Door : MonoBehaviour, IInteractable
         {
             if (invokedAction.id == Data.CloseDoorInteraction.ActionRef.action.id)
             {
-                if (currentRotateCoroutine != null)
-                    StopCoroutine(currentRotateCoroutine);
-                    
-                currentRotateCoroutine = StartCoroutine(RotateDoor(closedRotation));
-                IsOpen = false;
+                CloseDoor();
                 return true;
             }
         }
-        else if(invokedAction.id == Data.OpenDoorInteraction.ActionRef.action.id)
+        else if (invokedAction.id == Data.OpenDoorInteraction.ActionRef.action.id)
         {
-            if (currentRotateCoroutine != null)
-                StopCoroutine(currentRotateCoroutine);
-                
-            currentRotateCoroutine = StartCoroutine(RotateDoor(
-                closedRotation * Quaternion.Euler(0f, Data.OpenAngle, 0f)));
-            IsOpen = true;
+            OpenDoor();
             return true;
         }
         return false;
+    }
+
+    public void CloseDoor()
+    {
+        if (currentRotateCoroutine != null)
+            StopCoroutine(currentRotateCoroutine);
+
+        currentRotateCoroutine = StartCoroutine(RotateDoor(closedRotation));
+        IsOpen = false;
+    }
+
+    public void OpenDoor()
+    {
+        if (currentRotateCoroutine != null)
+            StopCoroutine(currentRotateCoroutine);
+
+        currentRotateCoroutine = StartCoroutine(
+            RotateDoor(closedRotation * Quaternion.Euler(0f, Data.OpenAngle, 0f))
+        );
+        IsOpen = true;
     }
 
     public bool ToggleOutline(bool value)
@@ -60,13 +74,13 @@ public class Door : MonoBehaviour, IInteractable
         Quaternion startRotation = transform.parent.rotation;
         float angleToRotate = Quaternion.Angle(startRotation, desiredRotation);
         float adjustedDuration = Data.LerpDuration * (angleToRotate / Data.OpenAngle);
-        
+
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
         {
             elapsedTime += Time.deltaTime;
             float step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
-            
+
             transform.parent.rotation = Quaternion.Lerp(startRotation, desiredRotation, step);
             yield return null;
         }
