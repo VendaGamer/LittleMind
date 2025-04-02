@@ -391,8 +391,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
+      propertyPath: uiData
+      value: 
+      objectReference: {fileID: 11400000, guid: 8354aec3e80db6c4b93b57951eba3dd1,
+        type: 2}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
       propertyPath: groundLayerMask.m_Bits
       value: 775
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: interactableLayerMask.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 8476556591668560585, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}

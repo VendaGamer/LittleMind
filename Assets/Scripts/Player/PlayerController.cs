@@ -1,21 +1,9 @@
 using System.Collections;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour, IInteractor
+public partial class PlayerController : MonoBehaviour, IInteractor
 {
-    [Header("Pickup Settings")]
-    [SerializeField]
-    private Transform pickupPoint;
-    public Transform PickupPoint=> pickupPoint;
-    private static Camera Camera => PlayerCamera.Instance.Camera;
-    [SerializeField]
-    private float pickupLerpDuration=1f;
-    public float PickupLerpDuration => pickupLerpDuration;
-
-
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintSpeed = 7f;
@@ -28,22 +16,13 @@ public class PlayerController : MonoBehaviour, IInteractor
     private bool canJump = true;
     private bool isGrounded;
     private bool isCrouching;
+    private static Camera playerCamera => PlayerCamera.Instance.Camera;
     
 
     [Header("Look Settings")]
     [SerializeField] private float maxLookUpAngle = 90f;
     [SerializeField] private float maxLookDownAngle = -90f;
     [SerializeField] private Transform playerCameraHolder;
-    
-    [Header("Interaction Settings")]
-    [SerializeField] private GlobalInteractions globalInteractionsPlayerControls;
-    [SerializeField] private LayerMask interactableLayerMask;
-    [SerializeField] private float sphereCastDistance = 3f;
-    [SerializeField] private float sphereCastRadius = 0.1f;
-    
-    private readonly RaycastHit[] raycastHits = new RaycastHit[1];
-    [CanBeNull] private IInteractable interactableLookingAt;
-    [CanBeNull] public IInteractable InteractableHolding { get; private set; }
 
     public static Controls Controls { get; private set; }
     private float currentSpeed;
@@ -74,8 +53,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed -= OnSprint;
         Controls.Player.Drop.performed -= OnDrop;
         Controls.Player.Crouch.performed -= OnCrouch;
-        Controls.Player.Jump.performed -= OnJump;
-        Controls.Player.Jump.started -= OnJump;
     }
 
     private void OnEnable()
@@ -85,15 +62,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed += OnSprint;
         Controls.Player.Drop.performed += OnDrop;
         Controls.Player.Crouch.performed += OnCrouch;
-        Controls.Player.Jump.started += OnJump;
-    }
-
-    private void OnJump(InputAction.CallbackContext obj)
-    {
-        if (canJump && isGrounded)
-        {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
     }
 
     private void OnDrop(InputAction.CallbackContext obj)
@@ -135,7 +103,16 @@ public class PlayerController : MonoBehaviour, IInteractor
         HandleLook();
         HandleMovement();
         CheckGrounded();
+        HandleJump();
         HandleInteraction();
+    }
+
+    private void HandleJump()
+    {
+        if (Controls.Player.Jump.IsPressed() && canJump && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+        }
     }
 
     private void CheckGrounded()
@@ -148,66 +125,6 @@ public class PlayerController : MonoBehaviour, IInteractor
         canJump = false;
         yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
-    }
-
-    private void HandleInteraction()
-    {
-        Ray ray = Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, Camera.nearClipPlane));
-        int hitCount = Physics.SphereCastNonAlloc(ray, sphereCastRadius, raycastHits, sphereCastDistance, interactableLayerMask);
-
-        if (hitCount > 0)
-        {
-            RaycastHit hit = raycastHits[0];
-            if (hit.collider.TryGetComponent<IInteractable>(out var interactable))
-            {
-                // If we're looking at a different interactable, update interactions
-                if (interactableLookingAt != interactable)
-                {
-                    
-                    if (!interactableLookingAt.IsUnityNull())
-                    {
-                        interactableLookingAt.ToggleOutline(false);
-                        if (interactableLookingAt.CurrentInteractions != interactable.CurrentInteractions)
-                        {
-                            SwitchExclusiveInteractions(interactable);
-                        }
-                    }
-
-                    interactable.ToggleOutline(true);
-                    interactableLookingAt = interactable;
-                }
-            }
-            else
-            {
-                // We hit something, but it's not an interactable
-                if (!interactableLookingAt.IsUnityNull())
-                {
-                    interactableLookingAt.ToggleOutline(false);
-                    interactableLookingAt = null;
-                    SwitchExclusiveInteractions(null);
-                }
-            }
-        }
-        else
-        {
-            // We didn't hit anything
-            if (!interactableLookingAt.IsUnityNull())
-            {
-                interactableLookingAt.ToggleOutline(false);
-                interactableLookingAt = null;
-                SwitchExclusiveInteractions(null);
-            }
-        }
-    }
-    
-    private void SwitchGlobalInteractions(GlobalInteractions newGlobalInteractions)
-    {
-        //uiData.UpdateInteractions(newGlobalInteractions, interactableLookingAt);
-    }
-
-    private void SwitchExclusiveInteractions(IInteractable newExclusiveInteractions)
-    {
-        //uiData.UpdateInteractions(globalInteractionsPlayerControls, newExclusiveInteractions);
     }
     
     private void HandleMovement()

@@ -1,7 +1,7 @@
 using UnityEngine;
 public static class OutlineSettings
 {
-    public static float OutlineThickness = 10;
-    public static Color OutlineColor = Color.red;
-    public static Outline.Mode OutlineMode = Outline.Mode.OutlineAll;
+    public const float OutlineThickness = 10;
+    public static readonly Color OutlineColor = Color.white;
+    public const Outline.Mode OutlineMode = Outline.Mode.OutlineAll;
 }

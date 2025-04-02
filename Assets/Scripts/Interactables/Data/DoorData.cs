@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "InteractableInfo/DoorInfo",fileName = "DoorInfo")]
+[CreateAssetMenu(menuName = "GameData/DoorData",fileName = "DoorData")]
 public class DoorData : InteractableDataBase
 {
     [field:SerializeField] public float LerpDuration { get; private set; }

@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "InteractableInfo/PickableObjectInfo",fileName = "PickableObjectInfo")]
+[CreateAssetMenu(menuName = "GameData/PickableObjectData",fileName = "PickableObjectData")]
 public class PickableObjectData : InteractableDataBase
 {
     [field:SerializeField] public float LerpDuration { get; private set; }

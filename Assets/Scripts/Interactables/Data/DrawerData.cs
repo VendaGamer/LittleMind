@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "InteractableInfo",fileName = "Drawer")]
+[CreateAssetMenu(menuName = "GameData/DrawerData",fileName = "DrawerData")]
 public class DrawerData : InteractableDataBase
 {
     [field:SerializeField] public float LerpDuration { get; private set; }

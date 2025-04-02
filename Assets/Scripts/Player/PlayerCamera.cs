@@ -1,11 +1,12 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// </summary>
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoBehaviour, ISingleton
 {
     public static PlayerCamera Instance { get; private set; }
     public Camera Camera { get; private set; }
