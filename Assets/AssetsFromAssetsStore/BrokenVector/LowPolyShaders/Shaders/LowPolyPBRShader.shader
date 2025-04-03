@@ -40,5 +40,5 @@
 		}
 		ENDCG
 	} 
-	FallBack "Diffuse"
+	FallBack "Unlit/Texture"
 }
