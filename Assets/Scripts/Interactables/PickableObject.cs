@@ -15,6 +15,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     private Collider col;
     private Outline outline;
     private Coroutine currentPickupCoroutine;
+    private Transform Container;
 
     public Interaction[] CurrentInteractions
     {
@@ -26,6 +27,7 @@ public class PickableObject : MonoBehaviour, IInteractable
 
     protected virtual void Start()
     {
+        Container = transform.parent ?? transform;
         rb = GetComponentInParent<Rigidbody>();
         col = GetComponent<Collider>();
         outline = GetComponent<Outline>();
@@ -37,14 +39,14 @@ public class PickableObject : MonoBehaviour, IInteractable
         
         rb.isKinematic = false;
         col.isTrigger = false;
-        transform.parent.SetParent(null);
+        Container.SetParent(null);
         OnDropped();
     }
     private void PickObject(Transform parent)
     {
         rb.isKinematic = true;
         col.isTrigger = true;
-        transform.parent.SetParent(parent);
+        Container.SetParent(parent);
     
         if (currentPickupCoroutine != null)
             StopCoroutine(currentPickupCoroutine);
@@ -57,7 +59,7 @@ public class PickableObject : MonoBehaviour, IInteractable
         var endPos = Vector3.zero;
         var endRot = Quaternion.Euler(Vector3.zero);
 
-        transform.parent.GetLocalPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
+        Container.GetLocalPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
         float elapsedTime = 0f;
     
         while (elapsedTime < info.LerpDuration)
@@ -65,7 +67,7 @@ public class PickableObject : MonoBehaviour, IInteractable
             elapsedTime += Time.deltaTime;
             var step = Mathf.SmoothStep(0, 1, elapsedTime / info.LerpDuration);
 
-            transform.parent.SetLocalPositionAndRotation(
+            Container.SetLocalPositionAndRotation(
                 Vector3.Lerp(startPos, endPos, step),
                 Quaternion.Lerp(startRot, endRot, step)
             );
@@ -73,7 +75,7 @@ public class PickableObject : MonoBehaviour, IInteractable
             yield return null;
         }
     
-        transform.parent.SetLocalPositionAndRotation(endPos, endRot);
+        Container.SetLocalPositionAndRotation(endPos, endRot);
         OnPicked();
     }
 

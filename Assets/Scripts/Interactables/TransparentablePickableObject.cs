@@ -9,23 +9,23 @@ public class TransparentablePickableObject : PickableObject
     protected override void Start()
     {
         base.Start();
-        rend = GetComponent<Renderer>();
-        originalTransparency = rend.material.color.a;
+        // rend = GetComponent<Renderer>() ?? GetComponentInChildren<Renderer>();
+        // originalTransparency = rend.material.color.a;
     }
 
     protected override void OnPicked()
     {
-        var col = rend.material.color;
-        
-        rend.material.color = new Color(
-        col.r, col.g, col.b,
-        Mathf.Lerp(originalTransparency, 0f, ((TransparentablePickableObjectInfo)info).TransparencyPercentage)
-        );
+        // var col = rend.material.color;
+        //
+        // rend.material.color = new Color(
+        // col.r, col.g, col.b,
+        // Mathf.Lerp(originalTransparency, 0f, ((TransparentablePickableObjectInfo)info).TransparencyPercentage)
+        // );
     }
 
     protected override void OnDropped()
     {
-        var col = rend.material.color;
-        rend.material.color = new Color(col.r, col.g, col.b, originalTransparency);
+        // var col = rend.material.color;
+        // rend.material.color = new Color(col.r, col.g, col.b, originalTransparency);
     }
 }
