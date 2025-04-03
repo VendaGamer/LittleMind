@@ -74,6 +74,8 @@ public class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed -= OnSprint;
         Controls.Player.Drop.performed -= OnDrop;
         Controls.Player.Crouch.performed -= OnCrouch;
+        Controls.Player.Jump.performed -= OnJump;
+        Controls.Player.Jump.started -= OnJump;
     }
 
     private void OnEnable()
@@ -83,6 +85,15 @@ public class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed += OnSprint;
         Controls.Player.Drop.performed += OnDrop;
         Controls.Player.Crouch.performed += OnCrouch;
+        Controls.Player.Jump.started += OnJump;
+    }
+
+    private void OnJump(InputAction.CallbackContext obj)
+    {
+        if (canJump && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
     private void OnDrop(InputAction.CallbackContext obj)
