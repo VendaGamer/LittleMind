@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +15,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         closedRotation = transform.parent.rotation;
     }
-
+    [CreateProperty]
     public virtual Interaction[] CurrentInteractions
     {
         get

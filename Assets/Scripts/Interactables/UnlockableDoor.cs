@@ -1,3 +1,4 @@
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +6,7 @@ public class UnlockableDoor : Door
 {
     [SerializeField] private DoorKey requiredKey;
     private bool isLocked = true;
+    [CreateProperty]
     public override Interaction[] CurrentInteractions
     {
         get

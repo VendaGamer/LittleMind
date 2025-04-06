@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,7 +18,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         closedPosition = transform.position;
         outline = GetComponent<Outline>();
     }
-    
+    [CreateProperty]
     public Interaction[] CurrentInteractions
     {
         get

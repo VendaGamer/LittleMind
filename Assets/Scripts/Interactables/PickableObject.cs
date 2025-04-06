@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Threading;
-using System.Threading.Tasks;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +17,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     private Coroutine currentPickupCoroutine;
     private Transform Container;
 
+    [CreateProperty]
     public Interaction[] CurrentInteractions
     {
         get
