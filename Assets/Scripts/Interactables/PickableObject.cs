@@ -4,12 +4,12 @@ using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PickableObject : MonoBehaviour, IInteractable
+public abstract class PickableObject : MonoBehaviour, IInteractable
 {
-    [SerializeField] protected PickableObjectInfo info;
+    protected abstract PickableObjectData Data { get; }
     protected bool IsPicked = false;
     private CancellationTokenSource curTokScr;
-    public string InteractGroupLabel => info.InteractableGroupLabel;
+    public string InteractGroupLabel => Data.InteractableGroupLabel;
 
     private Rigidbody rb;
     private Collider col;
@@ -22,7 +22,7 @@ public class PickableObject : MonoBehaviour, IInteractable
     {
         get
         {
-            return IsPicked ? new[] {  info.DropInteraction } : new[] { info.PickupInteraction };
+            return IsPicked ? new[] {  Data.DropInteraction } : new[] { Data.PickupInteraction };
         }
     }
 
@@ -63,10 +63,10 @@ public class PickableObject : MonoBehaviour, IInteractable
         Container.GetLocalPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
         float elapsedTime = 0f;
     
-        while (elapsedTime < info.LerpDuration)
+        while (elapsedTime < Data.LerpDuration)
         {
             elapsedTime += Time.deltaTime;
-            var step = Mathf.SmoothStep(0, 1, elapsedTime / info.LerpDuration);
+            var step = Mathf.SmoothStep(0, 1, elapsedTime / Data.LerpDuration);
 
             Container.SetLocalPositionAndRotation(
                 Vector3.Lerp(startPos, endPos, step),
@@ -88,14 +88,14 @@ public class PickableObject : MonoBehaviour, IInteractable
     {
         if (IsPicked)
         {
-            if (invokedAction.id == info.DropInteraction.ActionRef.action.id)
+            if (invokedAction.id == Data.DropInteraction.ActionRef.action.id)
             {
                 DropObject();
                 IsPicked = false;
                 return true;
             }
         }
-        else if (invokedAction.id == info.PickupInteraction.ActionRef.action.id)
+        else if (invokedAction.id == Data.PickupInteraction.ActionRef.action.id)
         {
             PickObject(interactor.PickupPoint);
             IsPicked = true;

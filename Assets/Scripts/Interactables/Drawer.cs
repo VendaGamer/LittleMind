@@ -3,10 +3,11 @@ using System.Collections;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class Drawer : MonoBehaviour, IInteractable, IDisposable
 {
-    [SerializeField] private DrawerInfo info;
+    [FormerlySerializedAs("info")] [SerializeField] private DrawerData data;
     [field:SerializeField] public string InteractGroupLabel { get; private set; }
     private bool isOpen = false;
     private Vector3 closedPosition;
@@ -23,7 +24,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     {
         get
         {
-            return isOpen ? new[] { info.CloseDrawerInteraction } : new[] {info.OpenDrawerInteraction};
+            return isOpen ? new[] { data.CloseDrawerInteraction } : new[] {data.OpenDrawerInteraction};
         }
     }
     
@@ -31,7 +32,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     {
         Vector3 startPos = transform.position;
         float distanceToMove = Vector3.Distance(startPos, destination);
-        float adjustedDuration = info.LerpDuration * (distanceToMove / Mathf.Abs(info.OpenX));
+        float adjustedDuration = data.LerpDuration * (distanceToMove / Mathf.Abs(data.OpenX));
     
         float elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
@@ -50,7 +51,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     {
         if (isOpen)
         {
-            if (invokedAction.id == info.CloseDrawerInteraction.ActionRef.action.id)
+            if (invokedAction.id == data.CloseDrawerInteraction.ActionRef.action.id)
             {
                 if (currentMoveCoroutine != null)
                     StopCoroutine(currentMoveCoroutine);
@@ -60,13 +61,13 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
                 return true;
             }
         }
-        else if(invokedAction.id == info.OpenDrawerInteraction.ActionRef.action.id)
+        else if(invokedAction.id == data.OpenDrawerInteraction.ActionRef.action.id)
         {
             if (currentMoveCoroutine != null)
                 StopCoroutine(currentMoveCoroutine);
                 
             currentMoveCoroutine = StartCoroutine(Move(
-                closedPosition + new Vector3(info.OpenX, 0f, 0f) * transform.parent.localScale.x));
+                closedPosition + new Vector3(data.OpenX, 0f, 0f) * transform.parent.localScale.x));
             isOpen = true;
             return true;
         }

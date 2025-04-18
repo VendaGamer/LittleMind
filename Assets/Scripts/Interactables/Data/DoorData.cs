@@ -1,6 +1,6 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "InteractableInfo/DoorInfo",fileName = "DoorInfo")]
-public class DoorInfo : InteractableInfoBase
+[CreateAssetMenu(menuName = "GameData/Interactables/DoorData",fileName = "DoorData")]
+public class DoorData : InteractableData
 {
     [field:SerializeField] public float LerpDuration { get; private set; }
     [field:SerializeField] public float OpenAngle { get; private set; }

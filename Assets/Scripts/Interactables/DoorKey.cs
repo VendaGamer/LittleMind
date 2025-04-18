@@ -1,4 +1,4 @@
-public class DoorKey : PickableObject
+public class DoorKey : GeneralPickableObject
 {
     
 }
