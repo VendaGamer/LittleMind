@@ -8,7 +8,7 @@ public class Hematophobia : AnxietyManager
 
     private Camera playerCamera;
 
-    private void Start()
+    protected override void Start()
     {
         playerCamera = GetComponentInChildren<Camera>();
         StartCoroutine(CheckIfLookingAtBlood());

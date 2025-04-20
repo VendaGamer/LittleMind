@@ -5,8 +5,8 @@ using UnityEngine;
 /// </summary>
 public class CameraVisibilityDetector : MonoBehaviour
 {
-    private Collider collider;
-    private Renderer renderer;
+    private new Collider collider;
+    private new Renderer renderer;
     private void Start()
     {
         collider = GetComponent<Collider>();

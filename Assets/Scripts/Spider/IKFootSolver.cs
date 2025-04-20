@@ -1,4 +1,7 @@
 using System.Collections;
+using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using UnityEngine;
 
 public class IKFootSolver : MonoBehaviour
@@ -16,7 +19,7 @@ public class IKFootSolver : MonoBehaviour
         currentPos = transform.position;
     }
     
-    void Update()
+    private void Update()
     {
         var change = Vector3.Distance(transform.position, currentPos);
         transform.position = currentPos;
@@ -25,8 +28,18 @@ public class IKFootSolver : MonoBehaviour
             currentPos = legMoveTarget.position;
             shouldMove = true;
         }
+
+        if (Physics.Raycast(legMoveTarget.position + (0.3f* Vector3.up), Vector3.down, out var hit, data.MaxRaycastDistance,
+                data.TerrainLayer))
+        {
+            legMoveTarget.position = hit.point;
+        }
     }
 
+    public TweenerCore<Vector3,Vector3,VectorOptions> MoveToMoveTarget()
+    {
+        return transform.DOMove(legMoveTarget.position,1f);
+    }
 
     private void OnDrawGizmos()
     {

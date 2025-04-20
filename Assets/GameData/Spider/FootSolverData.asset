@@ -9,20 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48798f1297ae4ebeb6fd3b12d0b77b4c, type: 3}
-  m_Name: Locomotion
+  m_Script: {fileID: 11500000, guid: 3fb4fd349d764c33aa46a0e13533f66c, type: 3}
+  m_Name: FootSolverData
   m_EditorClassIdentifier: 
   <TerrainLayer>k__BackingField:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 857
   <Speed>k__BackingField: 1
   <StepDistance>k__BackingField: 0.1
   <StepLength>k__BackingField: 0.1
   <StepHeight>k__BackingField: 0.1
   <FootOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <MaxRaycastDistance>k__BackingField: 10
-  <LegGroupDelay>k__BackingField: 0.2
+  <LegLiftDelay>k__BackingField: 0.1
   <GaitSpeed>k__BackingField: 1
-  <GaitPattern>k__BackingField: 0
-  <BodyHeight>k__BackingField: 0.5
-  <BodyTiltAmount>k__BackingField: 0.5

@@ -9,6 +9,7 @@ public class IKFootSolverData : ScriptableObject
     [field:SerializeField] public float StepLength { get; private set; } = 0.1f;
     [field:SerializeField] public float StepHeight { get; private set; } = 0.1f;
     [field:SerializeField] public Vector3 FootOffset { get; private set; } = default;
+    [field:SerializeField] public Vector3 RaycastDirection { get; private set; } = new Vector3(0.1f, -1f, 0.1f);
     [field:SerializeField] public float MaxRaycastDistance { get; private set; } = 10f;
     
     // Added spider gait pattern controls
