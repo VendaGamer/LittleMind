@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Test - menu.unity
+    guid: 527675498d11b3b4f821f75bfa15819c
+  - enabled: 1
     path: Assets/Scenes/Testovaci scena Interakce.unity
     guid: 53716a0913c5e404394127a7d5dab75f
   m_configObjects:

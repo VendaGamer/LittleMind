@@ -10,7 +10,6 @@ public abstract class AnxietySymptom : MonoBehaviour
     public virtual void OnAnxietyChanged(float newAnxiety)
     {
         Intensity = newAnxiety;
-        ActivateSymptom(newAnxiety);
     }
 
     /// <summary>
@@ -31,5 +30,5 @@ public abstract class AnxietySymptom : MonoBehaviour
     /// <summary>
     /// Stop the symptom (e.g. end any coroutines or animations).
     /// </summary>
-    public virtual void StopSymptom() { }
+    public abstract void StopSymptom();
 }

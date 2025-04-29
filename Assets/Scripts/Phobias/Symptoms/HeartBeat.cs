@@ -1,20 +1,38 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HeartBeatSymptom : AnxietySymptom
 {
+    [Header("UI")]
+    private UIDocument playerUI;
+
+    private VisualElement heartElement;
+
     [Header("Audio Clips")]
-    [SerializeField] private AudioClip HeartBeatLub;
-    [SerializeField] private AudioClip HeartBeatDub;
+    [SerializeField]
+    private AudioClip HeartBeatLub;
+
+    [SerializeField]
+    private AudioClip HeartBeatDub;
 
     [Header("Timing Settings")]
-    [SerializeField] private float MinHeartRate = 60f;  // beats per minute
-    [SerializeField] private float MaxHeartRate = 180f; // beats per minute
-    [SerializeField] private float LubDubGap = 0.15f;
-    [SerializeField] private float HeartRateBuildupSpeed = 7f;
+    [SerializeField]
+    private float MinHeartRate = 60f; // beats per minute
+
+    [SerializeField]
+    private float MaxHeartRate = 180f; // beats per minute
+
+    [SerializeField]
+    private float LubDubGap = 0.15f;
+
+    [SerializeField]
+    private float HeartRateBuildupSpeed = 7f;
 
     [Header("Volume Settings")]
-    [SerializeField] private AnimationCurve HeartbeatVolumeCurve = AnimationCurve.Linear(0, 0.5f, 1, 1f);
+    [SerializeField]
+    private AnimationCurve HeartbeatVolumeCurve = AnimationCurve.Linear(0, 0.5f, 1, 1f);
 
     private Coroutine heartBeatRoutine;
     private AudioSource audioSource;
@@ -23,6 +41,9 @@ public class HeartBeatSymptom : AnxietySymptom
     private void Awake()
     {
         audioSource = GetComponentInChildren<AudioSource>();
+        heartElement = playerUI.rootVisualElement.Q("heartbeat-representation");
+        transform.DOMove();
+        heartElement.DO
     }
 
     public override void ActivateSymptom(float intensity)
@@ -41,7 +62,11 @@ public class HeartBeatSymptom : AnxietySymptom
         while (enabled)
         {
             float volume = HeartbeatVolumeCurve.Evaluate(Intensity);
-            currentHeartRate = Mathf.Lerp(currentHeartRate, targetHeartRate, Time.deltaTime * HeartRateBuildupSpeed);
+            currentHeartRate = Mathf.Lerp(
+                currentHeartRate,
+                targetHeartRate,
+                Time.deltaTime * HeartRateBuildupSpeed
+            );
 
             audioSource.PlayOneShot(HeartBeatLub, volume);
             yield return new WaitForSeconds(LubDubGap);
