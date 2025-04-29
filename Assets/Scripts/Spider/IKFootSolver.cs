@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class IKFootSolver : MonoBehaviour
@@ -36,9 +37,11 @@ public class IKFootSolver : MonoBehaviour
         }
     }
 
+    [CanBeNull]
     public TweenerCore<Vector3,Vector3,VectorOptions> MoveToMoveTarget()
     {
-        return transform.DOMove(legMoveTarget.position,1f);
+        return transform.position == legMoveTarget.position ? null
+            : transform.DOMove(legMoveTarget.position,1f);
     }
 
     private void OnDrawGizmos()

@@ -10,6 +10,18 @@ public class Trembling : AnxietySymptom
     private CameraShakeInstance currentShake;
     public override void ActivateSymptom(float intensity)
     {
+        enabled = true;
+        StartShake();
+    }
+
+    public override void OnAnxietyChanged(float newAnxiety)
+    {
+        base.OnAnxietyChanged(newAnxiety);
+        StartShake();
+    }
+
+    private void StartShake()
+    {
         if (currentShake == null)
         {
             currentShake = CameraShaker.Instance.StartShake(baseMagnitude * Intensity, baseRoughness * Intensity, baseFadeInTime / Intensity);

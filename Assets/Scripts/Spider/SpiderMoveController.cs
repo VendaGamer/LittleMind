@@ -4,10 +4,12 @@ public class SpiderMoveController : MonoBehaviour
 {
     [SerializeField] private float bodyHeight = 0.3f;
     private IKFootSolver[] footSolvers;
+    private Rigidbody rb;
 
     private void Start()
     {
         footSolvers = GetComponentsInChildren<IKFootSolver>();
+        rb = GetComponentInParent<Rigidbody>();
     }
 
     private void Update()
@@ -16,14 +18,16 @@ public class SpiderMoveController : MonoBehaviour
         {
             transform.position += transform.TransformDirection(Vector3.up) * hit.distance;
         }
+
+        if (Mathf.Approximately(rb.linearVelocity.magnitude, 0f))
+        {
+            OnVelocityZero();
+        }
     }
 
     private void OnVelocityZero()
     {
-        foreach (var solver in footSolvers)
-        {
-            solver.MoveToMoveTarget();
-        }
+
     }
 
     private void OnDrawGizmos()

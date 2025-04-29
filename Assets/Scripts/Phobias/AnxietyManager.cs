@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -22,6 +19,11 @@ public abstract class AnxietyManager : MonoBehaviour
     #endregion
     public virtual void RegisterAnxietySource(IAnxietySource anxietySource)
     {
+        if (activeAnxietySources.Count == 0)
+        {
+            StartAllSymtoms();
+        }
+        
         if (FadeCoroutine != null)
         {
             StopCoroutine(FadeCoroutine);
