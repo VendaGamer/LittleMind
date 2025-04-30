@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,6 +8,7 @@ using UnityEngine.Serialization;
 /// </summary>
 public class PlayerCamera : MonoBehaviour
 {
+    [CanBeNull]
     public static PlayerCamera Instance { get; private set; }
     public Camera Camera { get; private set; }
     public Plane[] FrustumPlanes { get; } = new Plane[6];
