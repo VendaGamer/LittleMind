@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 public class HeartBeatSymptom : AnxietySymptom
@@ -11,42 +12,53 @@ public class HeartBeatSymptom : AnxietySymptom
 
     private VisualElement heartElement;
 
+    [FormerlySerializedAs("HeartBeatLub")]
     [Header("Audio Clips")]
     [SerializeField]
-    private AudioClip HeartBeatLub;
+    private AudioClip heartBeatLub;
 
+    [FormerlySerializedAs("HeartBeatDub")]
     [SerializeField]
-    private AudioClip HeartBeatDub;
+    private AudioClip heartBeatDub;
 
+    [FormerlySerializedAs("MinHeartRate")]
     [Header("Timing Settings")]
     [SerializeField]
-    private float MinHeartRate = 60f; // beats per minute
+    private float minHeartRate = 60f; // beats per minute
 
+    [FormerlySerializedAs("MaxHeartRate")]
     [SerializeField]
-    private float MaxHeartRate = 180f; // beats per minute
+    private float maxHeartRate = 180f; // beats per minute
 
+    [FormerlySerializedAs("LubDubGap")]
     [SerializeField]
-    private float LubDubGap = 0.15f;
+    private float lubDubGap = 0.15f;
 
+    [FormerlySerializedAs("HeartRateBuildupSpeed")]
     [SerializeField]
-    private float HeartRateBuildupSpeed = 7f;
+    private float heartRateBuildupSpeed = 7f;
 
+    [FormerlySerializedAs("HeartbeatVolumeCurve")]
     [Header("Volume Settings")]
     [SerializeField]
-    private AnimationCurve HeartbeatVolumeCurve = AnimationCurve.Linear(0, 0.5f, 1, 1f);
-    
+    private AnimationCurve heartbeatVolumeCurve = AnimationCurve.Linear(0, 0.5f, 1, 1f);
+
+    [FormerlySerializedAs("MinHeartIntensity")]
     [Header("Animation Settings")]
     [SerializeField]
-    private float MinHeartIntensity = 1.05f;
-    
+    private float minHeartIntensity = 1.05f;
+
+    [FormerlySerializedAs("MaxHeartIntensity")]
     [SerializeField]
-    private float MaxHeartIntensity = 1.3f;
-    
+    private float maxHeartIntensity = 1.3f;
+
+    [FormerlySerializedAs("NormalHeartColor")]
     [SerializeField]
-    private Color NormalHeartColor = Color.white;
-    
+    private Color normalHeartColor = Color.white;
+
+    [FormerlySerializedAs("IntenseHeartColor")]
     [SerializeField]
-    private Color IntenseHeartColor = new Color(1f, 0.7f, 0.7f);
+    private Color intenseHeartColor = new Color(1f, 0.7f, 0.7f);
 
     private Coroutine heartBeatRoutine;
     private AudioSource audioSource;
@@ -62,63 +74,44 @@ public class HeartBeatSymptom : AnxietySymptom
     public override void ActivateSymptom(float intensity)
     {
         enabled = true;
-        targetHeartRate = Mathf.Lerp(MinHeartRate, MaxHeartRate, intensity);
+        targetHeartRate = Mathf.Lerp(minHeartRate, maxHeartRate, intensity);
         if (heartBeatRoutine == null)
         {
             heartBeatRoutine = StartCoroutine(HeartBeatRoutine());
         }
     }
-    
-    private void StartHeartbeatAnimation(float bpm, float intensity)
+
+    public override void OnAnxietyChanged(float newAnxiety)
     {
-        // Stop any existing animation
-        if (heartbeatAnimation != null && heartbeatAnimation.IsActive())
+        base.OnAnxietyChanged(newAnxiety);
+        targetHeartRate = Mathf.Lerp(minHeartRate, maxHeartRate, newAnxiety);
+        if (heartBeatRoutine == null)
         {
-            heartbeatAnimation.Kill();
+            heartBeatRoutine = StartCoroutine(HeartBeatRoutine());
         }
-        
-        // Create a new realistic heartbeat animation
-        heartbeatAnimation = heartElement.DORealisticHeartbeat(
-            bpm,
-            MinHeartRate,
-            MaxHeartRate
-        );
-        
-        // Add color pulsing based on intensity
-        Color targetColor = Color.Lerp(NormalHeartColor, IntenseHeartColor, intensity);
-        
-        // Add color animation to the heartbeat
-        Sequence colorSequence = DOTween.Sequence();
-        colorSequence.Append(heartElement.DOColor(targetColor, 60f / bpm * 0.15f));
-        colorSequence.Append(heartElement.DOColor(NormalHeartColor, 60f / bpm * 0.85f));
-        colorSequence.SetLoops(-1);
     }
 
     private IEnumerator HeartBeatRoutine()
     {
-        float currentHeartRate = MinHeartRate;
+        float currentHeartRate = minHeartRate;
         while (enabled)
         {
-            float volume = HeartbeatVolumeCurve.Evaluate(Intensity);
+            float volume = heartbeatVolumeCurve.Evaluate(Intensity);
             currentHeartRate = Mathf.Lerp(
                 currentHeartRate,
                 targetHeartRate,
-                Time.deltaTime * HeartRateBuildupSpeed
+                Time.deltaTime * heartRateBuildupSpeed
             );
 
-            audioSource.PlayOneShot(HeartBeatLub, volume);
-            yield return new WaitForSeconds(LubDubGap);
+            audioSource.PlayOneShot(heartBeatLub, volume);
+            heartElement.DOScale(1.2f, lubDubGap);
+            yield return new WaitForSeconds(lubDubGap);
 
-            audioSource.PlayOneShot(HeartBeatDub, volume);
-            
-            if (Mathf.Abs(currentHeartRate - targetHeartRate) < 5f && 
-                heartbeatAnimation != null && 
-                !heartbeatAnimation.IsPlaying())
-            {
-                StartHeartbeatAnimation(currentHeartRate, Intensity);
-            }
-            
-            yield return new WaitForSeconds((60f / currentHeartRate) - LubDubGap);
+            audioSource.PlayOneShot(heartBeatDub, volume);
+            var gap = (60f / currentHeartRate) - lubDubGap;
+            heartElement.DOScale(1f, gap);
+
+            yield return new WaitForSeconds(gap);
         }
 
         heartBeatRoutine = null;
@@ -127,26 +120,26 @@ public class HeartBeatSymptom : AnxietySymptom
     public override void StopSymptom()
     {
         enabled = false;
-        
+
         // Stop audio routine
         if (heartBeatRoutine != null)
         {
             StopCoroutine(heartBeatRoutine);
             heartBeatRoutine = null;
         }
-        
+
         // Stop visual animation
         if (heartbeatAnimation != null && heartbeatAnimation.IsActive())
         {
             // Create a smooth fade-out effect
             heartbeatAnimation.Complete();
             heartbeatAnimation.Kill();
-            
+
             if (heartElement != null)
             {
                 // Smoothly return to normal
                 heartElement.DOScale(1f, 0.5f);
-                heartElement.DOColor(NormalHeartColor, 0.5f);
+                heartElement.DOColor(normalHeartColor, 0.5f);
             }
         }
     }

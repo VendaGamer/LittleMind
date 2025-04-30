@@ -1,8 +1,9 @@
 .context-menu {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    min-width: 200px;
+    bottom: 5%;
+    right: 3%;
+    width: 20%;
+    height: 10%;
 }
 .menu-container {
     background-color: rgba(0, 0, 0, 0.75);
