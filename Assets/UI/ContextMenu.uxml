@@ -1,5 +1,6 @@
 <engine:UXML xmlns:engine="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/ContextMenuStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#ContextMenuStyles" />
+    <Style src="project://database/Assets/UI/Styles/generated.uss?fileID=7433441132597879392&amp;guid=ad98132e0760e7b438ef31209214f8d6&amp;type=3#generated" />
     <engine:VisualElement name="Container" data-source="project://database/Assets/UI/Interactions.asset?fileID=11400000&amp;guid=8354aec3e80db6c4b93b57951eba3dd1&amp;type=2#Interactions" class="container">
         <engine:VisualElement name="context-menu" class="context-menu">
             <engine:VisualElement name="menu-container" data-source-type="UIInteractionGroup, Assembly-CSharp" class="menu-container">
