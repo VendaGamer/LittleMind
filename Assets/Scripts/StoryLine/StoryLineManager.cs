@@ -32,7 +32,8 @@ public class StoryLineManager: MonoBehaviour, ISingleton
         newChapterName = playerUI.rootVisualElement.Q<Label>("NewChapterName");
         if (Instance)
         {
-            Destroy(Instance);
+            Destroy(this);
+            return;
         }
         Instance = this;
     }
