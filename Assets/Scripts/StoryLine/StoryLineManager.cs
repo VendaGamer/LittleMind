@@ -3,38 +3,22 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class StoryLineManager: MonoBehaviour, ISingleton
+public class StoryLineManager: MonoSingleton<StoryLineManager>
 {
-    [CanBeNull]
-    public static StoryLineManager Instance { get; private set; }
-
     [SerializeField] private Chapter[] chapters;
-    [SerializeField] private UIDocument playerUI;
-    private Label newChapterName;
+
     private VisualElement gameSavingIndicator;
     
     private byte currentChapter;
 
     public void NewChapter()
     {
-
-        newChapterName.DOFade(0f, 2f);
         currentChapter++;
+        PlayerUIManager.Instance?.NewChapter(chapters[currentChapter].Title);
     }
 
     public void ShowGameSaving()
     {
         
-    }
-
-    public void Awake()
-    {
-        newChapterName = playerUI.rootVisualElement.Q<Label>("NewChapterName");
-        if (Instance)
-        {
-            Destroy(this);
-            return;
-        }
-        Instance = this;
     }
 }

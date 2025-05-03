@@ -4,27 +4,27 @@ public class Diary : MonoBehaviour
     [SerializeField] private Transform leftPageContainer; // Left pages
     [SerializeField] private Transform rightPageContainer; // Right pages
 
-    private GameObject[] leftPages;
-    private GameObject[] rightPages;
+    private DiaryPage[] leftPages;
+    private DiaryPage[] rightPages;
 
     private int currentPageIndex = 0;
 
     private void Start()
     {
         // Load all pages into arrays
-        leftPages = new GameObject[leftPageContainer.childCount];
-        rightPages = new GameObject[rightPageContainer.childCount];
+        leftPages = new DiaryPage[leftPageContainer.childCount];
+        rightPages = new DiaryPage[rightPageContainer.childCount];
 
         for (int i = 0; i < leftPageContainer.childCount; i++)
         {
-            leftPages[i] = leftPageContainer.GetChild(i).gameObject;
-            leftPages[i].SetActive(false); // Disable all pages initially
+            leftPages[i] = leftPageContainer.GetChild(i).GetComponent<DiaryPage>();
+            leftPages[i].gameObject.SetActive(false); // Disable all pages initially
         }
 
         for (int i = 0; i < rightPageContainer.childCount; i++)
         {
-            rightPages[i] = rightPageContainer.GetChild(i).gameObject;
-            rightPages[i].SetActive(false); // Disable all pages initially
+            rightPages[i] = rightPageContainer.GetChild(i).GetComponent<DiaryPage>();
+            rightPages[i].gameObject.SetActive(false); // Disable all pages initially
         }
 
         if (leftPages.Length > 0)
@@ -61,20 +61,20 @@ public class Diary : MonoBehaviour
     {
         if (pageIndex >= 0 && pageIndex < leftPages.Length)
         {
-            leftPages[pageIndex].SetActive(true);
-            rightPages[pageIndex].SetActive(true);
+            leftPages[pageIndex].gameObject.SetActive(true);
+            rightPages[pageIndex].gameObject.SetActive(true);
         }
     }
 
     private void ShowCurrentPages()
     {
-        leftPages[currentPageIndex].SetActive(true);
-        rightPages[currentPageIndex].SetActive(true);
+        leftPages[currentPageIndex].gameObject.SetActive(true);
+        rightPages[currentPageIndex].gameObject.SetActive(true);
     }
 
     private void HideCurrentPages()
     {
-        leftPages[currentPageIndex].SetActive(false);
-        rightPages[currentPageIndex].SetActive(false);
+        leftPages[currentPageIndex].gameObject.SetActive(true);
+        rightPages[currentPageIndex].gameObject.SetActive(true);
     }
 }

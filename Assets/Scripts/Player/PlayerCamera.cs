@@ -6,10 +6,8 @@ using UnityEngine.Serialization;
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// </summary>
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoSingleton<PlayerCamera>
 {
-    [CanBeNull]
-    public static PlayerCamera Instance { get; private set; }
     public Camera Camera { get; private set; }
     public Plane[] FrustumPlanes { get; } = new Plane[6];
     private float frustumExpansionFactor = 1.1f;
@@ -51,15 +49,5 @@ public class PlayerCamera : MonoBehaviour
         GeometryUtility.CalculateFrustumPlanes(Camera, FrustumPlanes);
 
         Camera.fieldOfView = originalFOV;
-    }
-
-    private void Awake()
-    {
-        if (Instance)
-        {
-            Destroy(this);
-            return;
-        }
-        Instance = this;
     }
 }
