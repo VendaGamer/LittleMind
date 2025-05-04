@@ -1,31 +1,29 @@
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
-public class PlayerUIManager : MonoBehaviour
+public class PlayerUIManager : MonoSingleton<PlayerUIManager>
 {
-    [CanBeNull]
-    public static PlayerUIManager Instance { get; private set; }
     
     [SerializeField]
     private UIDocument playerUI;
-    private Label newChapterName;
+    private VisualElement chapterPopup;
+    private Label chapterTitle;
+    private Label chapterLabel;
     
     
-    public void NewChapter(string contents)
+    public void NewChapter(byte chapterNum,string contents)
     {
-        
+        chapterLabel.text = $"Chapter {chapterNum}";
+        chapterTitle.text = contents;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        newChapterName = playerUI.rootVisualElement.Q<Label>("NewChapterName");
-        if (Instance)
-        {
-            Destroy(Instance);
-        }
-        Instance = this;
+        base.Awake();
+        
+        var root = playerUI.rootVisualElement;
+        chapterPopup = root.Q<VisualElement>("chapter-popup");
+        chapterTitle = root.Q<Label>("chapter-title");
+        chapterLabel = root.Q<Label>("chapter-label");
     }
 }

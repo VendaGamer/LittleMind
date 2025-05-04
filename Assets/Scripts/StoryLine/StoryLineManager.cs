@@ -14,7 +14,8 @@ public class StoryLineManager: MonoSingleton<StoryLineManager>
     public void NewChapter()
     {
         currentChapter++;
-        PlayerUIManager.Instance?.NewChapter(chapters[currentChapter].Title);
+        var chapter = chapters[currentChapter];
+        PlayerUIManager.Instance?.NewChapter(currentChapter, chapter.Title);
     }
 
     public void ShowGameSaving()

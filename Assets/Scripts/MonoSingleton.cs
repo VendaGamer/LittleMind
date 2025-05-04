@@ -1,21 +1,18 @@
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 
 public abstract class MonoSingleton<T> : MonoBehaviour, ISingleton where T : MonoSingleton<T>
 {
     [CanBeNull]
     private static T _instance;
-    [CanBeNull]
     public static T Instance
     {
         get
         {
-            if (!_instance)
-            {
-                Debug.LogError(typeof(T).ToString() + " is missing.");
-            }
+            Assert.IsNull(_instance, $"There is no instance of {typeof(T).Name}");
 
             return _instance;
         }
@@ -27,7 +24,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour, ISingleton where T : Mon
     {
         if (_instance)
         {
-            Destroy(gameObject);
+            Destroy(_instance);
         }
         _instance = this as T;
     }
