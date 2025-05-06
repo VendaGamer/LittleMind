@@ -12,7 +12,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour, ISingleton where T : Mon
     {
         get
         {
-            Assert.IsNull(_instance, $"There is no instance of {typeof(T).Name}");
+            Assert.IsNotNull(_instance, $"There is no instance of {typeof(T).Name}");
 
             return _instance;
         }
