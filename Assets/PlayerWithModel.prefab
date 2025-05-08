@@ -296,20 +296,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupPoint: {fileID: 3207812161120748922}
-  pickupLerpDuration: 1
-  moveSpeed: 5
-  sprintSpeed: 7
-  jumpForce: 2.5
-  jumpPoint: {fileID: 7955756814250554620}
-  maxJumpPointDist: 0.2
-  jumpCooldown: 0.1
-  jumpPointRadius: 0.3
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 1015
-  maxLookUpAngle: 90
-  maxLookDownAngle: -90
-  playerCameraHolder: {fileID: 2182245987986286316}
   globalInteractionsPlayerControls:
     interactGroupLabel: Player
     currentInteractions:
@@ -322,8 +308,22 @@ MonoBehaviour:
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 512
-  sphereCastDistance: 3
-  sphereCastRadius: 0.3
+  rayCastDistance: 3
+  pickupLerpDuration: 1
+  uiData: {fileID: 0}
+  moveSpeed: 5
+  sprintSpeed: 7
+  jumpForce: 2.5
+  jumpPoint: {fileID: 7955756814250554620}
+  maxJumpPointDist: 0.2
+  jumpCooldown: 0.1
+  jumpPointRadius: 0.3
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 887
+  maxLookUpAngle: 90
+  maxLookDownAngle: -90
+  playerCameraHolder: {fileID: 2182245987986286316}
 --- !u!114 &2330484725698535383
 MonoBehaviour:
   m_ObjectHideFlags: 0
