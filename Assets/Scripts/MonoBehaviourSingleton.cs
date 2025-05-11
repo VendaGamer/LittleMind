@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 
-public abstract class MonoSingleton<T> : MonoBehaviour, ISingleton where T : MonoSingleton<T>
+public abstract class MonoBehaviourSingleton<T> : MonoBehaviour, ISingleton where T : MonoBehaviourSingleton<T>
 {
     [CanBeNull]
     private static T _instance;

@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class StoryLineManager: MonoSingleton<StoryLineManager>
+public class StoryLineManager: MonoBehaviourSingleton<StoryLineManager>
 {
     [SerializeField] private Chapter[] chapters;
 

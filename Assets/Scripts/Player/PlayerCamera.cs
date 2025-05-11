@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// </summary>
-public class PlayerCamera : MonoSingleton<PlayerCamera>
+public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 {
     public Camera Camera { get; private set; }
     public Plane[] FrustumPlanes { get; } = new Plane[6];

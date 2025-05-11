@@ -35,12 +35,14 @@ public abstract class AnxietyManager : MonoBehaviour
 
     public virtual void UnRegisterAnxietySource(IAnxietySource anxietySource)
     {
-        activeAnxietySources.Remove(anxietySource);
-        if (activeAnxietySources.Count == 0)
+        if (activeAnxietySources.Remove(anxietySource))
         {
-            StartFadeAnxiety();
+            if (activeAnxietySources.Count == 0)
+            {
+                StartFadeAnxiety();
+            }
+            OnAnxietySourcesChanged();
         }
-        OnAnxietySourcesChanged();
     }
 
 
