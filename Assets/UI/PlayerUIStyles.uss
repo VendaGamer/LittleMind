@@ -1,3 +1,63 @@
+.container {
+    flex-grow: 1;
+}
+
+/* New Status Bar Styles */
+.status-bar-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    flex-direction: row;
+    justify-content: flex-end;  /* Icons will start from the right */
+}
+
+.status-icons {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.status-icon {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
+    height: 100%;
+}
+
+.icon-image {
+    width: 32px;
+    height: 32px;
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 5px;
+}
+
+.status-value {
+    color: white;
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+/* Memory icon specific style */
+#memory-icon {
+    -unity-background-image-tint-color: rgb(130, 180, 255);
+}
+
+/* Health icon specific style */
+#health-icon {
+    -unity-background-image-tint-color: rgb(199, 152, 152);
+}
+
+/* Stamina icon specific style */
+#stamina-icon {
+    -unity-background-image-tint-color: rgb(152, 199, 152);
+}
+
+/* Existing Styles with adjustments for new layout */
 .context-menu {
     position: absolute;
     bottom: 5%;
@@ -5,25 +65,14 @@
     width: 20%;
     height: 10%;
 }
+
 .menu-container {
     background-color: rgba(0, 0, 0, 0.75);
     border-radius: 5px;
     padding: 10px;
     flex-wrap: wrap;
 }
-.heart-icon {
-    position: absolute;
-    right: 2.5%;  /* Changed from left: 50% */
-    top: 2.5%;    /* Changed from top: 50% */
-    width: 5%;
-    height: 5%;
-    margin: 0;    /* Changed from margin: 20px */
-    -unity-background-image-tint-color: rgb(199, 152, 152);
-    -unity-background-scale-mode: scale-to-fit;
-}
-.container{
-    flex-grow: 1;
-}
+
 .menu-item {
     flex-direction: row;
     justify-content: space-between;
@@ -31,11 +80,13 @@
     padding: 5px;
     margin: 2px 0;
 }
+
 .key-hint-text {
     color: rgb(200, 200, 200);
     margin-left: 10px;
     -unity-font-style: bold;
 }
+
 .key-hint-icon {
     color: rgb(255, 255, 255);
     margin-left: 10px;
@@ -44,14 +95,17 @@
     -unity-font-definition: url("project://database/Assets/InputSystem/promptfont.ttf?fileID=12800000&guid=786e752106593ae4da07d2e2f13225eb&type=3#promptfont");
     -unity-text-outline-width: 2px;
 }
+
 .action-text {
     color: white;
     -unity-font-style: normal;
 }
+
 .interactions-group {
     margin: 5px 0;
     padding: 5px;
 }
+
 .interactions-label {
     color: rgb(255, 255, 255);
     padding: 2px 5px;
@@ -61,6 +115,7 @@
     border-bottom-color: rgba(255, 255, 255, 0.3);
     border-bottom-width: 3px;
 }
+
 .keyboard-key {
     background-color: rgba(66, 65, 65, 0.75);
     border-radius: 5px;
@@ -69,12 +124,14 @@
     justify-content: center;
     align-items: center;
 }
+
 .crosshair-container {
     position: absolute;
     left: 50%;
     top: 50%;
     translate: -50% -50%;
 }
+
 .crosshair {
     width: 8px;
     height: 8px;
@@ -84,6 +141,7 @@
     transition-duration: 0.5s;
     transition-timing-function: ease;
 }
+
 .crosshair--interactive {
     border-color: white;
     border-width: 2px;

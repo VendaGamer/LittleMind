@@ -15,10 +15,7 @@ public class Alzheimer : MonoBehaviour
 
     public void RegisterMemoryTrigger(MemoryTrigger trigger)
     {
-        if (currentMemoryTriggers.Count == 0)
-        {
-            PlayerUIManager.Instance.MemoryIconVisibility = true;
-        }
+        PlayerUIManager.Instance.MemoryIconVisibility = true;
         currentMemoryTriggers.Add(trigger);
     }
 
