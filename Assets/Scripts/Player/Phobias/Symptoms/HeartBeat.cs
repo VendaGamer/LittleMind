@@ -6,12 +6,6 @@ using UnityEngine.UIElements;
 
 public class HeartBeatSymptom : AnxietySymptom
 {
-    [Header("UI")]
-    [SerializeField]
-    private UIDocument playerUI;
-
-    private VisualElement heartElement;
-
     [FormerlySerializedAs("HeartBeatLub")]
     [Header("Audio Clips")]
     [SerializeField]
@@ -68,7 +62,6 @@ public class HeartBeatSymptom : AnxietySymptom
     private void Awake()
     {
         audioSource = GetComponentInChildren<AudioSource>();
-        heartElement = playerUI.rootVisualElement.Q("heartbeat-representation");
     }
 
     public override void ActivateSymptom(float intensity)
@@ -104,12 +97,13 @@ public class HeartBeatSymptom : AnxietySymptom
             );
 
             audioSource.PlayOneShot(heartBeatLub, volume);
-            heartElement.DOScale(1.2f, lubDubGap);
+            //TODO: Need to use PlayerUIManager
+            //heartElement.DOScale(1.2f, lubDubGap);
             yield return new WaitForSeconds(lubDubGap);
 
             audioSource.PlayOneShot(heartBeatDub, volume);
             var gap = (60f / currentHeartRate) - lubDubGap;
-            heartElement.DOScale(1f, gap);
+            //heartElement.DOScale(1f, gap);
 
             yield return new WaitForSeconds(gap);
         }
@@ -135,12 +129,12 @@ public class HeartBeatSymptom : AnxietySymptom
             heartbeatAnimation.Complete();
             heartbeatAnimation.Kill();
 
-            if (heartElement != null)
-            {
-                // Smoothly return to normal
-                heartElement.DOScale(1f, 0.5f);
-                heartElement.DOColor(normalHeartColor, 0.5f);
-            }
+            // if (heartElement != null)
+            // {
+            //     // Smoothly return to normal
+            //     heartElement.DOScale(1f, 0.5f);
+            //     heartElement.DOColor(normalHeartColor, 0.5f);
+            // }
         }
     }
 }

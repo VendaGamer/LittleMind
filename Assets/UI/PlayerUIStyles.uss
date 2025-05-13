@@ -2,14 +2,12 @@
     flex-grow: 1;
 }
 
-/* New Status Bar Styles */
 .status-bar-container {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 60px;
-    background-color: rgba(0, 0, 0, 0.6);
+    height: 50px;
     padding: 10px;
     flex-direction: row;
     justify-content: flex-end;  /* Icons will start from the right */
@@ -30,8 +28,8 @@
 }
 
 .icon-image {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     -unity-background-scale-mode: scale-to-fit;
     margin-right: 5px;
 }
@@ -42,19 +40,12 @@
     -unity-font-style: bold;
 }
 
-/* Memory icon specific style */
 #memory-icon {
     -unity-background-image-tint-color: rgb(130, 180, 255);
 }
 
-/* Health icon specific style */
 #health-icon {
     -unity-background-image-tint-color: rgb(199, 152, 152);
-}
-
-/* Stamina icon specific style */
-#stamina-icon {
-    -unity-background-image-tint-color: rgb(152, 199, 152);
 }
 
 /* Existing Styles with adjustments for new layout */

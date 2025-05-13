@@ -3,8 +3,8 @@
     <engine:VisualElement name="Container" data-source="project://database/Assets/UI/Interactions.asset?fileID=11400000&amp;guid=8354aec3e80db6c4b93b57951eba3dd1&amp;type=2#Interactions" class="container">
         <engine:VisualElement name="status-bar-container" class="status-bar-container">
             <engine:VisualElement name="status-icons" class="status-icons">
-                <engine:VisualElement name="memory-icon" class="icon-image status-icon" style="background-image: url(&apos;project://database/Assets/UI/memory.svg&apos;);" />
-                <engine:VisualElement name="health-icon" class="icon-image status-icon" style="background-image: url(&quot;project://database/Assets/UI/heart.svg?fileID=7388822144124034973&amp;guid=d9fddde7b578b8d48b808567340af0c8&amp;type=3#heart&quot;);" />
+                <engine:VisualElement name="memory-icon" enabled="true" class="icon-image status-icon" style="background-image: url(&quot;project://database/Assets/UI/light%20bulb.svg?fileID=7388822144124034973&amp;guid=e95cff2e3d097f2428677daf85ac073e&amp;type=3#light bulb&quot;); -unity-background-image-tint-color: rgb(226, 226, 226); background-color: rgba(242, 255, 0, 0); display: flex;" />
+                <engine:VisualElement name="health-icon" enabled="true" class="icon-image status-icon" style="background-image: url(&quot;project://database/Assets/UI/heart.svg?fileID=7388822144124034973&amp;guid=d9fddde7b578b8d48b808567340af0c8&amp;type=3#heart&quot;);" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="context-menu" class="context-menu">
