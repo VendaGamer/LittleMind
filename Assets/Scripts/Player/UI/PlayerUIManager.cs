@@ -16,7 +16,7 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     public bool MemoryIconVisibility
     {
         get => memoryIcon.visible;
-        set => memoryIcon.visible = value;
+        set => memoryIcon.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
     }
 
     public void NewChapter(byte chapterNum, string contents)
@@ -36,7 +36,8 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         chapterLabel = root.Q<Label>("chapter-label");
         memoryIcon = root.Q<VisualElement>("memory-icon");
         heartIcon = root.Q<VisualElement>("health-icon");
-        heartIcon.visible = false;
+        memoryIcon.style.display = DisplayStyle.None;
+        heartIcon.style.display = DisplayStyle.None;
         newChapterSeq = DOTween
             .Sequence()
             .Append(chapterPopup.DOFadeIn(1f))

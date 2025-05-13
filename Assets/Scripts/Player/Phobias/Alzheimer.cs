@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Seagull.Interior_01;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,7 +8,8 @@ public class Alzheimer : MonoBehaviour
 {
     [SerializeField]
     private Diary playerDiary;
-    private List<MemoryTrigger> currentMemoryTriggers;
+    [CanBeNull]
+    private MemoryTrigger currentMemoryTrigger;
     private void Start()
     {
         PlayerController.Controls.Player.Journal.performed += OnJournal;
@@ -15,18 +17,32 @@ public class Alzheimer : MonoBehaviour
 
     public void RegisterMemoryTrigger(MemoryTrigger trigger)
     {
-        PlayerUIManager.Instance.MemoryIconVisibility = true;
-        currentMemoryTriggers.Add(trigger);
+        Debug.Log("Alzheimer: Registering memory trigger");
+        currentMemoryTrigger = trigger;
     }
 
     public void UnregisterMemoryTrigger(MemoryTrigger trigger)
     {
-        if (currentMemoryTriggers.Remove(trigger))
+        if (ReferenceEquals(trigger, currentMemoryTrigger))
         {
-            if (currentMemoryTriggers.Count == 0)
-            {
-                PlayerUIManager.Instance.MemoryIconVisibility = false;
-            }
+            currentMemoryTrigger = null;
+        }
+    }
+
+    private void Update()
+    {
+        if (!currentMemoryTrigger)
+        {
+            return;
+        }
+        
+        if (GeometryUtility.TestPlanesAABB(PlayerCamera.Instance.FrustumPlanes, currentMemoryTrigger.BoundsToLookAt))
+        {
+            PlayerUIManager.Instance.MemoryIconVisibility = true;
+        }
+        else
+        {
+            PlayerUIManager.Instance.MemoryIconVisibility = false;
         }
     }
 
