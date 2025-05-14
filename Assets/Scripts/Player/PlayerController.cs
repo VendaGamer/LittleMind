@@ -34,7 +34,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private static Camera playerCamera => PlayerCamera.Instance.Camera;
 
     [Header("Look Settings")]
-
     [SerializeField]
     private Transform playerCameraHolder;
 
@@ -146,9 +145,11 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void HandleMovement()
     {
         Vector2 moveInput = Controls.Player.Move.ReadValue<Vector2>();
-        
 
-        Vector3 moveDirection = playerCamera.transform.right * moveInput.x + playerCamera.transform.forward * moveInput.y;
+        Vector3 moveDirection =
+            playerCamera.transform.right * moveInput.x
+            + playerCamera.transform.forward * moveInput.y;
+        moveDirection.y = 0;
 
         if (moveDirection.magnitude > 0.1f)
         {
