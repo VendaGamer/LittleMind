@@ -34,11 +34,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private static Camera playerCamera => PlayerCamera.Instance.Camera;
 
     [Header("Look Settings")]
-    [SerializeField]
-    private float maxLookUpAngle = 90f;
-
-    [SerializeField]
-    private float maxLookDownAngle = -90f;
 
     [SerializeField]
     private Transform playerCameraHolder;
@@ -51,7 +46,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void Awake()
     {
-        Controls = new Controls();
+        Controls ??= new Controls();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
     }
@@ -118,7 +113,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void Update()
     {
-        HandleLook();
         HandleMovement();
         CheckGrounded();
         HandleJump();
@@ -152,28 +146,14 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void HandleMovement()
     {
         Vector2 moveInput = Controls.Player.Move.ReadValue<Vector2>();
+        
 
-        Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
+        Vector3 moveDirection = playerCamera.transform.right * moveInput.x + playerCamera.transform.forward * moveInput.y;
 
         if (moveDirection.magnitude > 0.1f)
         {
             moveDirection.Normalize();
             rb.MovePosition(rb.position + moveDirection * (currentSpeed * Time.deltaTime));
         }
-    }
-
-    private float yRotation = 0f;
-    private float xRotation = 0f;
-
-    private void HandleLook()
-    {
-        Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>();
-
-        yRotation += lookInput.x;
-        xRotation -= lookInput.y;
-        xRotation = Mathf.Clamp(xRotation, maxLookDownAngle, maxLookUpAngle);
-
-        transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        playerCameraHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
     }
 }
