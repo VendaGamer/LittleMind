@@ -891,6 +891,76 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Diary",
+            "id": "7b36260f-0634-4420-9496-b785cb29a569",
+            "actions": [
+                {
+                    "name": "TurnPageLeft",
+                    "type": "Button",
+                    "id": "29e8efb2-c06d-4bdd-bd71-6cb3d0919dae",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TurnPageRight",
+                    "type": "Button",
+                    "id": "9dc32c97-20e4-4c20-ac0d-26f4c90d27f7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "03058da6-6607-4509-a56e-860630cf4c42",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TurnPageLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b6cdbd99-7cf6-4168-b5a8-12a2b33c56bc",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "TurnPageLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90ba8de8-db4e-4771-9653-587a6ba11720",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TurnPageRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "56862330-6968-4a2f-a88c-66eeb0e45a6f",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "TurnPageRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

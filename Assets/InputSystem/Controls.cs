@@ -977,6 +977,76 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Diary"",
+            ""id"": ""7b36260f-0634-4420-9496-b785cb29a569"",
+            ""actions"": [
+                {
+                    ""name"": ""TurnPageLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""29e8efb2-c06d-4bdd-bd71-6cb3d0919dae"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TurnPageRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""9dc32c97-20e4-4c20-ac0d-26f4c90d27f7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""03058da6-6607-4509-a56e-860630cf4c42"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""TurnPageLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6cdbd99-7cf6-4168-b5a8-12a2b33c56bc"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""TurnPageLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90ba8de8-db4e-4771-9653-587a6ba11720"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""TurnPageRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56862330-6968-4a2f-a88c-66eeb0e45a6f"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""TurnPageRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1032,12 +1102,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // Diary
+        m_Diary = asset.FindActionMap("Diary", throwIfNotFound: true);
+        m_Diary_TurnPageLeft = m_Diary.FindAction("TurnPageLeft", throwIfNotFound: true);
+        m_Diary_TurnPageRight = m_Diary.FindAction("TurnPageRight", throwIfNotFound: true);
     }
 
     ~@Controls()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, Controls.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, Controls.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Diary.enabled, "This will cause a leak and performance issues, Controls.Diary.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1488,6 +1563,113 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="UIActions" /> instance referencing this action map.
     /// </summary>
     public UIActions @UI => new UIActions(this);
+
+    // Diary
+    private readonly InputActionMap m_Diary;
+    private List<IDiaryActions> m_DiaryActionsCallbackInterfaces = new List<IDiaryActions>();
+    private readonly InputAction m_Diary_TurnPageLeft;
+    private readonly InputAction m_Diary_TurnPageRight;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Diary".
+    /// </summary>
+    public struct DiaryActions
+    {
+        private @Controls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public DiaryActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Diary/TurnPageLeft".
+        /// </summary>
+        public InputAction @TurnPageLeft => m_Wrapper.m_Diary_TurnPageLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Diary/TurnPageRight".
+        /// </summary>
+        public InputAction @TurnPageRight => m_Wrapper.m_Diary_TurnPageRight;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Diary; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="DiaryActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(DiaryActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="DiaryActions" />
+        public void AddCallbacks(IDiaryActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DiaryActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DiaryActionsCallbackInterfaces.Add(instance);
+            @TurnPageLeft.started += instance.OnTurnPageLeft;
+            @TurnPageLeft.performed += instance.OnTurnPageLeft;
+            @TurnPageLeft.canceled += instance.OnTurnPageLeft;
+            @TurnPageRight.started += instance.OnTurnPageRight;
+            @TurnPageRight.performed += instance.OnTurnPageRight;
+            @TurnPageRight.canceled += instance.OnTurnPageRight;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="DiaryActions" />
+        private void UnregisterCallbacks(IDiaryActions instance)
+        {
+            @TurnPageLeft.started -= instance.OnTurnPageLeft;
+            @TurnPageLeft.performed -= instance.OnTurnPageLeft;
+            @TurnPageLeft.canceled -= instance.OnTurnPageLeft;
+            @TurnPageRight.started -= instance.OnTurnPageRight;
+            @TurnPageRight.performed -= instance.OnTurnPageRight;
+            @TurnPageRight.canceled -= instance.OnTurnPageRight;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DiaryActions.UnregisterCallbacks(IDiaryActions)" />.
+        /// </summary>
+        /// <seealso cref="DiaryActions.UnregisterCallbacks(IDiaryActions)" />
+        public void RemoveCallbacks(IDiaryActions instance)
+        {
+            if (m_Wrapper.m_DiaryActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="DiaryActions.AddCallbacks(IDiaryActions)" />
+        /// <seealso cref="DiaryActions.RemoveCallbacks(IDiaryActions)" />
+        /// <seealso cref="DiaryActions.UnregisterCallbacks(IDiaryActions)" />
+        public void SetCallbacks(IDiaryActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DiaryActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DiaryActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="DiaryActions" /> instance referencing this action map.
+    /// </summary>
+    public DiaryActions @Diary => new DiaryActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -1662,5 +1844,27 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Diary" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="DiaryActions.AddCallbacks(IDiaryActions)" />
+    /// <seealso cref="DiaryActions.RemoveCallbacks(IDiaryActions)" />
+    public interface IDiaryActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "TurnPageLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTurnPageLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TurnPageRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTurnPageRight(InputAction.CallbackContext context);
     }
 }
