@@ -42,12 +42,15 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private Rigidbody rb;
     private bool isRunning;
     private Animator animator;
+    
+    private PlayerInput playerInput;
 
     private void Awake()
     {
         Controls ??= new Controls();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     private void Start()
@@ -55,7 +58,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
-        SwitchGlobalInteractions(globalInteractionsPlayerControls);
     }
 
     private void OnDisable()
@@ -65,6 +67,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed -= OnSprint;
         Controls.Player.Drop.performed -= OnDrop;
         Controls.Player.Crouch.performed -= OnCrouch;
+        playerInput.onControlsChanged -= interactionHandler.OnControlsChanged;
     }
 
     private void OnEnable()
@@ -74,18 +77,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         Controls.Player.Sprint.performed += OnSprint;
         Controls.Player.Drop.performed += OnDrop;
         Controls.Player.Crouch.performed += OnCrouch;
-    }
-
-    private void OnDrop(InputAction.CallbackContext obj)
-    {
-        if (InteractableHolding == null)
-            return;
-
-        if (InteractableHolding.Interact(this, obj.action))
-        {
-            InteractableHolding = null;
-            SwitchExclusiveInteractions(interactableLookingAt);
-        }
+        playerInput.onControlsChanged += interactionHandler.OnControlsChanged;
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)
@@ -102,12 +94,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void OnUse(InputAction.CallbackContext obj)
     {
         interactableLookingAt?.Interact(this, obj.action);
-    }
-
-    public void PickUp(IInteractable itemToPickUp)
-    {
-        InteractableHolding = itemToPickUp;
-        SwitchExclusiveInteractions(InteractableHolding);
     }
 
     private void Update()

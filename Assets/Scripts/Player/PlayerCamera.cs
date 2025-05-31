@@ -31,22 +31,25 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
         Camera = GetComponent<Camera>();
     }
 
-    private void LateUpdate()
-    {
-        if (transform.rotation == lastCameraRotation && transform.position == lastCameraPosition)
-            return;
-
-        UpdateFrustum();
-    }
+    private void LateUpdate() => UpdateFrustum();
 
     private void UpdateFrustum()
     {
         lastCameraPosition = transform.position;
         lastCameraRotation = transform.rotation;
-        var originalFOV = Camera.fieldOfView;
 
-        Camera.fieldOfView = originalFOV * FrustumExpansionFactor;
+        // Copy and expand projection matrix
+        var projection = Matrix4x4.Perspective(
+            Camera.fieldOfView * FrustumExpansionFactor,
+            Camera.aspect,
+            Camera.nearClipPlane,
+            Camera.farClipPlane
+        );
 
-        GeometryUtility.CalculateFrustumPlanes(Camera, FrustumPlanes);
+        var worldToCamera = Camera.worldToCameraMatrix;
+        var vp = projection * worldToCamera;
+
+        GeometryUtility.CalculateFrustumPlanes(vp, FrustumPlanes);
     }
+    
 }

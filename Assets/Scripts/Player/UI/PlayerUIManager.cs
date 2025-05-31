@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,6 +13,9 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     private VisualElement memoryIcon;
     private VisualElement heartIcon;
     private Sequence newChapterSeq;
+    
+    private VisualElement globalInteractionsContainer;
+    private VisualElement currentInteractionsContainer;
 
     public bool MemoryIconVisibility
     {
@@ -24,12 +28,48 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         chapterLabel.text = $"Chapter {chapterNum}";
         chapterTitle.text = contents;
         newChapterSeq.Play();
+        
     }
+
+    public void UpdateGlobalInteractions(List<VisualElement> interactions)
+    {
+        // Clear existing global interactions
+        globalInteractionsContainer.Clear();
+        
+        // Add new global interactions
+        if (interactions != null)
+        {
+            foreach (var interaction in interactions)
+            {
+                globalInteractionsContainer.Add(interaction);
+            }
+        }
+    }
+
+    public void UpdateCurrentInteractions(List<VisualElement> interactions)
+    {
+        // Clear existing current interactions
+        currentInteractionsContainer.Clear();
+        
+        // Add new current interactions
+        if (interactions != null)
+        {
+            foreach (var interaction in interactions)
+            {
+                currentInteractionsContainer.Add(interaction);
+            }
+        }
+        
+        // Show/hide the container based on whether there are interactions
+        bool hasInteractions = interactions != null && interactions.Count > 0;
+        currentInteractionsContainer.style.display = hasInteractions ? DisplayStyle.Flex : DisplayStyle.None;
+    }
+
 
     protected override void Awake()
     {
         base.Awake();
-
+        
         var root = playerUI.rootVisualElement;
         chapterPopup = root.Q<VisualElement>("chapter-popup");
         chapterTitle = root.Q<Label>("chapter-title");
@@ -38,6 +78,9 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         heartIcon = root.Q<VisualElement>("health-icon");
         memoryIcon.style.display = DisplayStyle.None;
         heartIcon.style.display = DisplayStyle.None;
+        globalInteractionsContainer = root.Q<VisualElement>("global-interactions-container");
+        currentInteractionsContainer = root.Q<VisualElement>("current-interactions-container");
+        
         newChapterSeq = DOTween
             .Sequence()
             .Append(chapterPopup.DOFadeIn(1f))

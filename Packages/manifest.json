@@ -3,6 +3,7 @@
     "com.prenominal.realtimecsg": "https://github.com/LogicalError/realtime-CSG-for-unity.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
+    "com.unity.adaptiveperformance": "5.1.4",
     "com.unity.ads": "4.12.0",
     "com.unity.analytics": "3.8.1",
     "com.unity.animation.rigging": "1.3.0",
