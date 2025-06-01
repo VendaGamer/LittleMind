@@ -282,8 +282,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUI: {fileID: 508031141465379402}
-  InteractItemTemplate: {fileID: 0}
-  InteractGroupTemplate: {fileID: 0}
 --- !u!1 &6185675373264984707
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +293,7 @@ GameObject:
   - component: {fileID: 8476556591668560585}
   - component: {fileID: 8964724812988171379}
   - component: {fileID: 6284207477169610776}
-  - component: {fileID: 160724222204904175}
+  - component: {fileID: 5185820871005400711}
   m_Layer: 3
   m_Name: PlayerWithModel
   m_TagString: Untagged
@@ -361,15 +359,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupPoint: {fileID: 3207812161120748922}
-  globalInteractionGroupGroupPlayerControls:
-    interactGroupLabel: 
-    currentInteractions: []
+  globalInteractionGroupPlayerControls:
+    <InteractGroupLabel>k__BackingField: Player
+    <CurrentInteractions>k__BackingField:
+    - ActionName: Look
+      ActionRef: {fileID: -8581979353572428972, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - ActionName: Move
+      ActionRef: {fileID: -3705059106707766190, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - ActionName: Sprint
+      ActionRef: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - ActionName: Crouch
+      ActionRef: {fileID: 8909975673403271220, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+  interactionHandler: {fileID: 11400000, guid: 8354aec3e80db6c4b93b57951eba3dd1, type: 2}
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 512
   rayCastDistance: 3
   pickupLerpDuration: 1
-  uiData: {fileID: 0}
   moveSpeed: 5
   sprintSpeed: 7
   jumpForce: 2.5
@@ -381,7 +391,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 887
   playerCameraHolder: {fileID: 2182245987986286316}
---- !u!114 &160724222204904175
+--- !u!114 &5185820871005400711
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -390,12 +400,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6185675373264984707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c4a9f46d9540b6be1a4fa6ee07b6da, type: 3}
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: d28e1abc489e3544d8273f9d2a57ed9e,
     type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -408,11 +418,10 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: 
+  m_DefaultControlScheme: Keyboard&Mouse
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 3539996310292855768}
-  handler: {fileID: 11400000, guid: 8354aec3e80db6c4b93b57951eba3dd1, type: 2}
 --- !u!1 &6586660244480165395
 GameObject:
   m_ObjectHideFlags: 0

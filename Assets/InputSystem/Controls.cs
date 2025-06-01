@@ -297,11 +297,11 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8c8e490b-c610-4785-884f-f04217b23ca4"",
-                    ""path"": ""<Pointer>/delta"",
+                    ""id"": ""d0c6fd90-554b-44b4-8418-14785a1bf9fa"",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=0.2,y=0.2)"",
-                    ""groups"": "";Keyboard&Mouse;Touch"",
+                    ""processors"": ""ScaleVector2(x=0.5,y=0.5)"",
+                    ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

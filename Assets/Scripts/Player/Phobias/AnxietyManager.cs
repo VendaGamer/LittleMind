@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
+using ZLinq;
 
 public abstract class AnxietyManager : MonoBehaviour
 {
@@ -92,7 +92,7 @@ public abstract class AnxietyManager : MonoBehaviour
     {
         if (activeAnxietySources.Count > 0)
         {
-            IncreaseAnxiety(activeAnxietySources.Max(anxietySource => anxietySource.AnxietyAmount));
+            IncreaseAnxiety(activeAnxietySources.AsValueEnumerable().Max(anxietySource => anxietySource.AnxietyAmount));
         }
     }
 

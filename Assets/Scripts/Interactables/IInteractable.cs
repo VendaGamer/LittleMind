@@ -13,16 +13,15 @@ public interface IInteractable : IInteractionGroup
 {
     public bool Interact(IInteractor interactor, InputAction invokedAction);
     public bool ToggleOutline(bool value);
+
+    public event Action InteractionsChanged;
 }
 
 [Serializable]
 public class GlobalInteractionGroup : IInteractionGroup
 {
-    [SerializeField] private string interactGroupLabel;
-    [SerializeField] private Interaction[] currentInteractions;
-    public string InteractGroupLabel => interactGroupLabel;
-    public Interaction[] CurrentInteractions => currentInteractions;
-
+    [field:SerializeField] public string InteractGroupLabel { get; private set; }
+    [field:SerializeField] public Interaction[] CurrentInteractions { get; private set; }
 }
 
 public interface IInteractionGroup

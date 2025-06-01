@@ -6749,6 +6749,114 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 8354aec3e80db6c4b93b57951eba3dd1,
         type: 2}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.interactGroupLabel
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<InteractGroupLabel>k__BackingField
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[0].ActionRef
+      value: 
+      objectReference: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[1].ActionRef
+      value: 
+      objectReference: {fileID: 8909975673403271220, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[2].ActionRef
+      value: 
+      objectReference: {fileID: -3705059106707766190, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[3].ActionRef
+      value: 
+      objectReference: {fileID: -8581979353572428972, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[0].ActionName
+      value: Sprint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[1].ActionName
+      value: Crouch
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[2].ActionName
+      value: Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.currentInteractions.Array.data[3].ActionName
+      value: Look
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[0].ActionRef
+      value: 
+      objectReference: {fileID: -8581979353572428972, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[1].ActionRef
+      value: 
+      objectReference: {fileID: -3705059106707766190, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[2].ActionRef
+      value: 
+      objectReference: {fileID: 4984448235033175088, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[3].ActionRef
+      value: 
+      objectReference: {fileID: 8909975673403271220, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[0].ActionName
+      value: Look
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[1].ActionName
+      value: Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[2].ActionName
+      value: Sprint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: globalInteractionGroupPlayerControls.<CurrentInteractions>k__BackingField.Array.data[3].ActionName
+      value: Crouch
+      objectReference: {fileID: 0}
     - target: {fileID: 8476556591668560585, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_LocalPosition.x

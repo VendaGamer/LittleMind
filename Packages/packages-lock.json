@@ -7,6 +7,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.github-glitchenzo.nugetforunity": {
+      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "a22299e7e94eaa13ac17b326e0de8f2d3afa9e46"
+    },
     "com.prenominal.realtimecsg": {
       "version": "https://github.com/LogicalError/realtime-CSG-for-unity.git",
       "depth": 0,

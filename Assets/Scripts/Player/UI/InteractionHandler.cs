@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -10,190 +7,139 @@ using UnityEngine.UIElements;
 [CreateAssetMenu(menuName = "Interactions/Interactions",fileName = "Interactions")]
 public class InteractionHandler : ScriptableObject
 {
-    [SerializeField] private List<UIInteractionGroup> uiInteractionGroups;
-    [SerializeField] private bool crosshairVisible = true;
-    
     [SerializeField]
     private VisualTreeAsset InteractItemTemplateMouseGamepad;
     [SerializeField]
     private VisualTreeAsset InteractItemTemplateKeyboard;
-    [SerializeField]
-    private VisualTreeAsset InteractGroupTemplate;
     
-    
-    private List<GlobalInteractionGroup> _additionalGlobalInteractions = new();
-    private List<GlobalInteractionGroup> _currentGlobalInteractions = new();
-    private List<IInteractionGroup> _currentInteractableInteractions = new();
-    
-    private ControlScheme _currentControlScheme;
+    private IInteractable currentInteractableInteractionGroup;
+    private GlobalInteractionGroup currentGlobalInteractionGroup;
 
-    public ControlScheme CurrentControlScheme
+    private string _currentControlSchemeName = "Keyboard&Mouse";
+    private string currentControlSchemeName
     {
-        get => _currentControlScheme;
+        get => _currentControlSchemeName;
         set
         {
-            if (value == _currentControlScheme) return;
+            if (value == _currentControlSchemeName) return;
             
-            _currentControlScheme = value;
-            Debug.Log($"Changed control scheme to {value}");
+            _currentControlSchemeName = value;
             RefreshUI();
         }
     }
     
     private void RefreshUI()
     {
-        // Get all global interactions (base + additional)
-        var allGlobalInteractions = new List<VisualElement>();
-        var allGlobalGroups = new List<GlobalInteractionGroup>();
-        allGlobalGroups.AddRange(_currentGlobalInteractions);
-        allGlobalGroups.AddRange(_additionalGlobalInteractions);
-
-        foreach (var group in allGlobalGroups)
-        {
-            var visualGroup = CreateInteractionGroup(group);
-            if (visualGroup != null)
-                allGlobalInteractions.Add(visualGroup);
-        }
-
-        // Get current interactable interactions
-        var currentInteractions = new List<VisualElement>();
-        foreach (var group in _currentInteractableInteractions)
-        {
-            var visualGroup = CreateInteractionGroup(group);
-            if (visualGroup != null)
-                currentInteractions.Add(visualGroup);
-        }
-
-        // Update UI
-        PlayerUIManager.Instance?.UpdateGlobalInteractions(allGlobalInteractions);
-        PlayerUIManager.Instance?.UpdateCurrentInteractions(currentInteractions);
+        SetGlobalInteractions(currentGlobalInteractionGroup);
+        SetCurrentInteractableInteractions(currentInteractableInteractionGroup);
     }
     
-    private VisualElement CreateInteractionGroup(IInteractionGroup interactionGroup)
+    private VisualElement[] CreateInteractionGroupItems(IInteractionGroup interactionGroup)
     {
-        if (interactionGroup?.CurrentInteractions == null || !interactionGroup.CurrentInteractions.Any())
-            return null;
-
-        return CurrentControlScheme switch
+        return currentControlSchemeName switch
         {
-            ControlScheme.Gamepad => CreateGamepadGroup(interactionGroup),
-            _ => CreateKeyboardMouseGroup(interactionGroup)
+            "Gamepad" => CreateGamepadGroupItems(interactionGroup),
+            _ => CreateKeyboardMouseGroupItems(interactionGroup)
         };
     }
-    
-    
-    public void AddAdditionalGlobalInteractions(List<GlobalInteractionGroup> additionalGlobalInteractions)
+
+    public void SetGlobalInteractions([CanBeNull] GlobalInteractionGroup newGlobalInteractions)
     {
-        foreach (var group in additionalGlobalInteractions)
+        if (newGlobalInteractions == null)
         {
-            if (!_additionalGlobalInteractions.Contains(group))
-            {
-                _additionalGlobalInteractions.Add(group);
-            }
+            PlayerUIManager.Instance.ClearGlobalInteractions();
+            return;
         }
-        RefreshUI();
+        
+        currentGlobalInteractionGroup = newGlobalInteractions;
+        PlayerUIManager.Instance.GlobalInteractionsLabel.text = newGlobalInteractions.InteractGroupLabel;
+        var elements = CreateInteractionGroupItems(newGlobalInteractions);
+        PlayerUIManager.Instance.SetGlobalInteractions(elements);
     }
 
-    public void RemoveAdditionalGlobalInteractions(List<GlobalInteractionGroup> additionalGlobalInteractions)
+    public void SetCurrentInteractableInteractions([CanBeNull] IInteractable interactions)
     {
-        foreach (var group in additionalGlobalInteractions)
+        if (interactions == null)
         {
-            _additionalGlobalInteractions.Remove(group);
+            PlayerUIManager.Instance.ClearCurrentInteractableInteractions();
+            return;
         }
-        RefreshUI();
-    }
-
-    public void ChangeGlobalInteractions(List<GlobalInteractionGroup> newGlobalInteractions)
-    {
-        _currentGlobalInteractions.Clear();
-        _currentGlobalInteractions.AddRange(newGlobalInteractions);
-        RefreshUI();
-    }
-
-    public void SetCurrentInteractablesInteractions(IInteractionGroup[] interactions)
-    {
-        _currentInteractableInteractions.Clear();
-        if (interactions != null)
-        {
-            _currentInteractableInteractions.AddRange(interactions);
-        }
-        RefreshUI();
+        
+        currentInteractableInteractionGroup = interactions;
+        PlayerUIManager.Instance.CurrentInteractionsLabel.text = interactions.InteractGroupLabel;
+        var elements = CreateInteractionGroupItems(interactions);
+        PlayerUIManager.Instance.SetCurrentInteractions(elements);
     }
 
     public void OnControlsChanged(PlayerInput playerInput)
+        => currentControlSchemeName = playerInput.currentControlScheme;
+
+    private VisualElement[] CreateGamepadGroupItems(IInteractionGroup interactionGroup)
     {
-        CurrentControlScheme = playerInput.currentControlScheme switch
+        var elements = new VisualElement[interactionGroup.CurrentInteractions.Length];
+
+        for (var i = 0; i < interactionGroup.CurrentInteractions.Length; i++)
         {
-            "Gamepad" => ControlScheme.Gamepad,
-            _ => ControlScheme.KeyboardAndMouse
-        };
+            var interaction = interactionGroup.CurrentInteractions[i];
+            var action = interaction.ActionRef.action;
+            var bindingIndex = action.GetBindingIndex(currentControlSchemeName);
 
-    }
+            var binding = action.bindings[bindingIndex];
 
-    private VisualElement CreateGamepadGroup(IInteractionGroup interactionGroup)
-    {
-        var group = InteractGroupTemplate.Instantiate();
-        var listview = group.Q<VisualElement>("Interactions-container");
-
-        foreach (var interaction in interactionGroup.CurrentInteractions)
-        {
-            var key = XboxGamepadInputPathsNeededForIconFont[interaction.ActionRef.action.activeControl.path];
-            var hint = CreateMouseGamepadHint(interaction, key);
-            listview.Add(hint);
+            var key = XboxGamepadInputPathsNeededForIconFont[binding.effectivePath];
+            elements[i] = CreateMouseGamepadHint(interaction, key);
         }
-        return group;
+
+        return elements;
     }
     
-    [CanBeNull]
-    private VisualElement CreateKeyboardMouseGroup(IInteractionGroup interactionGroup)
+    private VisualElement[] CreateKeyboardMouseGroupItems(IInteractionGroup interactionGroup)
     {
-        var group = InteractGroupTemplate.Instantiate();
-        var container = group.Q<VisualElement>("Interactions-container");
+        var elements = new VisualElement[interactionGroup.CurrentInteractions.Length];
 
-        foreach (var interaction in interactionGroup.CurrentInteractions)
+        for (var i = 0; i < interactionGroup.CurrentInteractions.Length; i++)
         {
-            var devices = interaction.ActionRef.asset.devices;
-            if (devices == null) return null;
+            var interaction = interactionGroup.CurrentInteractions[i];
+            var action = interaction.ActionRef.action;
+            var bindingIndex = action.GetBindingIndex(currentControlSchemeName);
 
-            var mouseDevice = devices.Value.FirstOrDefault(device => device.valueType == typeof(Mouse));
-            
-            VisualElement hint;
-            if (mouseDevice != null)
+            var binding = action.bindings[bindingIndex];
+
+            if (binding.effectivePath.StartsWith("<Mouse>"))
             {
-                var key = MouseInputPathsNeededForIconFont[interaction.ActionRef.action.activeControl.path];
-                hint = CreateMouseGamepadHint(interaction,key);
-
+                var key = MouseInputPathsNeededForIconFont[binding.effectivePath];
+                elements[i] = CreateMouseGamepadHint(interaction, key);
             }
             else
             {
-                var key = interaction.ActionRef.action.activeControl.shortDisplayName;
-                hint = CreateKeyboardHint(interaction,key);
+                elements[i] = CreateKeyboardHint(interaction, action.GetBindingDisplayString(bindingIndex));
             }
-            
-            container.Add(hint);
         }
-        return group;
+
+        return elements;
     }
 
-    private VisualElement CreateMouseGamepadHint(Interaction interaction, string Key)
+    private VisualElement CreateMouseGamepadHint(Interaction interaction, string key)
     {
         var hint = InteractItemTemplateMouseGamepad.Instantiate();
-        hint.Q<Label>("key-icon").text = Key;
-        hint.Q<Label>("action-name").text = interaction.ActionRef.name;
+        hint.Q<Label>("key-icon").text = key;
+        hint.Q<Label>("action-name").text = interaction.ActionName;
+        Debug.Log($"Made new Item: key: {key} name: {interaction.ActionName}");
         return hint;
     }
 
-    private VisualElement CreateKeyboardHint(VisualElement element, Interaction interaction, string Key)
+    private VisualElement CreateKeyboardHint(Interaction interaction, string key)
     {
-        InteractItemTemplateMouseGamepad.CloneTree(element);
-        hint.Q<Label>("key-text").text = Key;
-        hint.Q<Label>("action-name").text = interaction.ActionRef.name;
+        var hint = InteractItemTemplateKeyboard.Instantiate();
+        hint.Q<Label>("key-text").text = key;
+        hint.Q<Label>("action-name").text = interaction.ActionName;
+        Debug.Log($"Made new Item: key: {key} name: {interaction.ActionName}");
         return hint;
     }
     
     //dict for keys
     
-     private Dictionary<string,string> XboxGamepadInputPathsNeededForIconFont= new ()
+    private readonly Dictionary<string,string> XboxGamepadInputPathsNeededForIconFont= new ()
     {
         {"<Gamepad>/buttonSouth","\u21D3"},
         {"<Gamepad>/buttonWest","\u21D0"},
@@ -234,6 +180,7 @@ public class InteractionHandler : ScriptableObject
     {
         {"<Mouse>/scroll/up","\u27F0"},
         {"<Mouse>/scroll/down","\u27F1"},
+        {"<Mouse>/delta","\u27FC"},
         {"<Mouse>/position","\u27FC"},
         {"<Mouse>/position/x","\u27FA"},
         {"<Mouse>/position/y","\u27FB"},
@@ -244,10 +191,4 @@ public class InteractionHandler : ScriptableObject
         {"<Mouse>/backButton", "\u278E"},
     };
 
-}
-
-public enum ControlScheme
-{
-    KeyboardAndMouse,
-    Gamepad
 }

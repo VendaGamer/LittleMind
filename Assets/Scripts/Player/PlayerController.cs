@@ -58,6 +58,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
+        interactionHandler.SetGlobalInteractions(globalInteractionGroupPlayerControls);
     }
 
     private void OnDisable()

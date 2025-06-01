@@ -1,8 +1,4 @@
-using System;
-using Cinemachine;
-using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy

@@ -1,7 +1,0 @@
-<engine:UXML xmlns:engine="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/PlayerUIStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#PlayerUIStyles" />
-    <engine:VisualElement data-source-type="UIInteractionGroup, Assembly-CSharp" class="interactions-group">
-        <engine:Label name="GroupLabel" data-source-type="UIInteractionGroup, Assembly-CSharp" class="interactions-label" />
-        <engine:VisualElement name="Interactions-container" style="flex-grow: 1;" />
-    </engine:VisualElement>
-</engine:UXML>

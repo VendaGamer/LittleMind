@@ -8,20 +8,19 @@
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="interactions-hint" class="context-menu">
-            <engine:VisualElement name="interactions-hint-container" data-source-type="UIInteractionGroup, Assembly-CSharp" class="menu-container">
-                <engine:VisualElement name="global-interactions-container" style="flex-grow: 1;" />
-                <engine:VisualElement style="flex-grow: 1;" />
+            <engine:VisualElement name="interaction-groups-container" enabled="false" class="menu-container" style="display: none;">
+                <engine:VisualElement name="global-interactions-group" enabled="false" class="interactions-group" style="display: none;">
+                    <engine:Label name="global-interactions-label" text="Test" class="interactions-label" />
+                    <engine:VisualElement name="global-interactions-container" style="flex-grow: 1;" />
+                </engine:VisualElement>
+                <engine:VisualElement name="current-interactions-group" enabled="false" class="interactions-group" style="display: none;">
+                    <engine:Label name="current-interactions-label" text="Test" class="interactions-label" />
+                    <engine:VisualElement name="current-interactions-container" style="flex-grow: 1;" />
+                </engine:VisualElement>
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="crosshair-container" class="crosshair-container">
-            <engine:VisualElement name="crosshair" class="crosshair">
-                <Bindings>
-                    <engine:DataBinding property="class-crosshair--interactive" binding-path="HasInteractableCrosshair" binding-mode="ToTarget" />
-                </Bindings>
-            </engine:VisualElement>
-            <Bindings>
-                <engine:DataBinding property="enabledSelf" data-source-path="CrosshairVisible" binding-mode="ToTarget" data-source-type="UIInteractionGroup, Assembly-CSharp" />
-            </Bindings>
+            <engine:VisualElement name="crosshair" class="crosshair" />
         </engine:VisualElement>
         <engine:VisualElement name="chapter-popup" class="chapter-popup">
             <engine:VisualElement name="chapter-container" class="chapter-container">

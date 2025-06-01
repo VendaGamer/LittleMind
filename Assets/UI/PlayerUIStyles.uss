@@ -48,28 +48,57 @@
     -unity-background-image-tint-color: rgb(199, 152, 152);
 }
 
-/* Existing Styles with adjustments for new layout */
+/* Updated context-menu to allow dynamic sizing */
 .context-menu {
     position: absolute;
     bottom: 5%;
     right: 3%;
-    width: 20%;
-    height: 10%;
+    max-width: 25%; /* Changed from fixed width to max-width */
+    min-width: 15%; /* Added minimum width */
+    /* Removed fixed height to allow dynamic sizing */
+    max-height: 50%; /* Added max-height to prevent it from getting too tall */
 }
 
-.menu-container {
-    background-color: rgba(0, 0, 0, 0.75);
-    border-radius: 5px;
-    padding: 10px;
-    flex-wrap: wrap;
+/* Optional: Add some spacing between global and current interactions */
+#global-interactions-container {
+    flex-grow: 0; /* Changed from 1 to 0 to prevent unnecessary stretching */
+    flex-shrink: 0;
 }
 
+#current-interactions-container {
+    flex-grow: 0; /* Changed from 1 to 0 to prevent unnecessary stretching */
+    flex-shrink: 0;
+    margin-top: 5px; /* Add some space between sections if both have content */
+}
+
+
+/* Ensure menu items don't break the layout */
 .menu-item {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 5px;
     margin: 2px 0;
+    flex-shrink: 0; /* Prevent items from shrinking */
+    min-width: 0; /* Allow text to wrap if needed */
+}
+
+/* Make sure interactions groups size properly */
+.interactions-group {
+    margin: 5px 0;
+    padding: 5px;
+    flex-shrink: 0;
+}
+
+/* Ensure the container can scroll if it gets too tall */
+.menu-container {
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+    padding: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+    overflow: hidden; /* Hide overflow */
 }
 
 .key-hint-text {

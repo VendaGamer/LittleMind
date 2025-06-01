@@ -9,10 +9,26 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
 {
     [FormerlySerializedAs("info")] [SerializeField] private DrawerData data;
     [field:SerializeField] public string InteractGroupLabel { get; private set; }
-    private bool isOpen = false;
+    
+    public event Action InteractionsChanged;
+
+    protected bool IsOpen
+    {
+        get => _isOpen;
+        set
+        {
+            if (value == _isOpen)
+                return;
+            _isOpen = value;
+            InteractionsChanged?.Invoke();
+        }
+    }
+    
+    
     private Vector3 closedPosition;
     private Coroutine currentMoveCoroutine;
     private Outline outline;
+    private bool _isOpen = false;
     
     private void Start()
     {
@@ -24,7 +40,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     {
         get
         {
-            return isOpen ? new[] { data.CloseDrawerInteraction } : new[] {data.OpenDrawerInteraction};
+            return IsOpen ? new[] { data.CloseDrawerInteraction } : new[] {data.OpenDrawerInteraction};
         }
     }
     
@@ -49,7 +65,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     
     public bool Interact(IInteractor interactor, InputAction invokedAction)
     {
-        if (isOpen)
+        if (IsOpen)
         {
             if (invokedAction.id == data.CloseDrawerInteraction.ActionRef.action.id)
             {
@@ -57,7 +73,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
                     StopCoroutine(currentMoveCoroutine);
                     
                 currentMoveCoroutine = StartCoroutine(Move(closedPosition));
-                isOpen = false;
+                IsOpen = false;
                 return true;
             }
         }
@@ -68,7 +84,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
                 
             currentMoveCoroutine = StartCoroutine(Move(
                 closedPosition + new Vector3(data.OpenX, 0f, 0f) * transform.parent.localScale.x));
-            isOpen = true;
+            IsOpen = true;
             return true;
         }
         return false;

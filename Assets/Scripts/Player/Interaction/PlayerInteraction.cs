@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,14 +34,19 @@ public partial class PlayerController
         get=> _interactableHolding;
         private set
         {
+            if(ReferenceEquals(_interactableHolding, value))
+                return;
+            
             _interactableHolding = value;
-            interactionHandler.SetCurrentInteractablesInteractions(new IInteractionGroup[] { value });
+            interactionHandler.SetCurrentInteractableInteractions(value);
         }
     }
 
     [SerializeField]
     private float pickupLerpDuration = 1f;
     public float PickupLerpDuration => pickupLerpDuration;
+
+
 
 
     private void HandleInteraction()
@@ -103,7 +107,7 @@ public partial class PlayerController
 
             if (interactableLookingAt.CurrentInteractions != interactable.CurrentInteractions)
             {
-                // swithc interactions
+                interactionHandler.SetCurrentInteractableInteractions(interactableLookingAt);
             }
             // Set new interactable
         }

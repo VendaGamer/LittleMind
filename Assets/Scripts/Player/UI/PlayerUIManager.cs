@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,8 +13,14 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     private VisualElement heartIcon;
     private Sequence newChapterSeq;
     
-    private VisualElement globalInteractionsContainer;
-    private VisualElement currentInteractionsContainer;
+    public VisualElement GlobalInteractionsContainer { get; private set; }
+    public Label GlobalInteractionsLabel { get; private set; }
+    public VisualElement CurrentInteractionsContainer { get; private set; }
+    public Label CurrentInteractionsLabel { get; private set; }
+    
+    private VisualElement interactionGroupsContainer;
+    private VisualElement currentInteractionsGroup;
+    private VisualElement globalInteractionsGroup;
 
     public bool MemoryIconVisibility
     {
@@ -31,38 +36,30 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         
     }
 
-    public void UpdateGlobalInteractions(List<VisualElement> interactions)
+    public void SetGlobalInteractions(VisualElement[] interactions)
     {
-        // Clear existing global interactions
-        globalInteractionsContainer.Clear();
+        GlobalInteractionsContainer.Clear();
         
-        // Add new global interactions
-        if (interactions != null)
+        foreach (var interaction in interactions)
         {
-            foreach (var interaction in interactions)
-            {
-                globalInteractionsContainer.Add(interaction);
-            }
+            GlobalInteractionsContainer.Add(interaction);
         }
+        
+        globalInteractionsGroup.style.display = DisplayStyle.Flex;
+        interactionGroupsContainer.style.display = DisplayStyle.Flex;
     }
 
-    public void UpdateCurrentInteractions(List<VisualElement> interactions)
+    public void SetCurrentInteractions(VisualElement[] interactions)
     {
-        // Clear existing current interactions
-        currentInteractionsContainer.Clear();
-        
-        // Add new current interactions
-        if (interactions != null)
+        CurrentInteractionsContainer.Clear();
+
+        foreach (var interaction in interactions)
         {
-            foreach (var interaction in interactions)
-            {
-                currentInteractionsContainer.Add(interaction);
-            }
+            CurrentInteractionsContainer.Add(interaction);
         }
         
-        // Show/hide the container based on whether there are interactions
-        bool hasInteractions = interactions != null && interactions.Count > 0;
-        currentInteractionsContainer.style.display = hasInteractions ? DisplayStyle.Flex : DisplayStyle.None;
+        currentInteractionsGroup.style.display = DisplayStyle.Flex;
+        interactionGroupsContainer.style.display = DisplayStyle.Flex;
     }
 
 
@@ -78,13 +75,44 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         heartIcon = root.Q<VisualElement>("health-icon");
         memoryIcon.style.display = DisplayStyle.None;
         heartIcon.style.display = DisplayStyle.None;
-        globalInteractionsContainer = root.Q<VisualElement>("global-interactions-container");
-        currentInteractionsContainer = root.Q<VisualElement>("current-interactions-container");
+        
+        interactionGroupsContainer = root.Q<VisualElement>("interaction-groups-container");
+        
+        globalInteractionsGroup = interactionGroupsContainer.Q<VisualElement>("global-interactions-group");
+        currentInteractionsGroup = interactionGroupsContainer.Q<VisualElement>("current-interactions-group");
+
+        
+        GlobalInteractionsLabel = globalInteractionsGroup.Q<Label>("global-interactions-label");
+        CurrentInteractionsLabel = currentInteractionsGroup.Q<Label>("current-interactions-label");
+        
+        GlobalInteractionsContainer = globalInteractionsGroup.Q<VisualElement>("global-interactions-container");
+        CurrentInteractionsContainer = currentInteractionsGroup.Q<VisualElement>("current-interactions-container");
         
         newChapterSeq = DOTween
             .Sequence()
             .Append(chapterPopup.DOFadeIn(1f))
             .Append(chapterPopup.DOFadeOut(3f).SetDelay(5f));
         NewChapter(1, "What is upon us");
+    }
+
+    public void ClearGlobalInteractions()
+    {
+        GlobalInteractionsContainer.Clear();
+        GlobalInteractionsContainer.style.display = DisplayStyle.None;
+        if (CurrentInteractionsContainer.style.display == DisplayStyle.None)
+            interactionGroupsContainer.style.display = DisplayStyle.Flex;
+    }
+
+    public void HideUI()
+    {
+        
+    }
+
+    public void ClearCurrentInteractableInteractions()
+    {
+        CurrentInteractionsContainer.Clear();
+        CurrentInteractionsContainer.style.display = DisplayStyle.None;
+        if (GlobalInteractionsContainer.style.display == DisplayStyle.None)
+            interactionGroupsContainer.style.display = DisplayStyle.Flex;
     }
 }
