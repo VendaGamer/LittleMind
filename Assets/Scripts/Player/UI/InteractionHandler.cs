@@ -86,7 +86,7 @@ public class InteractionHandler : ScriptableObject
 
             var binding = action.bindings[bindingIndex];
 
-            var key = XboxGamepadInputPathsNeededForIconFont[binding.effectivePath];
+            var key = EffetivePathToGamepadIcon(binding.effectivePath);
             elements[i] = CreateMouseGamepadHint(interaction, key);
         }
 
@@ -107,12 +107,16 @@ public class InteractionHandler : ScriptableObject
 
             if (binding.effectivePath.StartsWith("<Mouse>"))
             {
-                var key = MouseInputPathsNeededForIconFont[binding.effectivePath];
+                var key = EffectivePathToMouseIcon(binding.effectivePath);
                 elements[i] = CreateMouseGamepadHint(interaction, key);
+            }
+            else if (binding.isPartOfComposite)
+            {
+                elements[i] = CreateMouseGamepadHint(interaction, "\u2423");
             }
             else
             {
-                elements[i] = CreateKeyboardHint(interaction, action.GetBindingDisplayString(bindingIndex));
+                elements[i] = CreateKeyboardHint(interaction, binding.ToDisplayString());
             }
         }
 
@@ -124,7 +128,6 @@ public class InteractionHandler : ScriptableObject
         var hint = InteractItemTemplateMouseGamepad.Instantiate();
         hint.Q<Label>("key-icon").text = key;
         hint.Q<Label>("action-name").text = interaction.ActionName;
-        Debug.Log($"Made new Item: key: {key} name: {interaction.ActionName}");
         return hint;
     }
 
@@ -133,62 +136,64 @@ public class InteractionHandler : ScriptableObject
         var hint = InteractItemTemplateKeyboard.Instantiate();
         hint.Q<Label>("key-text").text = key;
         hint.Q<Label>("action-name").text = interaction.ActionName;
-        Debug.Log($"Made new Item: key: {key} name: {interaction.ActionName}");
         return hint;
     }
     
-    //dict for keys
     
-    private readonly Dictionary<string,string> XboxGamepadInputPathsNeededForIconFont= new ()
-    {
-        {"<Gamepad>/buttonSouth","\u21D3"},
-        {"<Gamepad>/buttonWest","\u21D0"},
-        {"<Gamepad>/buttonNorth","\u21D1"},
-        {"<Gamepad>/buttonEast","\u21D2"},
-        {"<Gamepad>/dpad", "\u21CE"},
-        {"<Gamepad>/dpad/right", "\u21A0"},
-        {"<Gamepad>/dpad/left", "\u219E"},
-        {"<Gamepad>/dpad/down", "\u21A1"},
-        {"<Gamepad>/dpad/up", "\u219F"},
-        {"<Gamepad>/dpad/x", "\u21A2"},
-        {"<Gamepad>/dpad/y", "\u21A3"},
-        {"<Gamepad>/rightShoulder", "\u2199"},
-        {"<Gamepad>/rightStick", "\u21F2"},
-        {"<Gamepad>/rightStickPress", "\u21BB"},
-        {"<Gamepad>/rightStick/right", "\u21C1"},
-        {"<Gamepad>/rightStick/left", "\u21BD"},
-        {"<Gamepad>/rightStick/down","\u21C3"},
-        {"<Gamepad>/rightStick/up","\u21C3"},
-        {"<Gamepad>/rightStick/x","\u21C1"},
-        {"<Gamepad>/rightStick/y","\u21C1"},
-        {"<Gamepad>/rightTrigger","\u2197"},
-        {"<Gamepad>/leftStick", "\u21F1"},
-        {"<Gamepad>/leftShoulder", "\u2198"}, 
-        {"<Gamepad>/leftStickPress", "\u21BA"},   
-        {"<Gamepad>/leftStick/right", "\u21C0"},     
-        {"<Gamepad>/leftStick/left", "\u21BC"},      
-        {"<Gamepad>/leftStick/down","\u21C2"},       
-        {"<Gamepad>/leftStick/up","\u21BE"},
-        {"<Gamepad>/leftStick/x","\u21C0"},
-        {"<Gamepad>/leftStick/y","\u21C1"},
-        {"<Gamepad>/leftTrigger","\u2196"},
-        {"<Gamepad>/select", "\u21F7"},
-        {"<Gamepad>/start", "\u21F8"},
-    };
-    
-    private Dictionary<string,string> MouseInputPathsNeededForIconFont= new ()
-    {
-        {"<Mouse>/scroll/up","\u27F0"},
-        {"<Mouse>/scroll/down","\u27F1"},
-        {"<Mouse>/delta","\u27FC"},
-        {"<Mouse>/position","\u27FC"},
-        {"<Mouse>/position/x","\u27FA"},
-        {"<Mouse>/position/y","\u27FB"},
-        {"<Mouse>/leftButton","\u278A"},
-        {"<Mouse>/rightButton", "\u278B"},
-        {"<Mouse>/middleButton", "\u278C"},
-        {"<Mouse>/forwardButton", "\u278D"},
-        {"<Mouse>/backButton", "\u278E"},
-    };
+    private string EffetivePathToGamepadIcon(string effectivePath) =>
+        effectivePath switch
+        {
+            "<Gamepad>/buttonSouth" => "\u21D3",
+            "<Gamepad>/buttonWest" => "\u21D0",
+            "<Gamepad>/buttonNorth" => "\u21D1",
+            "<Gamepad>/buttonEast" => "\u21D2",
+            "<Gamepad>/dpad" => "\u21CE",
+            "<Gamepad>/dpad/right" => "\u21A0",
+            "<Gamepad>/dpad/left" => "\u219E",
+            "<Gamepad>/dpad/down" => "\u21A1",
+            "<Gamepad>/dpad/up" => "\u219F",
+            "<Gamepad>/dpad/x" => "\u21A2",
+            "<Gamepad>/dpad/y" => "\u21A3",
+            "<Gamepad>/rightShoulder" => "\u2199",
+            "<Gamepad>/rightStick" => "\u21F2",
+            "<Gamepad>/rightStickPress" => "\u21BB",
+            "<Gamepad>/rightStick/right" => "\u21C1",
+            "<Gamepad>/rightStick/left" => "\u21BD",
+            "<Gamepad>/rightStick/down" => "\u21C3",
+            "<Gamepad>/rightStick/up" => "\u21BF",
+            "<Gamepad>/rightStick/x" => "\u21C6",
+            "<Gamepad>/rightStick/y" => "\u21F5",
+            "<Gamepad>/rightTrigger" => "\u2197",
+            "<Gamepad>/leftStick" => "\u21F1",
+            "<Gamepad>/leftShoulder" => "\u2198", 
+            "<Gamepad>/leftStickPress" => "\u21BA", 
+            "<Gamepad>/leftStick/right" => "\u21C0",     
+            "<Gamepad>/leftStick/left" => "\u21BC",      
+            "<Gamepad>/leftStick/down" => "\u21C2",       
+            "<Gamepad>/leftStick/up" => "\u21BE",
+            "<Gamepad>/leftStick/x" => "\u21C4",
+            "<Gamepad>/leftStick/y" => "\u21C5",
+            "<Gamepad>/leftTrigger" => "\u2196",
+            "<Gamepad>/select" => "\u21F7",
+            "<Gamepad>/start" => "\u21F8",
+            _ => "?"
+        };
+
+    private string EffectivePathToMouseIcon(string effectivePath) =>
+        effectivePath switch
+        {
+            "<Mouse>/scroll/up" => "\u27F0",
+            "<Mouse>/scroll/down" => "\u27F1",
+            "<Mouse>/delta" => "\u27FC",
+            "<Mouse>/position" => "\u27FC",
+            "<Mouse>/position/x" => "\u27FA",
+            "<Mouse>/position/y" => "\u27FB",
+            "<Mouse>/leftButton" => "\u278A",
+            "<Mouse>/rightButton" => "\u278B",
+            "<Mouse>/middleButton" => "\u278C",
+            "<Mouse>/forwardButton" => "\u278D",
+            "<Mouse>/backButton" => "\u278E",
+            _ => "\u27FC"
+        };
 
 }

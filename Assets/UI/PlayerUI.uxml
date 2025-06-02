@@ -8,7 +8,7 @@
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="interactions-hint" class="context-menu">
-            <engine:VisualElement name="interaction-groups-container" enabled="false" class="menu-container" style="display: none;">
+            <engine:VisualElement name="interaction-groups-container" enabled="false" class="menu-container" style="display: none; opacity: 0.75;">
                 <engine:VisualElement name="global-interactions-group" enabled="false" class="interactions-group" style="display: none;">
                     <engine:Label name="global-interactions-label" text="Test" class="interactions-label" />
                     <engine:VisualElement name="global-interactions-container" style="flex-grow: 1;" />

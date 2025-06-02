@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +8,15 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     [Header("Movement Settings")]
     [SerializeField]
     private float moveSpeed = 5f;
+
+    [SerializeField] 
+    private float playerRotateSpeed = 20f;
+
+    [SerializeField] private float maxPlayerBodCamRotDiff = 45f;
+    
+    
+    [SerializeField]
+    private Transform playerBodyTransform;
 
     [SerializeField]
     private float sprintSpeed = 7f;
@@ -129,14 +139,44 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         canJump = true;
     }
 
+
+    private void LateUpdate()
+    {
+        float cameraYaw = playerCamera.transform.eulerAngles.y;
+        float bodyYaw = playerBodyTransform.eulerAngles.y;
+
+        float angleDiff = Mathf.DeltaAngle(bodyYaw, cameraYaw);
+
+        if (Mathf.Abs(angleDiff) > maxPlayerBodCamRotDiff)
+        {
+            // Snap body back to be within ±45° of camera
+            float correction = angleDiff - Mathf.Sign(angleDiff) * maxPlayerBodCamRotDiff;
+            float newBodyYaw = bodyYaw + correction;
+
+            Quaternion newRotation = Quaternion.Euler(0f, newBodyYaw, 0f);
+            playerBodyTransform.rotation = newRotation;
+        }
+        else
+        {
+            Quaternion targetRotation = Quaternion.Euler(0f, cameraYaw, 0f);
+            playerBodyTransform.rotation = Quaternion.Slerp(
+                playerBodyTransform.rotation,
+                targetRotation,
+                playerRotateSpeed * Time.deltaTime
+            );
+        }
+        
+    }
+
     private void HandleMovement()
     {
         Vector2 moveInput = Controls.Player.Move.ReadValue<Vector2>();
 
+        // Calculate movement direction relative to camera
         Vector3 moveDirection =
-            playerCamera.transform.right * moveInput.x
-            + playerCamera.transform.forward * moveInput.y;
-        moveDirection.y = 0;
+            playerCamera.transform.right * moveInput.x +
+            playerCamera.transform.forward * moveInput.y;
+        moveDirection.y = 0f;
 
         if (moveDirection.magnitude > 0.1f)
         {
@@ -144,4 +184,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
             rb.MovePosition(rb.position + moveDirection * (currentSpeed * Time.deltaTime));
         }
     }
+
+
+
 }
