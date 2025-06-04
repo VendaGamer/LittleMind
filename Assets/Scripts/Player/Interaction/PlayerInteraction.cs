@@ -23,7 +23,7 @@ public partial class PlayerController
     private float rayCastDistance = 3f;
 
     [CanBeNull]
-    private IInteractable interactableLookingAt;
+    private IInteractable _interactableLookingAt;
 
     [CanBeNull]
     private IInteractable _interactableHolding;
@@ -38,6 +38,20 @@ public partial class PlayerController
                 return;
             
             _interactableHolding = value;
+            interactionHandler.SetCurrentInteractableInteractions(value);
+        }
+    }
+    
+    [CanBeNull]
+    public IInteractable InteractableLookingAt
+    {
+        get => _interactableLookingAt;
+        private set
+        {
+            if (ReferenceEquals(_interactableLookingAt, value))
+                return;
+            
+            _interactableLookingAt = value;
             interactionHandler.SetCurrentInteractableInteractions(value);
         }
     }
@@ -77,13 +91,8 @@ public partial class PlayerController
             ClearCurrentInteractable();
         }
     }
-    
-    public void PickUp(IInteractable itemToPickUp)
-    {
-        InteractableHolding = itemToPickUp;
 
-    }
-    
+    public void PickUp(IInteractable itemToPickUp) => InteractableHolding = itemToPickUp;
     private void OnDrop(InputAction.CallbackContext obj)
     {
         if (InteractableHolding == null)
@@ -98,30 +107,20 @@ public partial class PlayerController
     private void HandleInteractableHit(IInteractable interactable)
     {
         // Only update if we're looking at a different interactable
-        if (ReferenceEquals(interactable, interactableLookingAt))
+        if (ReferenceEquals(interactable, InteractableLookingAt))
             return;
 
-        if (interactableLookingAt != null)
-        {
-            interactableLookingAt.ToggleOutline(false);
-
-            if (interactableLookingAt.CurrentInteractions != interactable.CurrentInteractions)
-            {
-                interactionHandler.SetCurrentInteractableInteractions(interactableLookingAt);
-            }
-            // Set new interactable
-        }
-
+        InteractableLookingAt?.ToggleOutline(false);
         interactable.ToggleOutline(true);
-        interactableLookingAt = interactable;
+        InteractableLookingAt = interactable;
     }
 
     private void ClearCurrentInteractable()
     {
-        if (interactableLookingAt == null)
+        if (InteractableLookingAt == null)
             return;
-
-        interactableLookingAt.ToggleOutline(false);
-        interactableLookingAt = null;
+        
+        InteractableLookingAt.ToggleOutline(false);
+        InteractableLookingAt = null;
     }
 }

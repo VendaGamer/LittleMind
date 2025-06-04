@@ -27,6 +27,12 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         get => memoryIcon.visible;
         set => memoryIcon.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
     }
+    
+    public bool Visibility
+    {
+        get => playerUI.rootVisualElement.style.display == DisplayStyle.Flex;
+        set => playerUI.rootVisualElement.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+    }
 
     public void NewChapter(byte chapterNum, string contents)
     {
@@ -101,11 +107,6 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         GlobalInteractionsContainer.style.display = DisplayStyle.None;
         if (CurrentInteractionsContainer.style.display == DisplayStyle.None)
             interactionGroupsContainer.style.display = DisplayStyle.Flex;
-    }
-
-    public void HideUI()
-    {
-        
     }
 
     public void ClearCurrentInteractableInteractions()

@@ -1,15 +1,19 @@
 using UnityEngine;
+using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
+
 public class Diary : MonoBehaviour
 {
-    [SerializeField] private Transform leftPageContainer; // Left pages
-    [SerializeField] private Transform rightPageContainer; // Right pages
+    [SerializeField] private Transform leftPageContainer;
+    [SerializeField] private Transform rightPageContainer;
+    [SerializeField] private GlobalInteractionGroup globalInteractions;
+    [SerializeField] private InteractionHandler interactionHandler;
 
     private DiaryPage[] leftPages;
     private DiaryPage[] rightPages;
 
     private int currentPageIndex = 0;
 
-    private void Start()
+    private void Awake()
     {
         // Load all pages into arrays
         leftPages = new DiaryPage[leftPageContainer.childCount];
@@ -27,10 +31,34 @@ public class Diary : MonoBehaviour
             rightPages[i].gameObject.SetActive(false); // Disable all pages initially
         }
 
-        if (leftPages.Length > 0)
-        {
-            ShowCurrentPages(); // Show the first pair of pages
-        }
+        ShowCurrentPages();
+    }
+
+    private void OnEnable()
+    {
+        var diaryControls = interactionHandler.InputControls.Diary;
+        diaryControls.Enable();
+        diaryControls.TurnPageLeft.performed += TurnLeft;
+        diaryControls.TurnPageRight.performed += TurnRight;
+        interactionHandler.SetGlobalInteractions(globalInteractions);
+    }
+
+    private void OnDisable()
+    {
+        var diaryControls = interactionHandler.InputControls.Diary;
+        diaryControls.Disable();
+        diaryControls.TurnPageLeft.performed -= TurnLeft;
+        diaryControls.TurnPageRight.performed -= TurnRight;
+    }
+
+    private void TurnRight(CallbackContext _)
+    {
+        FlipToNextPage();
+    }
+
+    private void TurnLeft(CallbackContext _)
+    {
+        FlipToPreviousPage();
     }
 
     public void NegateActiveState()

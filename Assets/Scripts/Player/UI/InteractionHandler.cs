@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,11 +10,13 @@ public class InteractionHandler : ScriptableObject
     private VisualTreeAsset InteractItemTemplateMouseGamepad;
     [SerializeField]
     private VisualTreeAsset InteractItemTemplateKeyboard;
+
+    public Controls InputControls { get; private set; }
     
     private IInteractable currentInteractableInteractionGroup;
     private GlobalInteractionGroup currentGlobalInteractionGroup;
 
-    private string _currentControlSchemeName = "Keyboard&Mouse";
+    private string _currentControlSchemeName;
     private string currentControlSchemeName
     {
         get => _currentControlSchemeName;
@@ -26,6 +27,12 @@ public class InteractionHandler : ScriptableObject
             _currentControlSchemeName = value;
             RefreshUI();
         }
+    }
+
+    private void OnEnable()
+    {
+        InputControls ??= new Controls();
+        currentControlSchemeName ??= InputControls.KeyboardMouseScheme.name;
     }
     
     private void RefreshUI()
@@ -53,12 +60,16 @@ public class InteractionHandler : ScriptableObject
         
         currentGlobalInteractionGroup = newGlobalInteractions;
         PlayerUIManager.Instance.GlobalInteractionsLabel.text = newGlobalInteractions.InteractGroupLabel;
-        var elements = CreateInteractionGroupItems(newGlobalInteractions);
-        PlayerUIManager.Instance.SetGlobalInteractions(elements);
+        PlayerUIManager.Instance.SetGlobalInteractions(CreateInteractionGroupItems(newGlobalInteractions));
     }
 
     public void SetCurrentInteractableInteractions([CanBeNull] IInteractable interactions)
     {
+        if (currentInteractableInteractionGroup != null)
+        {
+            currentInteractableInteractionGroup.InteractionsChanged -= OnInteractableInteractionsChanged;
+        }
+        
         if (interactions == null)
         {
             PlayerUIManager.Instance.ClearCurrentInteractableInteractions();
@@ -66,12 +77,15 @@ public class InteractionHandler : ScriptableObject
         }
         
         currentInteractableInteractionGroup = interactions;
+        currentInteractableInteractionGroup.InteractionsChanged += OnInteractableInteractionsChanged;
         PlayerUIManager.Instance.CurrentInteractionsLabel.text = interactions.InteractGroupLabel;
-        var elements = CreateInteractionGroupItems(interactions);
-        PlayerUIManager.Instance.SetCurrentInteractions(elements);
+        PlayerUIManager.Instance.SetCurrentInteractions(CreateInteractionGroupItems(interactions));
     }
 
-    public void OnControlsChanged(PlayerInput playerInput)
+    private void OnInteractableInteractionsChanged() =>
+        PlayerUIManager.Instance.SetCurrentInteractions(CreateInteractionGroupItems(currentInteractableInteractionGroup));
+
+    public void OnControlsChanged(UnityEngine.InputSystem.PlayerInput playerInput)
         => currentControlSchemeName = playerInput.currentControlScheme;
 
     private VisualElement[] CreateGamepadGroupItems(IInteractionGroup interactionGroup)
