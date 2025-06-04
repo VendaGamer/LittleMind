@@ -358,6 +358,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftPageContainer: {fileID: 5969753462666622665}
   rightPageContainer: {fileID: 1198956058635252035}
+  globalInteractions:
+    <InteractGroupLabel>k__BackingField: 
+    <CurrentInteractions>k__BackingField: []
+  interactionHandler: {fileID: 11400000, guid: 8354aec3e80db6c4b93b57951eba3dd1, type: 2}
 --- !u!1 &1351302553195563769
 GameObject:
   m_ObjectHideFlags: 0
