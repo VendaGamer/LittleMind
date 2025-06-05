@@ -6,7 +6,7 @@ public class Trembling : AnxietySymptom
     [SerializeField] private float baseRoughness = 5f;
     [SerializeField] private float baseFadeInTime = 3f;
     [SerializeField] private float baseFadeOutTime = 5f;
-    [SerializeField] private Vector3 baseRotationInfluence = new Vector3(0.7f, 0.7f, 0.7f);
+    [SerializeField] private Vector3 baseRotationInfluence = new(0.7f, 0.7f, 0.7f);
     private CameraShakeInstance currentShake;
     public override void ActivateSymptom(float intensity)
     {

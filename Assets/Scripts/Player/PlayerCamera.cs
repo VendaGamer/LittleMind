@@ -1,5 +1,4 @@
 using UnityEngine;
-
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// </summary>

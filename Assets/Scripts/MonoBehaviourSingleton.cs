@@ -1,10 +1,9 @@
 using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 
-public abstract class MonoBehaviourSingleton<T> : MonoBehaviour, ISingleton where T : MonoBehaviourSingleton<T>
+public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBehaviourSingleton<T>
 {
     [CanBeNull]
     private static T _instance;
