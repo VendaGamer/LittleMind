@@ -144,7 +144,7 @@ namespace GreatArcStudios
         {
             // Apply texture settings
             PauseManager.lastTexLimit = settings.textureLimit;
-            QualitySettings.masterTextureLimit = settings.textureLimit;
+            QualitySettings.globalTextureMipmapLimit = settings.textureLimit;
             
             // Apply audio settings
             AudioListener.volume = settings.masterVolume;
