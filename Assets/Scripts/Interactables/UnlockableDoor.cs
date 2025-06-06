@@ -5,13 +5,27 @@ using UnityEngine.InputSystem;
 public class UnlockableDoor : Door
 {
     [SerializeField] private DoorKey requiredKey;
-    private bool isLocked = true;
-    [CreateProperty]
+
+    protected bool _isLocked = true;
+    
+    protected bool IsLocked
+    {
+        get => _isLocked;
+        set
+        {
+            if (value == _isLocked)
+                return;
+            _isLocked = value;
+            OnInteractionsChanged();
+        }
+    }
+    
+    private bool _isOpen;
     public override Interaction[] CurrentInteractions
     {
         get
         {
-            if (isLocked)
+            if (IsLocked)
             {
                 return new[] { ((UnlockableDoorData)data).UnlockDoorInteraction, data.LookThroughKeyHoleInteraction };
             }
@@ -21,13 +35,13 @@ public class UnlockableDoor : Door
 
     public override bool Interact(IInteractor interactor, InputAction invokedAction)
     {
-        if (isLocked)
+        if (IsLocked)
         {
             if (invokedAction.id == ((UnlockableDoorData)data).UnlockDoorInteraction.ActionRef.action.id)
             {
                 if (ReferenceEquals(interactor.InteractableHolding, requiredKey))
                 {
-                    isLocked = false;
+                    IsLocked = false;
                     return true;
                 }
                 return false;

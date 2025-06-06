@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +8,15 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     [Header("Movement Settings")]
     [SerializeField]
     private float moveSpeed = 5f;
+
+    [SerializeField] 
+    private float playerRotateSpeed = 20f;
+
+    [SerializeField] 
+    private float maxPlayerBodCamRotDiff = 45f;
+    
+    [SerializeField]
+    private Transform playerBodyTransform;
 
     [SerializeField]
     private float sprintSpeed = 7f;
@@ -28,22 +38,12 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     [SerializeField]
     private LayerMask groundLayerMask;
+    
     private bool canJump = true;
     private bool isGrounded;
     private bool isCrouching;
     private static Camera playerCamera => PlayerCamera.Instance.Camera;
-
-    [Header("Look Settings")]
-    [SerializeField]
-    private float maxLookUpAngle = 90f;
-
-    [SerializeField]
-    private float maxLookDownAngle = -90f;
-
-    [SerializeField]
-    private Transform playerCameraHolder;
-
-    public static Controls Controls { get; private set; }
+    
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning;
@@ -51,7 +51,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void Awake()
     {
-        Controls = new Controls();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
     }
@@ -61,37 +60,27 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
-        SwitchGlobalInteractions(globalInteractionsPlayerControls);
     }
 
     private void OnDisable()
     {
-        Controls.Player.Disable();
-        Controls.Player.Use.performed -= OnUse;
-        Controls.Player.Sprint.performed -= OnSprint;
-        Controls.Player.Drop.performed -= OnDrop;
-        Controls.Player.Crouch.performed -= OnCrouch;
+        var controlsPlayer = interactionHandler.InputControls.Player;
+        controlsPlayer.Disable();
+        controlsPlayer.Use.performed -= OnUse;
+        controlsPlayer.Sprint.performed -= OnSprint;
+        controlsPlayer.Drop.performed -= OnDrop;
+        controlsPlayer.Crouch.performed -= OnCrouch;
     }
 
     private void OnEnable()
     {
-        Controls.Player.Enable();
-        Controls.Player.Use.performed += OnUse;
-        Controls.Player.Sprint.performed += OnSprint;
-        Controls.Player.Drop.performed += OnDrop;
-        Controls.Player.Crouch.performed += OnCrouch;
-    }
-
-    private void OnDrop(InputAction.CallbackContext obj)
-    {
-        if (InteractableHolding == null)
-            return;
-
-        if (InteractableHolding.Interact(this, obj.action))
-        {
-            InteractableHolding = null;
-            SwitchExclusiveInteractions(interactableLookingAt);
-        }
+        var controlsPlayer = interactionHandler.InputControls.Player;
+        controlsPlayer.Enable();
+        controlsPlayer.Use.performed += OnUse;
+        controlsPlayer.Sprint.performed += OnSprint;
+        controlsPlayer.Drop.performed += OnDrop;
+        controlsPlayer.Crouch.performed += OnCrouch;
+        interactionHandler.SetGlobalInteractions(globalInteractionGroupPlayerControls);
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)
@@ -107,18 +96,11 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void OnUse(InputAction.CallbackContext obj)
     {
-        interactableLookingAt?.Interact(this, obj.action);
+        InteractableLookingAt?.Interact(this, obj.action);
     }
 
-    public void PickUp(IInteractable itemToPickUp)
+    private void FixedUpdate()
     {
-        InteractableHolding = itemToPickUp;
-        SwitchExclusiveInteractions(InteractableHolding);
-    }
-
-    private void Update()
-    {
-        HandleLook();
         HandleMovement();
         CheckGrounded();
         HandleJump();
@@ -127,9 +109,10 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleJump()
     {
-        if (Controls.Player.Jump.IsPressed() && canJump && isGrounded)
+        if (interactionHandler.InputControls.Player.Jump.IsPressed() && canJump && isGrounded)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+            StartCoroutine(JumpCooldown());
         }
     }
 
@@ -149,11 +132,47 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         canJump = true;
     }
 
+
+    private void LateUpdate()
+    {
+        RotatePlayerBody();
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void RotatePlayerBody()
+    {
+        float cameraYaw = playerCamera.transform.eulerAngles.y;
+        float bodyYaw = playerBodyTransform.eulerAngles.y;
+
+        float angleDiff = Mathf.DeltaAngle(bodyYaw, cameraYaw);
+
+        if (Mathf.Abs(angleDiff) > maxPlayerBodCamRotDiff)
+        {
+            // Snap body back to be within ±45° of camera
+            float correction = angleDiff - Mathf.Sign(angleDiff) * maxPlayerBodCamRotDiff;
+            float newBodyYaw = bodyYaw + correction;
+
+            Quaternion newRotation = Quaternion.Euler(0f, newBodyYaw, 0f);
+            playerBodyTransform.rotation = newRotation;
+        }
+
+        Quaternion targetRotation = Quaternion.Euler(0f, cameraYaw, 0f);
+        playerBodyTransform.rotation = Quaternion.Slerp(
+            playerBodyTransform.rotation,
+            targetRotation,
+            playerRotateSpeed * Time.deltaTime
+        );
+    }
+
     private void HandleMovement()
     {
-        Vector2 moveInput = Controls.Player.Move.ReadValue<Vector2>();
+        Vector2 moveInput = interactionHandler.InputControls.Player.Move.ReadValue<Vector2>();
 
-        Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
+        // Calculate movement direction relative to camera
+        Vector3 moveDirection =
+            playerCamera.transform.right * moveInput.x +
+            playerCamera.transform.forward * moveInput.y;
+        moveDirection.y = 0f;
 
         if (moveDirection.magnitude > 0.1f)
         {
@@ -161,19 +180,5 @@ public partial class PlayerController : MonoBehaviour, IInteractor
             rb.MovePosition(rb.position + moveDirection * (currentSpeed * Time.deltaTime));
         }
     }
-
-    private float yRotation = 0f;
-    private float xRotation = 0f;
-
-    private void HandleLook()
-    {
-        Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>();
-
-        yRotation += lookInput.x;
-        xRotation -= lookInput.y;
-        xRotation = Mathf.Clamp(xRotation, maxLookDownAngle, maxLookUpAngle);
-
-        transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        playerCameraHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
-    }
+    
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Threading;
 using Unity.Properties;
@@ -7,8 +8,20 @@ using UnityEngine.InputSystem;
 public abstract class PickableObject : MonoBehaviour, IInteractable
 {
     protected abstract PickableObjectData Data { get; }
-    protected bool IsPicked = false;
+    protected bool IsPicked
+    {
+        get => _isPicked;
+        set
+        {
+            if (value == _isPicked)
+                return;
+            _isPicked = value;
+            InteractionsChanged?.Invoke();
+        }
+    }
+
     private CancellationTokenSource curTokScr;
+    public event Action InteractionsChanged;
     public string InteractGroupLabel => Data.InteractableGroupLabel;
 
     private Rigidbody rb;
@@ -16,6 +29,12 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
     private Outline outline;
     private Coroutine currentPickupCoroutine;
     private Transform Container;
+    private bool _isPicked = false;
+
+    protected void OnInteractionsChanged()
+    {
+        InteractionsChanged?.Invoke();
+    }
 
     [CreateProperty]
     public Interaction[] CurrentInteractions

@@ -9,23 +9,22 @@ public class Interaction
     public string ActionName;
     [FormerlySerializedAs("Action")] public InputActionReference ActionRef;
 }
-public interface IInteractable : IInteractions
+public interface IInteractable : IInteractionGroup
 {
     public bool Interact(IInteractor interactor, InputAction invokedAction);
     public bool ToggleOutline(bool value);
+
+    public event Action InteractionsChanged;
 }
 
 [Serializable]
-public class GlobalInteractions : IInteractions
+public class GlobalInteractionGroup : IInteractionGroup
 {
-    [SerializeField] private string interactGroupLabel;
-    [SerializeField] private Interaction[] currentInteractions;
-    public string InteractGroupLabel => interactGroupLabel;
-    public Interaction[] CurrentInteractions => currentInteractions;
-
+    [field:SerializeField] public string InteractGroupLabel { get; private set; }
+    [field:SerializeField] public Interaction[] CurrentInteractions { get; private set; }
 }
 
-public interface IInteractions
+public interface IInteractionGroup
 {
     public string InteractGroupLabel { get;}
     public Interaction[] CurrentInteractions { get;}
@@ -35,9 +34,4 @@ public interface IInteractor
     public Transform PickupPoint { get; }
     public void PickUp(IInteractable itemToPickUp);
     public IInteractable InteractableHolding { get; }
-}
-public enum InputType
-{
-    KeyboardMouse,
-    Gamepad
 }

@@ -1,17 +1,13 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// </summary>
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 {
-    public static PlayerCamera Instance { get; private set; }
     public Camera Camera { get; private set; }
     public Plane[] FrustumPlanes { get; } = new Plane[6];
     private float frustumExpansionFactor = 1.1f;
-    
+
     public float FrustumExpansionFactor
     {
         get => frustumExpansionFactor;
@@ -21,7 +17,7 @@ public class PlayerCamera : MonoBehaviour
             UpdateFrustum();
         }
     }
-    
+
     private Vector3 lastCameraPosition;
     private Quaternion lastCameraRotation;
 
@@ -29,35 +25,26 @@ public class PlayerCamera : MonoBehaviour
     {
         Camera = GetComponent<Camera>();
     }
-    private void LateUpdate()
-    {
-        if (transform.rotation == lastCameraRotation &&
-            transform.position == lastCameraPosition)
-            return;
-        
-        UpdateFrustum();
-    }
+
+    private void LateUpdate() => UpdateFrustum();
 
     private void UpdateFrustum()
     {
         lastCameraPosition = transform.position;
         lastCameraRotation = transform.rotation;
-        var originalFOV = Camera.fieldOfView;
-        
-        Camera.fieldOfView = originalFOV * FrustumExpansionFactor;
 
-        GeometryUtility.CalculateFrustumPlanes(Camera, FrustumPlanes);
+        // Copy and expand projection matrix
+        var projection = Matrix4x4.Perspective(
+            Camera.fieldOfView * FrustumExpansionFactor,
+            Camera.aspect,
+            Camera.nearClipPlane,
+            Camera.farClipPlane
+        );
 
-        Camera.fieldOfView = originalFOV;
+        var worldToCamera = Camera.worldToCameraMatrix;
+        var vp = projection * worldToCamera;
+
+        GeometryUtility.CalculateFrustumPlanes(vp, FrustumPlanes);
     }
-
-    private void Awake()
-    {
-        if (Instance)
-        {
-            Destroy(this);
-            return;
-        }
-        Instance = this;
-    }
+    
 }
