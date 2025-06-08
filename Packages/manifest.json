@@ -61,7 +61,9 @@
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
-        "com.oyacamp.zoboui"
+        "com.oyacamp.zoboui",
+        "com.vovgou.loxodon-framework",
+        "com.vovgou.loxodon-framework-uitoolkit"
       ],
       "overrideBuiltIns": false
     }

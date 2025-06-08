@@ -15,23 +15,23 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     
     public VisualElement GlobalInteractionsContainer { get; private set; }
     public Label GlobalInteractionsLabel { get; private set; }
-    public VisualElement CurrentInteractionsContainer { get; private set; }
+    public VisualElement InteractableInteractionsContainer { get; private set; }
     public Label CurrentInteractionsLabel { get; private set; }
     
     private VisualElement interactionGroupsContainer;
-    private VisualElement currentInteractionsGroup;
+    private VisualElement interactableInteractionsGroup;
     private VisualElement globalInteractionsGroup;
 
     public bool MemoryIconVisibility
     {
-        get => memoryIcon.visible;
-        set => memoryIcon.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+        get => memoryIcon.visible; 
+        set => memoryIcon.visible = value;
     }
     
     public bool Visibility
     {
-        get => playerUI.rootVisualElement.style.display == DisplayStyle.Flex;
-        set => playerUI.rootVisualElement.style.display = value ? DisplayStyle.Flex : DisplayStyle.None;
+        get => playerUI.rootVisualElement.visible;
+        set => playerUI.rootVisualElement.visible = value;
     }
 
     public void NewChapter(byte chapterNum, string contents)
@@ -51,21 +51,21 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
             GlobalInteractionsContainer.Add(interaction);
         }
         
-        globalInteractionsGroup.style.display = DisplayStyle.Flex;
-        interactionGroupsContainer.style.display = DisplayStyle.Flex;
+        globalInteractionsGroup.visible = true;
+        interactionGroupsContainer.visible = true;
     }
 
     public void SetCurrentInteractions(VisualElement[] interactions)
     {
-        CurrentInteractionsContainer.Clear();
+        InteractableInteractionsContainer.Clear();
 
         foreach (var interaction in interactions)
         {
-            CurrentInteractionsContainer.Add(interaction);
+            InteractableInteractionsContainer.Add(interaction);
         }
         
-        currentInteractionsGroup.style.display = DisplayStyle.Flex;
-        interactionGroupsContainer.style.display = DisplayStyle.Flex;
+        InteractableInteractionsContainer.visible = true;
+        interactionGroupsContainer.visible = true;
     }
 
 
@@ -85,14 +85,14 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         interactionGroupsContainer = root.Q<VisualElement>("interaction-groups-container");
         
         globalInteractionsGroup = interactionGroupsContainer.Q<VisualElement>("global-interactions-group");
-        currentInteractionsGroup = interactionGroupsContainer.Q<VisualElement>("current-interactions-group");
+        interactableInteractionsGroup = interactionGroupsContainer.Q<VisualElement>("current-interactions-group");
 
         
         GlobalInteractionsLabel = globalInteractionsGroup.Q<Label>("global-interactions-label");
-        CurrentInteractionsLabel = currentInteractionsGroup.Q<Label>("current-interactions-label");
+        CurrentInteractionsLabel = interactableInteractionsGroup.Q<Label>("current-interactions-label");
         
         GlobalInteractionsContainer = globalInteractionsGroup.Q<VisualElement>("global-interactions-container");
-        CurrentInteractionsContainer = currentInteractionsGroup.Q<VisualElement>("current-interactions-container");
+        InteractableInteractionsContainer = interactableInteractionsGroup.Q<VisualElement>("current-interactions-container");
         
         newChapterSeq = DOTween
             .Sequence()
@@ -104,16 +104,16 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     public void ClearGlobalInteractions()
     {
         GlobalInteractionsContainer.Clear();
-        GlobalInteractionsContainer.style.display = DisplayStyle.None;
-        if (CurrentInteractionsContainer.style.display == DisplayStyle.None)
-            interactionGroupsContainer.style.display = DisplayStyle.Flex;
+        GlobalInteractionsContainer.visible = true;
+        if (!InteractableInteractionsContainer.visible)
+            interactionGroupsContainer.visible = false;
     }
 
     public void ClearCurrentInteractableInteractions()
     {
-        CurrentInteractionsContainer.Clear();
-        CurrentInteractionsContainer.style.display = DisplayStyle.None;
-        if (GlobalInteractionsContainer.style.display == DisplayStyle.None)
-            interactionGroupsContainer.style.display = DisplayStyle.Flex;
+        InteractableInteractionsContainer.Clear();
+        InteractableInteractionsContainer.visible = true;
+        if (!GlobalInteractionsContainer.visible)
+            interactionGroupsContainer.visible = false;
     }
 }

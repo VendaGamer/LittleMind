@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
@@ -10,12 +11,13 @@ public class Diary : MonoBehaviour
 
     private DiaryPage[] leftPages;
     private DiaryPage[] rightPages;
+    private PlayerController playerController;
+    private CinemachineVirtualCamera virtualCamera;
 
     private int currentPageIndex = 0;
 
     private void Awake()
     {
-        // Load all pages into arrays
         leftPages = new DiaryPage[leftPageContainer.childCount];
         rightPages = new DiaryPage[rightPageContainer.childCount];
 
@@ -32,6 +34,8 @@ public class Diary : MonoBehaviour
         }
 
         ShowCurrentPages();
+        playerController = FindFirstObjectByType<PlayerController>();
+        virtualCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
     private void OnEnable()
@@ -40,15 +44,33 @@ public class Diary : MonoBehaviour
         diaryControls.Enable();
         diaryControls.TurnPageLeft.performed += TurnLeft;
         diaryControls.TurnPageRight.performed += TurnRight;
+        PlayerCamera.Instance.OnBlendFinished += OnBlendFinished;
+        interactionHandler.InputControls.General.Exit.performed += OnExit;
         interactionHandler.SetGlobalInteractions(globalInteractions);
+        playerController.enabled = false;
+        virtualCamera.Priority = 1;
     }
-
+    
     private void OnDisable()
     {
         var diaryControls = interactionHandler.InputControls.Diary;
         diaryControls.Disable();
         diaryControls.TurnPageLeft.performed -= TurnLeft;
         diaryControls.TurnPageRight.performed -= TurnRight;
+        PlayerCamera.Instance.OnBlendFinished -= OnBlendFinished;
+        interactionHandler.InputControls.General.Exit.performed -= OnExit;
+        playerController.enabled = true;
+        virtualCamera.Priority = 0;
+    }
+
+    private void OnBlendFinished()
+    {
+        Debug.Log("OnBlendFinished");
+    }
+
+    private void OnExit(CallbackContext _)
+    {
+        NegateActiveState();
     }
 
     private void TurnRight(CallbackContext _)

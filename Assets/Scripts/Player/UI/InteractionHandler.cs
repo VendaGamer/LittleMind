@@ -33,6 +33,12 @@ public class InteractionHandler : ScriptableObject
     {
         InputControls ??= new Controls();
         currentControlSchemeName ??= InputControls.KeyboardMouseScheme.name;
+        InputControls.General.Enable();
+    }
+
+    private void OnDisable()
+    {
+        InputControls.General.Disable();
     }
     
     private void RefreshUI()
