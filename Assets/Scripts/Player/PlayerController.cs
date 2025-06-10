@@ -9,12 +9,12 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     [SerializeField]
     private float moveSpeed = 5f;
 
-    [SerializeField] 
+    [SerializeField]
     private float playerRotateSpeed = 20f;
 
-    [SerializeField] 
+    [SerializeField]
     private float maxPlayerBodCamRotDiff = 45f;
-    
+
     [SerializeField]
     private Transform playerBodyTransform;
 
@@ -34,16 +34,16 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private float jumpCooldown = 0.1f;
 
     [SerializeField]
-    private float jumpPointRadius = 0.3f;
+    private float jumpPointRayCast = 0.3f;
 
     [SerializeField]
     private LayerMask groundLayerMask;
-    
+
     private bool canJump = true;
     private bool isGrounded;
     private bool isCrouching;
     private static Camera playerCamera => PlayerCamera.Instance.Camera;
-    
+
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning;
@@ -102,27 +102,27 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void FixedUpdate()
     {
         HandleMovement();
-        CheckGrounded();
         HandleJump();
         HandleInteraction();
     }
 
     private void HandleJump()
     {
-        if (interactionHandler.InputControls.Player.Jump.IsPressed() && canJump && isGrounded)
+        if (interactionHandler.InputControls.Player.Jump.IsPressed() && canJump)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
-            StartCoroutine(JumpCooldown());
+            if (
+                Physics.SphereCast(
+                    new Ray(jumpPoint.position, Vector3.down),
+                    jumpPointRayCast,
+                    maxJumpPointDist,
+                    groundLayerMask
+                )
+            )
+            {
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+                StartCoroutine(JumpCooldown());
+            }
         }
-    }
-
-    private void CheckGrounded()
-    {
-        isGrounded = Physics.Raycast(
-            new Ray(jumpPoint.position, Vector3.down),
-            maxJumpPointDist,
-            groundLayerMask
-        );
     }
 
     private IEnumerator JumpCooldown()
@@ -132,12 +132,11 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         canJump = true;
     }
 
-
     private void LateUpdate()
     {
         RotatePlayerBody();
     }
-    
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void RotatePlayerBody()
     {
@@ -170,8 +169,8 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
         // Calculate movement direction relative to camera
         Vector3 moveDirection =
-            playerCamera.transform.right * moveInput.x +
-            playerCamera.transform.forward * moveInput.y;
+            playerCamera.transform.right * moveInput.x
+            + playerCamera.transform.forward * moveInput.y;
         moveDirection.y = 0f;
 
         if (moveDirection.magnitude > 0.1f)
@@ -180,5 +179,4 @@ public partial class PlayerController : MonoBehaviour, IInteractor
             rb.MovePosition(rb.position + moveDirection * (currentSpeed * Time.deltaTime));
         }
     }
-    
 }

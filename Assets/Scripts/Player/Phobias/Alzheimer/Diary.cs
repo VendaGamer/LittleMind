@@ -1,18 +1,26 @@
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
+[DefaultExecutionOrder(300)]
 public class Diary : MonoBehaviour
 {
-    [SerializeField] private Transform leftPageContainer;
-    [SerializeField] private Transform rightPageContainer;
-    [SerializeField] private GlobalInteractionGroup globalInteractions;
-    [SerializeField] private InteractionHandler interactionHandler;
+    [SerializeField]
+    private Transform leftPageContainer;
+
+    [SerializeField]
+    private Transform rightPageContainer;
+
+    [SerializeField]
+    private GlobalInteractionGroup globalInteractions;
+
+    [SerializeField]
+    private InteractionHandler interactionHandler;
 
     private DiaryPage[] leftPages;
     private DiaryPage[] rightPages;
     private PlayerController playerController;
-    private CinemachineVirtualCamera virtualCamera;
+    private CinemachineCamera virtualCamera;
 
     private int currentPageIndex = 0;
 
@@ -35,7 +43,7 @@ public class Diary : MonoBehaviour
 
         ShowCurrentPages();
         playerController = FindFirstObjectByType<PlayerController>();
-        virtualCamera = GetComponent<CinemachineVirtualCamera>();
+        virtualCamera = GetComponentInChildren<CinemachineCamera>();
     }
 
     private void OnEnable()
@@ -48,9 +56,9 @@ public class Diary : MonoBehaviour
         interactionHandler.InputControls.General.Exit.performed += OnExit;
         interactionHandler.SetGlobalInteractions(globalInteractions);
         playerController.enabled = false;
-        virtualCamera.Priority = 1;
+        virtualCamera.Priority = PlayerCamera.Instance.CameraPriority + 2;
     }
-    
+
     private void OnDisable()
     {
         var diaryControls = interactionHandler.InputControls.Diary;
@@ -60,7 +68,7 @@ public class Diary : MonoBehaviour
         PlayerCamera.Instance.OnBlendFinished -= OnBlendFinished;
         interactionHandler.InputControls.General.Exit.performed -= OnExit;
         playerController.enabled = true;
-        virtualCamera.Priority = 0;
+        virtualCamera.Priority = PlayerCamera.Instance.CameraPriority - 2;
     }
 
     private void OnBlendFinished()
@@ -87,6 +95,7 @@ public class Diary : MonoBehaviour
     {
         gameObject.SetActive(!gameObject.activeSelf);
     }
+
     public void FlipToNextPage()
     {
         if (currentPageIndex < leftPages.Length - 1)

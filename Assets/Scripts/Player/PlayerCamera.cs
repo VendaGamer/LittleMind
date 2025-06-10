@@ -1,19 +1,21 @@
 using System;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
+
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// Stara se taky o prepinani mezi mody kamery
 /// </summary>
 ///
-[DefaultExecutionOrder(-2000)]
+[DefaultExecutionOrder(10)]
 public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 {
     public Camera Camera { get; private set; }
-    
+
     public Plane[] FrustumPlanes { get; } = new Plane[6];
     private float frustumExpansionFactor = 1.1f;
     public event Action OnBlendFinished;
+    public int CameraPriority => cinemachineCamera.Priority.Value;
 
     public float FrustumExpansionFactor
     {
@@ -25,15 +27,16 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
         }
     }
 
-    private Vector3 lastCameraPosition;
-    private Quaternion lastCameraRotation;
     private CinemachineBrain cinemachineBrain;
+    private CinemachineCamera cinemachineCamera;
     private bool wasBlending = false;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         Camera = GetComponentInChildren<Camera>();
         cinemachineBrain = GetComponentInChildren<CinemachineBrain>();
+        cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
     }
 
     private void Update()
@@ -53,10 +56,6 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 
     private void UpdateFrustum()
     {
-        lastCameraPosition = transform.position;
-        lastCameraRotation = transform.rotation;
-
-        // Copy and expand projection matrix
         var projection = Matrix4x4.Perspective(
             Camera.fieldOfView * FrustumExpansionFactor,
             Camera.aspect,
@@ -69,11 +68,4 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 
         GeometryUtility.CalculateFrustumPlanes(vp, FrustumPlanes);
     }
-
-    public void StopAim()
-    {
-        var brain = CinemachineCore.Instance.GetActiveBrain(0);
-        
-    }
-    
 }
