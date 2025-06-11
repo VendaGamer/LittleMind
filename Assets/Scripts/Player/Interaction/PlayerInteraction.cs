@@ -31,17 +31,17 @@ public partial class PlayerController
     [CanBeNull]
     public IInteractable InteractableHolding
     {
-        get=> _interactableHolding;
+        get => _interactableHolding;
         private set
         {
-            if(ReferenceEquals(_interactableHolding, value))
+            if (ReferenceEquals(_interactableHolding, value))
                 return;
-            
+
             _interactableHolding = value;
             interactionHandler.SetCurrentInteractableInteractions(value);
         }
     }
-    
+
     [CanBeNull]
     public IInteractable InteractableLookingAt
     {
@@ -50,7 +50,7 @@ public partial class PlayerController
         {
             if (ReferenceEquals(_interactableLookingAt, value))
                 return;
-            
+
             _interactableLookingAt = value;
             interactionHandler.SetCurrentInteractableInteractions(value);
         }
@@ -59,9 +59,6 @@ public partial class PlayerController
     [SerializeField]
     private float pickupLerpDuration = 1f;
     public float PickupLerpDuration => pickupLerpDuration;
-
-
-
 
     private void HandleInteraction()
     {
@@ -93,6 +90,7 @@ public partial class PlayerController
     }
 
     public void PickUp(IInteractable itemToPickUp) => InteractableHolding = itemToPickUp;
+
     private void OnDrop(InputAction.CallbackContext obj)
     {
         if (InteractableHolding == null)
@@ -101,6 +99,7 @@ public partial class PlayerController
         if (InteractableHolding.Interact(this, obj.action))
         {
             InteractableHolding = null;
+            OnInteractableDrop();
         }
     }
 
@@ -119,7 +118,7 @@ public partial class PlayerController
     {
         if (InteractableLookingAt == null)
             return;
-        
+
         InteractableLookingAt.ToggleOutline(false);
         InteractableLookingAt = null;
     }

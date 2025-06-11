@@ -497,36 +497,6 @@ PrefabInstance:
       propertyPath: m_projectionMatrixMode
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3570792272094106301, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.66
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570792272094106301, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.384
-      objectReference: {fileID: 0}
-    - target: {fileID: 3570792272094106301, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.343
-      objectReference: {fileID: 0}
-    - target: {fileID: 5085160930370141741, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.521
-      objectReference: {fileID: 0}
-    - target: {fileID: 5085160930370141741, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.447
-      objectReference: {fileID: 0}
-    - target: {fileID: 5085160930370141741, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.303
-      objectReference: {fileID: 0}
     - target: {fileID: 5663138421456031605, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_IsActive
@@ -585,14 +555,19 @@ PrefabInstance:
       objectReference: {fileID: 51604788}
     - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
+      propertyPath: rightHandKeyLockTarget
+      value: 
+      objectReference: {fileID: 286503896}
+    - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
       propertyPath: leftHandIKConstraintTransform
       value: 
-      objectReference: {fileID: 105857017}
+      objectReference: {fileID: 0}
     - target: {fileID: 6284207477169610776, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: rightHandIKConstraintTransform
       value: 
-      objectReference: {fileID: 51604788}
+      objectReference: {fileID: 0}
     - target: {fileID: 6552653891599695681, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_Dithering
@@ -775,6 +750,12 @@ PrefabInstance:
 --- !u!4 &286503895 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6202221154645114256, guid: 8c68e2e78cbcff14086fc6e384d096da,
+    type: 3}
+  m_PrefabInstance: {fileID: 286503894}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &286503896 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1024622200465354443, guid: 8c68e2e78cbcff14086fc6e384d096da,
     type: 3}
   m_PrefabInstance: {fileID: 286503894}
   m_PrefabAsset: {fileID: 0}

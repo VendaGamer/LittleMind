@@ -39,10 +39,7 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
     [CreateProperty]
     public Interaction[] CurrentInteractions
     {
-        get
-        {
-            return IsPicked ? new[] {  Data.DropInteraction } : new[] { Data.PickupInteraction };
-        }
+        get { return IsPicked ? new[] { Data.DropInteraction } : new[] { Data.PickupInteraction }; }
     }
 
     protected virtual void Start()
@@ -52,25 +49,27 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
         col = GetComponent<Collider>();
         outline = GetComponent<Outline>();
     }
+
     private void DropObject()
     {
         if (currentPickupCoroutine != null)
             StopCoroutine(currentPickupCoroutine);
-        
+
         rb.isKinematic = false;
         col.isTrigger = false;
         Container.SetParent(null);
         OnDropped();
     }
+
     private void PickObject(Transform parent)
     {
         rb.isKinematic = true;
         col.isTrigger = true;
         Container.SetParent(parent);
-    
+
         if (currentPickupCoroutine != null)
             StopCoroutine(currentPickupCoroutine);
-        
+
         currentPickupCoroutine = StartCoroutine(PerformPickupLerp());
     }
 
@@ -81,7 +80,7 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
 
         Container.GetLocalPositionAndRotation(out Vector3 startPos, out Quaternion startRot);
         float elapsedTime = 0f;
-    
+
         while (elapsedTime < Data.LerpDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -91,18 +90,17 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
                 Vector3.Lerp(startPos, endPos, step),
                 Quaternion.Lerp(startRot, endRot, step)
             );
-        
+
             yield return null;
         }
-    
+
         Container.SetLocalPositionAndRotation(endPos, endRot);
-        OnPicked();
     }
 
+    protected virtual void OnPicked(IInteractor interactor) { }
 
-    protected virtual void OnPicked() { }
     protected virtual void OnDropped() { }
-    
+
     public virtual bool Interact(IInteractor interactor, InputAction invokedAction)
     {
         if (IsPicked)
@@ -119,6 +117,7 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
             PickObject(interactor.PickupPoint);
             IsPicked = true;
             interactor.PickUp(this);
+            OnPicked(interactor);
             return true;
         }
         return false;

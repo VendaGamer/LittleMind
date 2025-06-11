@@ -6,10 +6,17 @@ using UnityEngine;
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// Stara se taky o prepinani mezi mody kamery
 /// </summary>
-///
 [DefaultExecutionOrder(10)]
 public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 {
+    [SerializeField]
+    private Transform headTransform;
+
+    [SerializeField]
+    private float maxDistance = 0.05f;
+
+    [SerializeField]
+    private LayerMask collisionMask;
     public Camera Camera { get; private set; }
 
     public Plane[] FrustumPlanes { get; } = new Plane[6];
@@ -52,7 +59,36 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
         }
     }
 
-    private void LateUpdate() => UpdateFrustum();
+    private void LateUpdate()
+    {
+        UpdateFrustum();
+        CheckCameraClipping();
+    }
+
+    private void CheckCameraClipping()
+    {
+        Vector3 desiredCameraPosition = headTransform.position;
+        Vector3 offsetDirection = Camera.transform.forward;
+        Vector3 checkPosition = desiredCameraPosition + offsetDirection * maxDistance;
+
+        if (
+            Physics.Linecast(
+                desiredCameraPosition,
+                checkPosition,
+                out RaycastHit hit,
+                collisionMask
+            )
+        )
+        {
+            Camera.transform.position = hit.point - offsetDirection * 0.01f;
+        }
+        else
+        {
+            Camera.transform.position = checkPosition;
+        }
+
+        Camera.transform.rotation = headTransform.rotation;
+    }
 
     private void UpdateFrustum()
     {

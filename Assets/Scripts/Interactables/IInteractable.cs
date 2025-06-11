@@ -7,8 +7,11 @@ using UnityEngine.Serialization;
 public class Interaction
 {
     public string ActionName;
-    [FormerlySerializedAs("Action")] public InputActionReference ActionRef;
+
+    [FormerlySerializedAs("Action")]
+    public InputActionReference ActionRef;
 }
+
 public interface IInteractable : IInteractionGroup
 {
     public bool Interact(IInteractor interactor, InputAction invokedAction);
@@ -20,18 +23,32 @@ public interface IInteractable : IInteractionGroup
 [Serializable]
 public class GlobalInteractionGroup : IInteractionGroup
 {
-    [field:SerializeField] public string InteractGroupLabel { get; private set; }
-    [field:SerializeField] public Interaction[] CurrentInteractions { get; private set; }
+    [field: SerializeField]
+    public string InteractGroupLabel { get; private set; }
+
+    [field: SerializeField]
+    public Interaction[] CurrentInteractions { get; private set; }
 }
 
 public interface IInteractionGroup
 {
-    public string InteractGroupLabel { get;}
-    public Interaction[] CurrentInteractions { get;}
+    public string InteractGroupLabel { get; }
+    public Interaction[] CurrentInteractions { get; }
 }
+
 public interface IInteractor
 {
     public Transform PickupPoint { get; }
     public void PickUp(IInteractable itemToPickUp);
     public IInteractable InteractableHolding { get; }
+
+    public void SetHandTarget(HandTargetType targetType);
+}
+
+public enum HandTargetType
+{
+    none,
+    key,
+    twoHand,
+    general,
 }

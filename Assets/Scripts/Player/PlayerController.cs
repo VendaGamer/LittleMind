@@ -9,14 +9,13 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private static readonly int XVelocityHash = Animator.StringToHash("XVelocity");
     private static readonly int YVelocityHash = Animator.StringToHash("YVelocity");
 
-
-    [Header("Movement Settings")] 
-    
+    [Header("Movement Settings")]
     [SerializeField]
     private float AnimBlendSpeed = 8f;
+
     [SerializeField]
     private float moveSpeed = 5f;
-    
+
     [SerializeField]
     private float crouchSpeed = 5f;
 
@@ -69,8 +68,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void Start()
     {
         currentSpeed = moveSpeed;
-        LockLeftHandTo(leftHandIKConstraintTransform);
-        LockRightHandTo(rightHandIKConstraintTransform);
     }
 
     private void OnDisable()
@@ -81,6 +78,12 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Sprint.performed -= OnSprint;
         controlsPlayer.Drop.performed -= OnDrop;
         controlsPlayer.Crouch.performed -= OnCrouch;
+
+        if (currentLock != HandTargetType.none)
+        {
+            UnlockLeftHand();
+            UnlockRightHand();
+        }
     }
 
     private void OnEnable()
@@ -94,12 +97,15 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Drop.performed += OnDrop;
         controlsPlayer.Crouch.performed += OnCrouch;
         interactionHandler.SetGlobalInteractions(globalInteractionGroupPlayerControls);
+
+        LockLeftHandTo(leftHandIKConstraintTransform);
+        LockRightHandTo(rightHandIKConstraintTransform);
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)
     {
         isCrouching = !isCrouching;
-        if(isCrouching)
+        if (isCrouching)
             isRunning = false;
         currentSpeed = moveSpeed;
         animator.SetBool(IsCrouchingHash, isCrouching);
@@ -107,9 +113,9 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void OnSprint(InputAction.CallbackContext obj)
     {
-        if(isCrouching)
+        if (isCrouching)
             return;
-        
+
         isRunning = !isRunning;
         currentSpeed = isRunning ? sprintSpeed : moveSpeed;
     }
@@ -118,7 +124,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     {
         InteractableLookingAt?.Interact(this, obj.action);
     }
-    
+
     private void FixedUpdate()
     {
         HandleMovement();
@@ -156,7 +162,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     {
         RotatePlayerBody();
     }
-    
+
     private void RotatePlayerBody()
     {
         float cameraYaw = playerCamera.transform.eulerAngles.y;
@@ -183,15 +189,19 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     }
 
     private Vector2 currentMoveVelocity;
+
     private void HandleMovement()
     {
         Vector2 moveInput = interactionHandler.InputControls.Player.Move.ReadValue<Vector2>();
 
-        currentMoveVelocity = Vector2.Lerp(currentMoveVelocity, moveInput * (isRunning ? 2: 1), AnimBlendSpeed * Time.fixedDeltaTime);
+        currentMoveVelocity = Vector2.Lerp(
+            currentMoveVelocity,
+            moveInput * (isRunning ? 2 : 1),
+            AnimBlendSpeed * Time.fixedDeltaTime
+        );
         animator.SetFloat(XVelocityHash, currentMoveVelocity.x);
         animator.SetFloat(YVelocityHash, currentMoveVelocity.y);
 
-        
         // Calculate movement direction relative to camera
         Vector3 moveDirection =
             playerCamera.transform.right * moveInput.x
