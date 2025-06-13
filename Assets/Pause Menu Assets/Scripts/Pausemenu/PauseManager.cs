@@ -62,9 +62,6 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private SettingsHandler settingsHandler;
     
-    [SerializeField]
-    private RenderPipelineGlobalSettings renderPipelineGlobalSettings;
-
     [Header("UI Controls - Video")]
     [SerializeField]
     private Dropdown aaCombo;
@@ -128,6 +125,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private Text resolutionLabel;
     
+    [SerializeField]
+    private Text windowModeLabel;
+    
 
     [Header("Audio Sources")]
     [SerializeField]
@@ -136,4 +136,22 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private AudioSource[] effects;
 
+
+    private void Awake()
+    {
+        settingsHandler.InitValues();
+        settingsHandler.qualitySetting.Label = presetLabel;
+        settingsHandler.resolutions.Label = resolutionLabel;
+        settingsHandler.screenModes.Label = windowModeLabel;
+    }
+    public void ToggleVsync(bool value) => settingsHandler.vsync.SetValue(value);
+
+    public void NextWindowMode() => settingsHandler.screenModes.NextValue();
+    public void PreviousWindowMode() => settingsHandler.screenModes.PreviousValue();
+
+    public void PreviousResolution() => settingsHandler.resolutions.PreviousValue();
+
+    public void NextResolution() => settingsHandler.resolutions.NextValue();
+    
+    
 }
