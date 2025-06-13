@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 guid: 6ff1f9d1244cd7249b0602722ab4dfad
 timeCreated: 1461014551
 licenseType: Store
@@ -17,3 +18,6 @@ AssetOrigin:
   packageVersion: 1.0
   assetPath: Assets/Pause Menu Assets/Scripts/Pausemenu/SaveSettings.cs
   uploadId: 123203
+=======
+guid: 6ff1f9d1244cd7249b0602722ab4dfad
+>>>>>>> Stashed changes
