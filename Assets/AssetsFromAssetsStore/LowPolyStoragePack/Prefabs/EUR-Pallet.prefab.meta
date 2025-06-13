@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 9ca60de961fb40041b29684a0aaf5433
+labels:
+- LowPoly
+- Low-Poly
+- Storage
+- Pallet
+timeCreated: 1504885146
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 101732
+  packageName: Low Poly Storage Pack
+  packageVersion: 1.1
+  assetPath: Assets/BrokenVector/LowPolyStoragePack/Prefabs/EUR-Pallet.prefab
+  uploadId: 253919

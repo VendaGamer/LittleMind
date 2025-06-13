@@ -891,13 +891,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3c2bdd0f3097245a72619c6e5daca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HeartBeatLub: {fileID: 8300000, guid: bd15bf6b6a7d0a0448eee4c1d9b8d630, type: 3}
-  HeartBeatDub: {fileID: 8300000, guid: d25afaab719d401429f7ec0140a90ad7, type: 3}
-  MinHeartRate: 60
-  MaxHeartRate: 180
-  LubDubGap: 0.15
-  HeartRateBuildupSpeed: 7
-  HeartbeatVolumeCurve:
+  heartBeatLub: {fileID: 8300000, guid: bd15bf6b6a7d0a0448eee4c1d9b8d630, type: 3}
+  heartBeatDub: {fileID: 8300000, guid: d25afaab719d401429f7ec0140a90ad7, type: 3}
+  minHeartRate: 60
+  maxHeartRate: 180
+  lubDubGap: 0.15
+  heartRateBuildupSpeed: 7
+  heartbeatVolumeCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -921,6 +921,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  minHeartIntensity: 1.05
+  maxHeartIntensity: 1.3
+  normalHeartColor: {r: 1, g: 1, b: 1, a: 1}
+  intenseHeartColor: {r: 1, g: 0.7, b: 0.7, a: 1}
 --- !u!1 &1730949637
 GameObject:
   m_ObjectHideFlags: 0

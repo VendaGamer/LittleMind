@@ -1,17 +1,29 @@
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
+/// Stara se taky o prepinani mezi mody kamery
 /// </summary>
-public class PlayerCamera : MonoBehaviour
+[DefaultExecutionOrder(10)]
+public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 {
-    public static PlayerCamera Instance { get; private set; }
+    [SerializeField]
+    private Transform headTransform;
+
+    [SerializeField]
+    private float maxDistance = 0.05f;
+
+    [SerializeField]
+    private LayerMask collisionMask;
     public Camera Camera { get; private set; }
+
     public Plane[] FrustumPlanes { get; } = new Plane[6];
     private float frustumExpansionFactor = 1.1f;
-    
+    public event Action OnBlendFinished;
+    public int CameraPriority => cinemachineCamera.Priority.Value;
+
     public float FrustumExpansionFactor
     {
         get => frustumExpansionFactor;
@@ -21,43 +33,75 @@ public class PlayerCamera : MonoBehaviour
             UpdateFrustum();
         }
     }
-    
-    private Vector3 lastCameraPosition;
-    private Quaternion lastCameraRotation;
 
-    private void Start()
+    private CinemachineBrain cinemachineBrain;
+    private CinemachineCamera cinemachineCamera;
+    private bool wasBlending = false;
+
+    protected override void Awake()
     {
-        Camera = GetComponent<Camera>();
+        base.Awake();
+        Camera = GetComponentInChildren<Camera>();
+        cinemachineBrain = GetComponentInChildren<CinemachineBrain>();
+        cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
     }
+
+    private void Update()
+    {
+        if (cinemachineBrain.IsBlending)
+        {
+            wasBlending = true;
+        }
+        else if (wasBlending)
+        {
+            wasBlending = false;
+            OnBlendFinished?.Invoke();
+        }
+    }
+
     private void LateUpdate()
     {
-        if (transform.rotation == lastCameraRotation &&
-            transform.position == lastCameraPosition)
-            return;
-        
         UpdateFrustum();
+        CheckCameraClipping();
+    }
+
+    private void CheckCameraClipping()
+    {
+        Vector3 desiredCameraPosition = headTransform.position;
+        Vector3 offsetDirection = Camera.transform.forward;
+        Vector3 checkPosition = desiredCameraPosition + offsetDirection * maxDistance;
+
+        if (
+            Physics.Linecast(
+                desiredCameraPosition,
+                checkPosition,
+                out RaycastHit hit,
+                collisionMask
+            )
+        )
+        {
+            Camera.transform.position = hit.point - offsetDirection * 0.01f;
+        }
+        else
+        {
+            Camera.transform.position = checkPosition;
+        }
+
+        Camera.transform.rotation = headTransform.rotation;
     }
 
     private void UpdateFrustum()
     {
-        lastCameraPosition = transform.position;
-        lastCameraRotation = transform.rotation;
-        var originalFOV = Camera.fieldOfView;
-        
-        Camera.fieldOfView = originalFOV * FrustumExpansionFactor;
+        var projection = Matrix4x4.Perspective(
+            Camera.fieldOfView * FrustumExpansionFactor,
+            Camera.aspect,
+            Camera.nearClipPlane,
+            Camera.farClipPlane
+        );
 
-        GeometryUtility.CalculateFrustumPlanes(Camera, FrustumPlanes);
+        var worldToCamera = Camera.worldToCameraMatrix;
+        var vp = projection * worldToCamera;
 
-        Camera.fieldOfView = originalFOV;
-    }
-
-    private void Awake()
-    {
-        if (Instance)
-        {
-            Destroy(this);
-            return;
-        }
-        Instance = this;
+        GeometryUtility.CalculateFrustumPlanes(vp, FrustumPlanes);
     }
 }

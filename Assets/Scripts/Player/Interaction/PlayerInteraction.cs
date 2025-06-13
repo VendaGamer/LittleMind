@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public partial class PlayerController
 {
@@ -10,7 +11,10 @@ public partial class PlayerController
 
     [Header("Interaction Settings")]
     [SerializeField]
-    private GlobalInteractions globalInteractionsPlayerControls;
+    private GlobalInteractionGroup globalInteractionGroupPlayerControls;
+
+    [SerializeField]
+    private InteractionHandler interactionHandler;
 
     [SerializeField]
     private LayerMask interactableLayerMask;
@@ -19,27 +23,42 @@ public partial class PlayerController
     private float rayCastDistance = 3f;
 
     [CanBeNull]
-    private IInteractable interactableLookingAt;
+    private IInteractable _interactableLookingAt;
 
     [CanBeNull]
-    public IInteractable InteractableHolding { get; private set; }
+    private IInteractable _interactableHolding;
+
+    [CanBeNull]
+    public IInteractable InteractableHolding
+    {
+        get => _interactableHolding;
+        private set
+        {
+            if (ReferenceEquals(_interactableHolding, value))
+                return;
+
+            _interactableHolding = value;
+            interactionHandler.SetCurrentInteractableInteractions(value);
+        }
+    }
+
+    [CanBeNull]
+    public IInteractable InteractableLookingAt
+    {
+        get => _interactableLookingAt;
+        private set
+        {
+            if (ReferenceEquals(_interactableLookingAt, value))
+                return;
+
+            _interactableLookingAt = value;
+            interactionHandler.SetCurrentInteractableInteractions(value);
+        }
+    }
 
     [SerializeField]
     private float pickupLerpDuration = 1f;
     public float PickupLerpDuration => pickupLerpDuration;
-
-    [SerializeField]
-    private Interactions uiData;
-
-    private void SwitchGlobalInteractions(GlobalInteractions newGlobalInteractions)
-    {
-        //uiData.UpdateInteractions(newGlobalInteractions, interactableLookingAt);
-    }
-
-    private void SwitchExclusiveInteractions(IInteractable newExclusiveInteractions)
-    {
-        //uiData.UpdateInteractions(globalInteractionsPlayerControls, newExclusiveInteractions);
-    }
 
     private void HandleInteraction()
     {
@@ -70,38 +89,37 @@ public partial class PlayerController
         }
     }
 
+    public void PickUp(IInteractable itemToPickUp) => InteractableHolding = itemToPickUp;
+
+    private void OnDrop(InputAction.CallbackContext obj)
+    {
+        if (InteractableHolding == null)
+            return;
+
+        if (InteractableHolding.Interact(this, obj.action))
+        {
+            InteractableHolding = null;
+            OnInteractableDrop();
+        }
+    }
+
     private void HandleInteractableHit(IInteractable interactable)
     {
         // Only update if we're looking at a different interactable
-        if (interactableLookingAt == interactable)
+        if (ReferenceEquals(interactable, InteractableLookingAt))
             return;
 
-        if (interactableLookingAt != null)
-        {
-            interactableLookingAt.ToggleOutline(false);
-
-            if (interactableLookingAt.CurrentInteractions != interactable.CurrentInteractions)
-            {
-                SwitchExclusiveInteractions(interactable);
-            }
-            // Set new interactable
-        }
-        else
-        {
-            SwitchExclusiveInteractions(interactable);
-        }
-
+        InteractableLookingAt?.ToggleOutline(false);
         interactable.ToggleOutline(true);
-        interactableLookingAt = interactable;
+        InteractableLookingAt = interactable;
     }
 
     private void ClearCurrentInteractable()
     {
-        if (interactableLookingAt == null)
+        if (InteractableLookingAt == null)
             return;
 
-        interactableLookingAt.ToggleOutline(false);
-        interactableLookingAt = null;
-        SwitchExclusiveInteractions(null);
+        InteractableLookingAt.ToggleOutline(false);
+        InteractableLookingAt = null;
     }
 }

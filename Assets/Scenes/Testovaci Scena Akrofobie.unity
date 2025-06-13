@@ -368,6 +368,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  minHeartIntensity: 1.05
+  maxHeartIntensity: 1.3
+  normalHeartColor: {r: 1, g: 1, b: 1, a: 1}
+  intenseHeartColor: {r: 1, g: 0.7, b: 0.7, a: 1}
 --- !u!114 &215293709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,13 +401,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 258d352ea50272d43af5f21d7067ca84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAnxietyLevel: 1
-  anxietyBuildUpRate: 0.1
-  fadeDuration: 10
+  Data: {fileID: 0}
   maxCheckDistance: 6
   eyesCloseTriggerDelay: 5
   eyesOpenDelay: 3
-  eyeClose: {fileID: 1382766511}
+  eyeOverlay: {fileID: 0}
 --- !u!1 &645489710
 GameObject:
   m_ObjectHideFlags: 0

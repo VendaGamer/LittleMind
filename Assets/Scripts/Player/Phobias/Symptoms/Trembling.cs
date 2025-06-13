@@ -1,0 +1,42 @@
+using EZCameraShake;
+using UnityEngine;
+public class Trembling : AnxietySymptom
+{
+    [SerializeField] private float baseMagnitude = 2f;
+    [SerializeField] private float baseRoughness = 5f;
+    [SerializeField] private float baseFadeInTime = 3f;
+    [SerializeField] private float baseFadeOutTime = 5f;
+    [SerializeField] private Vector3 baseRotationInfluence = new(0.7f, 0.7f, 0.7f);
+    private CameraShakeInstance currentShake;
+    public override void ActivateSymptom(float intensity)
+    {
+        enabled = true;
+        StartShake();
+    }
+
+    public override void OnAnxietyChanged(float newAnxiety)
+    {
+        base.OnAnxietyChanged(newAnxiety);
+        StartShake();
+    }
+
+    private void StartShake()
+    {
+        if (currentShake == null)
+        {
+            currentShake = CameraShaker.Instance.StartShake(baseMagnitude * Intensity, baseRoughness * Intensity, baseFadeInTime / Intensity);
+            return;
+        }
+        currentShake.Magnitude = baseMagnitude * Intensity;
+        currentShake.Roughness = baseRoughness * Intensity;
+        currentShake.Magnitude = baseMagnitude * Intensity;
+        currentShake.RotationInfluence = baseRotationInfluence * Intensity;
+    }
+
+    public override void StopSymptom()
+    {
+        enabled = false;
+        currentShake.StartFadeOut(baseFadeOutTime * Intensity);
+        currentShake = null;
+    }
+}

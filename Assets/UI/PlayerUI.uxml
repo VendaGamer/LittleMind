@@ -1,0 +1,32 @@
+<engine:UXML xmlns:engine="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/PlayerUIStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#PlayerUIStyles" />
+    <engine:VisualElement name="Container" class="container">
+        <engine:VisualElement name="status-bar-container" class="status-bar-container">
+            <engine:VisualElement name="status-icons" class="status-icons">
+                <engine:VisualElement name="memory-icon" class="icon-image status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/light%20bulb.svg?fileID=7388822144124034973&amp;guid=e95cff2e3d097f2428677daf85ac073e&amp;type=3#light bulb&quot;); -unity-background-image-tint-color: rgb(226, 226, 226); background-color: rgba(242, 255, 0, 0); display: none;" />
+                <engine:VisualElement name="health-icon" class="icon-image status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/heart.svg?fileID=7388822144124034973&amp;guid=d9fddde7b578b8d48b808567340af0c8&amp;type=3#heart&quot;); display: none;" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="interactions-hint" class="context-menu">
+            <engine:VisualElement name="interaction-groups-container" enabled="false" class="menu-container" style="display: none; opacity: 0.75;">
+                <engine:VisualElement name="global-interactions-group" enabled="false" class="interactions-group" style="display: flex;">
+                    <engine:Label name="global-interactions-label" text="Test" class="interactions-label" />
+                    <engine:VisualElement name="global-interactions-container" style="flex-grow: 1;" />
+                </engine:VisualElement>
+                <engine:VisualElement name="current-interactions-group" enabled="false" class="interactions-group" style="display: none;">
+                    <engine:Label name="current-interactions-label" text="Test" class="interactions-label" />
+                    <engine:VisualElement name="current-interactions-container" style="flex-grow: 1;" />
+                </engine:VisualElement>
+            </engine:VisualElement>
+        </engine:VisualElement>
+        <engine:VisualElement name="crosshair-container" class="crosshair-container">
+            <engine:VisualElement name="crosshair" class="crosshair" />
+        </engine:VisualElement>
+        <engine:VisualElement name="chapter-popup" class="chapter-popup">
+            <engine:VisualElement name="chapter-container" class="chapter-container">
+                <engine:Label name="chapter-label" text="CHAPTER" class="chapter-label" />
+                <engine:Label name="chapter-title" text="New Beginning" class="chapter-title" />
+            </engine:VisualElement>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

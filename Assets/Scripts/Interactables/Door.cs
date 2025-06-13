@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.Properties;
 using UnityEngine;
@@ -8,8 +9,25 @@ public class Door : MonoBehaviour, IInteractable
 {
     [FormerlySerializedAs("info")] [SerializeField] protected DoorData data;
     private Quaternion closedRotation;
-    protected bool IsOpen = false;
+    private bool _isOpen = false;
+
+    protected bool IsOpen
+    {
+        get => _isOpen;
+        set
+        {
+            if (value == _isOpen)
+                return;
+            _isOpen = value;
+            InteractionsChanged?.Invoke();
+        }
+    }
+    
+    protected void OnInteractionsChanged() => InteractionsChanged?.Invoke();
+    
     public string InteractGroupLabel => data.InteractableGroupLabel;
+    public event Action InteractionsChanged;
+    
     private Coroutine currentRotateCoroutine;
     
     private void Start()

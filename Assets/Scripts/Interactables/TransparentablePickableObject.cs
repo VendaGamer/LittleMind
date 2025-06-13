@@ -16,13 +16,15 @@ public class TransparentablePickableObject : PickableObject
         originalTransparency = rend.material.color.a;
     }
 
-    protected override void OnPicked()
+    protected override void OnPicked(IInteractor _)
     {
         var col = rend.material.color;
-        
+
         rend.material.color = new Color(
-        col.r, col.g, col.b,
-        Mathf.Lerp(originalTransparency, 0f, data.TransparencyPercentage)
+            col.r,
+            col.g,
+            col.b,
+            Mathf.Lerp(originalTransparency, 0f, data.TransparencyPercentage)
         );
     }
 
