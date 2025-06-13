@@ -2229,25 +2229,25 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Dry-Cherry_Tree_1
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 7.3
+        brushSpacing: 2.12
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
+        orientationMode: 2
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 51.6
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
+        scaleUniformMin: 5
         scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
@@ -2545,21 +2545,21 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Dry-Fir_1
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 9.9
+        brushSpacing: 5
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
+        orientationMode: 2
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 59.7
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
@@ -2856,7 +2856,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Dry-Flowering_Tree_1
@@ -3177,25 +3177,25 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Dry-Ivy_Tree_1
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 8.6
+        brushSpacing: 4.99
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
+        orientationMode: 2
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 56.2
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
+        scaleUniformMin: 8
         scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
@@ -4441,25 +4441,25 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Dry-Oak_3
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 9.9
+        brushSpacing: 3.77
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
+        orientationMode: 2
         alongBrushStroke: 0
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 66.7
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
+        scaleUniformMin: 10
         scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
@@ -6964,7 +6964,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Oak_2
@@ -10661,21 +10661,21 @@ MonoBehaviour:
     brushes:
     - name: Bamboo_1
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 3.9
+        brushSpacing: 1.42
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 3
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
+        orientationMode: 2
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 37.9
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
@@ -10977,21 +10977,21 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Bamboo_2
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
+        brushRadius: 3.5
+        brushSpacing: 1.07
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 2
         brushOverlapCheckObjects: 1
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
+        orientationMode: 2
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 25.9
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
@@ -11293,9 +11293,9 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Bamboo_3
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
+        brushRadius: 3.4
+        brushSpacing: 1.1
+        brushOverlapCheckMode: 1
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
         brushOverlapCheckLayers:
@@ -11303,11 +11303,11 @@ MonoBehaviour:
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
+        orientationMode: 2
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 26.4
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
@@ -11609,21 +11609,21 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Bush_1
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 6.4
+        brushSpacing: 0.93
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
         orientationMode: 0
-        alongBrushStroke: 0
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 27.6
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
@@ -11925,26 +11925,26 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Bush_2
       settings:
-        brushRadius: 19.49
-        brushSpacing: 3.81
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 8.4
+        brushSpacing: 3.22
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
+        orientationMode: 2
         alongBrushStroke: 0
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 80.6
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 8
-        scaleUniformMax: 15
+        scaleUniformMin: 25
+        scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -12241,25 +12241,25 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Bush_3
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 12.1
+        brushSpacing: 4.2
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
-        alongBrushStroke: 0
+        orientationMode: 2
+        alongBrushStroke: 1
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 52.8
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
+        scaleUniformMin: 25
         scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
@@ -12868,30 +12868,30 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Bush_5
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
-        brushOverlapCheckMode: 0
-        brushOverlapDistance: 0.5
-        brushOverlapCheckObjects: 1
+        brushRadius: 12.3
+        brushSpacing: 5
+        brushOverlapCheckMode: 1
+        brushOverlapDistance: 5
+        brushOverlapCheckObjects: 0
         brushOverlapCheckLayers:
           serializedVersion: 2
           m_Bits: 0
         surfaceOffset: 0
         orientationTransformMode: 0
-        orientationMode: 0
+        orientationMode: 2
         alongBrushStroke: 0
         rotation: {x: 0, y: 0, z: 0}
         randomizeOrientationX: 0
-        randomizeOrientationY: 0
+        randomizeOrientationY: 58.6
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
+        scaleUniformMin: 25
         scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
@@ -22687,7 +22687,7 @@ MonoBehaviour:
     - name: Rock_7
       settings:
         brushRadius: 12.74
-        brushSpacing: 2.36
+        brushSpacing: 3.34
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -22699,9 +22699,9 @@ MonoBehaviour:
         orientationMode: 0
         alongBrushStroke: 0
         rotation: {x: 0, y: 0, z: 0}
-        randomizeOrientationX: 0
-        randomizeOrientationY: 0
-        randomizeOrientationZ: 0
+        randomizeOrientationX: 24.4
+        randomizeOrientationY: 25.5
+        randomizeOrientationZ: 20.3
         scaleTransformMode: 0
         scaleMode: 0
         scaleUniformMin: 1
@@ -23011,11 +23011,18 @@ MonoBehaviour:
     levelsInWhite: 255
     levelsOutBlack: 0
     levelsOutWhite: 255
-  activeTab: 2
+  - name: New Tab
+    brushes: []
+    levelsGamma: 1
+    levelsInBlack: 0
+    levelsInWhite: 255
+    levelsOutBlack: 0
+    levelsOutWhite: 255
+  activeTab: 5
   paintOnSelected: 0
   paintLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 32
