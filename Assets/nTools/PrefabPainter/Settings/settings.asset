@@ -11627,7 +11627,7 @@ MonoBehaviour:
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
+        scaleUniformMin: 10
         scaleUniformMax: 1
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
@@ -11925,8 +11925,8 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Bush_2
       settings:
-        brushRadius: 1
-        brushSpacing: 0.5
+        brushRadius: 19.49
+        brushSpacing: 3.81
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
@@ -11943,8 +11943,8 @@ MonoBehaviour:
         randomizeOrientationZ: 0
         scaleTransformMode: 0
         scaleMode: 0
-        scaleUniformMin: 1
-        scaleUniformMax: 1
+        scaleUniformMin: 8
+        scaleUniformMax: 15
         scalePerAxisMin: {x: 1, y: 1, z: 1}
         scalePerAxisMax: {x: 1, y: 1, z: 1}
         pinFixedRotation: 0
@@ -12868,7 +12868,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 0
+      selected: 1
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Bush_5
@@ -16660,7 +16660,7 @@ MonoBehaviour:
       - gameObject: {fileID: 0}
       - gameObject: {fileID: 0}
       selectedSlot: 0
-      selected: 1
+      selected: 0
       colorTag: 0
       customPreviewImage: {fileID: 0}
     - name: Lilium_1
@@ -17929,8 +17929,8 @@ MonoBehaviour:
       customPreviewImage: {fileID: 0}
     - name: Tulip_1
       settings:
-        brushRadius: 2.41
-        brushSpacing: 0.5
+        brushRadius: 11.09
+        brushSpacing: 1.46
         brushOverlapCheckMode: 0
         brushOverlapDistance: 0.5
         brushOverlapCheckObjects: 1
