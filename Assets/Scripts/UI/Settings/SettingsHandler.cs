@@ -32,30 +32,21 @@ public class SettingsHandler : ScriptableObject
     public BoolSetting motionBlur { get; private set; }
     public BoolSetting vsync { get; private set; }
     
-    // Custom URP Settings
-    public SettingsValue<float> renderScale { get; private set; }
-    public SettingsValue<MsaaQuality> msaaQuality { get; private set; }
-    public SettingsValue<float> shadowDistance { get; private set; }
-    public SettingsValue<ShadowResolution> shadowResolution { get; private set; }
     public SettingsValue<GraphicsQuality> qualitySetting { get; private set; }
     
     // Texture and Performance Settings
     public SettingsValue<int> textureQuality { get; private set; }
     public SettingsValue<int> lodBias { get; private set; }
-    public SettingsValue<int> targetFramerate { get; private set; }
 
     private UniversalRenderPipelineAsset customURPAsset;
 
-    public bool CanApplyOrReset() => 
+    public bool CanApplyOrReset() =>
         resolutions.CanApplyOrReset || screenModes.CanApplyOrReset ||
         filmGrain.CanApplyOrReset || bloom.CanApplyOrReset ||
         vignette.CanApplyOrReset || chromaticAberration.CanApplyOrReset ||
         colorGrading.CanApplyOrReset || motionBlur.CanApplyOrReset ||
-        renderScale.CanApplyOrReset || msaaQuality.CanApplyOrReset ||
-        shadowDistance.CanApplyOrReset || shadowResolution.CanApplyOrReset ||
         qualitySetting.CanApplyOrReset || textureQuality.CanApplyOrReset ||
-        lodBias.CanApplyOrReset || vsync.CanApplyOrReset ||
-        targetFramerate.CanApplyOrReset;
+        lodBias.CanApplyOrReset || vsync.CanApplyOrReset;
 
     public void ApplySettings()
     {
@@ -76,7 +67,6 @@ public class SettingsHandler : ScriptableObject
         
         // Apply other settings
         vsync.Apply();
-        targetFramerate.Apply();
         textureQuality.Apply();
         lodBias.Apply();
     }
@@ -92,15 +82,10 @@ public class SettingsHandler : ScriptableObject
         chromaticAberration.Reset();
         colorGrading.Reset();
         motionBlur.Reset();
-        renderScale.Reset();
-        msaaQuality.Reset();
-        shadowDistance.Reset();
-        shadowResolution.Reset();
         qualitySetting.Reset();
         textureQuality.Reset();
         lodBias.Reset();
         vsync.Reset();
-        targetFramerate.Reset();
     }
 
     public void InitValues()
@@ -138,53 +123,9 @@ public class SettingsHandler : ScriptableObject
         colorGrading = new BoolSetting(ApplyVolumeSettings, true);
         motionBlur = new BoolSetting(ApplyVolumeSettings, false);
         
-        // Custom URP Settings
-        renderScale = new SettingsValue<float>(
-            new[] { 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f },
-            () => { },
-            1.0f
-        );
-        
-        msaaQuality = new SettingsValue<MsaaQuality>(
-            Enum.GetValues(typeof(MsaaQuality)).AsValueEnumerable().Cast<MsaaQuality>().ToArray(),
-            () => { },
-            MsaaQuality.Disabled
-        );
-        
-        shadowDistance = new SettingsValue<float>(
-            new[] { 50f, 100f, 150f, 200f, 300f },
-            () => { },
-            150f
-        );
-        
-        shadowResolution = new SettingsValue<ShadowResolution>(
-            Enum.GetValues(typeof(ShadowResolution)).AsValueEnumerable().Cast<ShadowResolution>().ToArray(),
-            () => { },
-            ShadowResolution._2048
-        );
-        
-        // Performance Settings
-        textureQuality = new SettingsValue<int>(
-            new[] { 3, 2, 1, 0 }, // 0 = full quality, higher = lower quality
-            () => QualitySettings.globalTextureMipmapLimit = textureQuality.CurrentValue,
-            0
-        );
-        
-        lodBias = new SettingsValue<int>(
-            new[] { 0, 1, 2 }, // LOD bias levels
-            () => QualitySettings.lodBias = lodBias.CurrentValue,
-            1
-        );
-        
         vsync = new BoolSetting(
             () => QualitySettings.vSyncCount = vsync.CurrentValue ? 1 : 0,
             true
-        );
-        
-        targetFramerate = new SettingsValue<int>(
-            new[] { 30, 60, 120, -1 }, // -1 = unlimited
-            () => Application.targetFrameRate = targetFramerate.CurrentValue,
-            60
         );
     }
 
@@ -212,15 +153,6 @@ public class SettingsHandler : ScriptableObject
         
         GraphicsSettings.defaultRenderPipeline = targetAsset;
         QualitySettings.renderPipeline = targetAsset;
-    }
-    
-    private void ApplyCustomURPSettings(UniversalRenderPipelineAsset urpAsset)
-    {
-        urpAsset.renderScale = renderScale.CurrentValue;
-        urpAsset.msaaSampleCount = (int)msaaQuality.CurrentValue;
-        urpAsset.shadowDistance = shadowDistance.CurrentValue;
-        urpAsset.mainLightShadowmapResolution = (int)shadowResolution.CurrentValue;
-        urpAsset.additionalLightsShadowmapResolution = (int)shadowResolution.CurrentValue;
     }
     
     private void ApplyVolumeSettings()
@@ -298,6 +230,19 @@ public class SettingsValue<T>
 {
     private int appliedIndex;
     private int currentIndex;
+
+    private int CurrentIndex
+    {
+        get => currentIndex;
+        set
+        {
+            if (currentIndex != value)
+            {
+                currentIndex = value;
+                label.text = ToString();
+            }
+        }
+    }
 
     private Text label;
     public Text Label
