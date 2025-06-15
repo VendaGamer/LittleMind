@@ -1,12 +1,32 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public partial class PlayerController : MonoBehaviour, IInteractor
 {
+    private static readonly int IsCrouchingHash = Animator.StringToHash("IsCrouching");
+    private static readonly int XVelocityHash = Animator.StringToHash("XVelocity");
+    private static readonly int YVelocityHash = Animator.StringToHash("YVelocity");
+
     [Header("Movement Settings")]
     [SerializeField]
+    private float AnimBlendSpeed = 8f;
+
+    [SerializeField]
     private float moveSpeed = 5f;
+
+    [SerializeField]
+    private float crouchSpeed = 5f;
+
+    [SerializeField]
+    private float playerRotateSpeed = 20f;
+
+    [SerializeField]
+    private float maxPlayerBodCamRotDiff = 45f;
+
+    [SerializeField]
+    private Transform playerBodyTransform;
 
     [SerializeField]
     private float sprintSpeed = 7f;
@@ -24,26 +44,16 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private float jumpCooldown = 0.1f;
 
     [SerializeField]
-    private float jumpPointRadius = 0.3f;
+    private float jumpPointRayCast = 0.3f;
 
     [SerializeField]
     private LayerMask groundLayerMask;
+
     private bool canJump = true;
     private bool isGrounded;
     private bool isCrouching;
     private static Camera playerCamera => PlayerCamera.Instance.Camera;
 
-    [Header("Look Settings")]
-    [SerializeField]
-    private float maxLookUpAngle = 90f;
-
-    [SerializeField]
-    private float maxLookDownAngle = -90f;
-
-    [SerializeField]
-    private Transform playerCameraHolder;
-
-    public static Controls Controls { get; private set; }
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning;
@@ -51,95 +61,94 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void Awake()
     {
-        Controls = new Controls();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
         currentSpeed = moveSpeed;
-        SwitchGlobalInteractions(globalInteractionsPlayerControls);
     }
 
     private void OnDisable()
     {
-        Controls.Player.Disable();
-        Controls.Player.Use.performed -= OnUse;
-        Controls.Player.Sprint.performed -= OnSprint;
-        Controls.Player.Drop.performed -= OnDrop;
-        Controls.Player.Crouch.performed -= OnCrouch;
+        var controlsPlayer = interactionHandler.InputControls.Player;
+        controlsPlayer.Disable();
+        controlsPlayer.Use.performed -= OnUse;
+        controlsPlayer.Sprint.performed -= OnSprint;
+        controlsPlayer.Drop.performed -= OnDrop;
+        controlsPlayer.Crouch.performed -= OnCrouch;
+
+        if (currentLock != HandTargetType.none)
+        {
+            UnlockLeftHand();
+            UnlockRightHand();
+        }
     }
 
     private void OnEnable()
     {
-        Controls.Player.Enable();
-        Controls.Player.Use.performed += OnUse;
-        Controls.Player.Sprint.performed += OnSprint;
-        Controls.Player.Drop.performed += OnDrop;
-        Controls.Player.Crouch.performed += OnCrouch;
-    }
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        var controlsPlayer = interactionHandler.InputControls.Player;
+        controlsPlayer.Enable();
+        controlsPlayer.Use.performed += OnUse;
+        controlsPlayer.Sprint.performed += OnSprint;
+        controlsPlayer.Drop.performed += OnDrop;
+        controlsPlayer.Crouch.performed += OnCrouch;
+        interactionHandler.SetGlobalInteractions(globalInteractionGroupPlayerControls);
 
-    private void OnDrop(InputAction.CallbackContext obj)
-    {
-        if (InteractableHolding == null)
-            return;
-
-        if (InteractableHolding.Interact(this, obj.action))
-        {
-            InteractableHolding = null;
-            SwitchExclusiveInteractions(interactableLookingAt);
-        }
+        LockLeftHandTo(leftHandIKConstraintTransform);
+        LockRightHandTo(rightHandIKConstraintTransform);
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)
     {
         isCrouching = !isCrouching;
+        if (isCrouching)
+            isRunning = false;
+        currentSpeed = moveSpeed;
+        animator.SetBool(IsCrouchingHash, isCrouching);
     }
 
     private void OnSprint(InputAction.CallbackContext obj)
     {
+        if (isCrouching)
+            return;
+
         isRunning = !isRunning;
         currentSpeed = isRunning ? sprintSpeed : moveSpeed;
     }
 
     private void OnUse(InputAction.CallbackContext obj)
     {
-        interactableLookingAt?.Interact(this, obj.action);
+        InteractableLookingAt?.Interact(this, obj.action);
     }
 
-    public void PickUp(IInteractable itemToPickUp)
+    private void FixedUpdate()
     {
-        InteractableHolding = itemToPickUp;
-        SwitchExclusiveInteractions(InteractableHolding);
-    }
-
-    private void Update()
-    {
-        HandleLook();
         HandleMovement();
-        CheckGrounded();
         HandleJump();
         HandleInteraction();
     }
 
     private void HandleJump()
     {
-        if (Controls.Player.Jump.IsPressed() && canJump && isGrounded)
+        if (interactionHandler.InputControls.Player.Jump.IsPressed() && canJump)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+            if (
+                Physics.SphereCast(
+                    new Ray(jumpPoint.position, Vector3.down),
+                    jumpPointRayCast,
+                    maxJumpPointDist,
+                    groundLayerMask
+                )
+            )
+            {
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+                StartCoroutine(JumpCooldown());
+            }
         }
-    }
-
-    private void CheckGrounded()
-    {
-        isGrounded = Physics.Raycast(
-            new Ray(jumpPoint.position, Vector3.down),
-            maxJumpPointDist,
-            groundLayerMask
-        );
     }
 
     private IEnumerator JumpCooldown()
@@ -149,31 +158,60 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         canJump = true;
     }
 
+    private void LateUpdate()
+    {
+        RotatePlayerBody();
+    }
+
+    private void RotatePlayerBody()
+    {
+        float cameraYaw = playerCamera.transform.eulerAngles.y;
+        float bodyYaw = playerBodyTransform.eulerAngles.y;
+
+        float angleDiff = Mathf.DeltaAngle(bodyYaw, cameraYaw);
+
+        if (Mathf.Abs(angleDiff) > maxPlayerBodCamRotDiff)
+        {
+            // Snap body back to be within ±45° of camera
+            float correction = angleDiff - Mathf.Sign(angleDiff) * maxPlayerBodCamRotDiff;
+            float newBodyYaw = bodyYaw + correction;
+
+            Quaternion newRotation = Quaternion.Euler(0f, newBodyYaw, 0f);
+            playerBodyTransform.rotation = newRotation;
+        }
+
+        Quaternion targetRotation = Quaternion.Euler(0f, cameraYaw, 0f);
+        playerBodyTransform.rotation = Quaternion.Slerp(
+            playerBodyTransform.rotation,
+            targetRotation,
+            playerRotateSpeed * Time.deltaTime
+        );
+    }
+
+    private Vector2 currentMoveVelocity;
+
     private void HandleMovement()
     {
-        Vector2 moveInput = Controls.Player.Move.ReadValue<Vector2>();
+        Vector2 moveInput = interactionHandler.InputControls.Player.Move.ReadValue<Vector2>();
 
-        Vector3 moveDirection = transform.right * moveInput.x + transform.forward * moveInput.y;
+        currentMoveVelocity = Vector2.Lerp(
+            currentMoveVelocity,
+            moveInput * (isRunning ? 2 : 1),
+            AnimBlendSpeed * Time.fixedDeltaTime
+        );
+        animator.SetFloat(XVelocityHash, currentMoveVelocity.x);
+        animator.SetFloat(YVelocityHash, currentMoveVelocity.y);
+
+        // Calculate movement direction relative to camera
+        Vector3 moveDirection =
+            playerCamera.transform.right * moveInput.x
+            + playerCamera.transform.forward * moveInput.y;
+        moveDirection.y = 0f;
 
         if (moveDirection.magnitude > 0.1f)
         {
             moveDirection.Normalize();
-            rb.MovePosition(rb.position + moveDirection * (currentSpeed * Time.deltaTime));
+            rb.MovePosition(rb.position + moveDirection * (currentSpeed * Time.fixedDeltaTime));
         }
-    }
-
-    private float yRotation = 0f;
-    private float xRotation = 0f;
-
-    private void HandleLook()
-    {
-        Vector2 lookInput = Controls.Player.Look.ReadValue<Vector2>();
-
-        yRotation += lookInput.x;
-        xRotation -= lookInput.y;
-        xRotation = Mathf.Clamp(xRotation, maxLookDownAngle, maxLookUpAngle);
-
-        transform.rotation = Quaternion.Euler(0, yRotation, 0);
-        playerCameraHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light Bulb Glass -->
+  <g>
+    <!-- Low poly glass effect -->
+    <!-- Core bright center -->
+    <polygon points="150,80 120,110 130,150 170,150 180,110" fill="#FFFF80" />
+    
+    <!-- Main bulb polygons -->
+    <polygon points="150,50 120,70 110,120 150,140 190,120 180,70" fill="#FFFFA0" opacity="0.95" />
+    <polygon points="110,120 90,150 110,190 150,200 190,190 210,150 190,120 150,140" fill="#FFFFC0" opacity="0.9" />
+    <polygon points="90,150 70,130 80,100 110,110 120,140" fill="#FFFDE2" opacity="0.8" />
+    <polygon points="210,150 230,130 220,100 190,110 180,140" fill="#FFFDE2" opacity="0.8" />
+    
+    <!-- Outer glow polygons -->
+    <polygon points="110,190 90,170 80,190 100,210 130,220 150,200" fill="#FFF9C9" opacity="0.6" />
+    <polygon points="190,190 210,170 220,190 200,210 170,220 150,200" fill="#FFF9C9" opacity="0.6" />
+    
+    <!-- Highlight polygons -->
+    <polygon points="130,80 120,110 140,130 160,130 170,110 160,80" fill="#FFFFFF" />
+    <polygon points="100,120 120,140 115,160 95,145" fill="#FFFFFF" opacity="0.85" />
+    
+    <!-- Light rays -->
+    <polygon points="140,40 150,20 160,40" fill="#FFFF99" opacity="0.8" />
+    <polygon points="110,60 90,45 105,75" fill="#FFFF99" opacity="0.7" />
+    <polygon points="190,60 210,45 195,75" fill="#FFFF99" opacity="0.7" />
+    <polygon points="70,100 50,90 65,120" fill="#FFFF99" opacity="0.7" />
+    <polygon points="230,100 250,90 235,120" fill="#FFFF99" opacity="0.7" />
+  </g>
+  
+  <!-- Bulb Base -->
+  <g>
+    <!-- Metal screw base -->
+    <polygon points="130,200 120,210 120,225 180,225 180,210 170,200" fill="#D4D4D4" />
+    <polygon points="125,225 125,240 175,240 175,225" fill="#BBBBBB" />
+    <polygon points="130,240 130,255 170,255 170,240" fill="#A0A0A0" />
+    
+    <!-- Contact point -->
+    <polygon points="140,255 140,265 160,265 160,255" fill="#888888" />
+  </g>
+  
+  <!-- Subtle outline of the entire bulb -->
+  <path d="M150,50 C100,70 50,130 90,190 L100,210 L130,220 L130,255 L170,255 L170,220 L200,210 L210,190 C250,130 200,70 150,50Z" fill="none" stroke="#DDDDDD" stroke-width="1" opacity="0.5" />
+</svg>

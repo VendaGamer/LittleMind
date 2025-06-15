@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: baa687410b551484f9314614ea0ebec5
+timeCreated: 1504958280
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 101732
+  packageName: Low Poly Storage Pack
+  packageVersion: 1.1
+  assetPath: Assets/BrokenVector/LowPolyStoragePack/Prefabs/Treasure_Chest.prefab
+  uploadId: 253919

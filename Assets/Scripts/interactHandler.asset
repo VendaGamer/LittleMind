@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c0a4b6c28b435cbd7ebeaf63061af5, type: 3}
+  m_Name: interactHandler
+  m_EditorClassIdentifier: 
+  uiInteractionGroups:
+  - GroupLabel: asd
+    Interactions:
+    - ActionName: s
+      DisplayText: sa
+      IsIcon: 1
+    - ActionName: s
+      DisplayText: sa
+      IsIcon: 1
+  - GroupLabel: asd
+    Interactions:
+    - ActionName: s
+      DisplayText: sa
+      IsIcon: 1
+    - ActionName: s
+      DisplayText: sa
+      IsIcon: 1
+  crosshairVisible: 1
+  inputActionAsset: {fileID: -944628639613478452, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    type: 3}
+  InteractItemTemplateMouseGamepad: {fileID: 9197481963319205126, guid: d32b93fd999acf846abb84a6b462e90f,
+    type: 3}
+  InteractItemTemplateKeyboard: {fileID: 9197481963319205126, guid: fe8085d39552ba54e8b1fbc47f237af5,
+    type: 3}

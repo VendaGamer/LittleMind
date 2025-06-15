@@ -1,0 +1,11 @@
+<engine:UXML xmlns:engine="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/PlayerUIStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#PlayerUIStyles" />
+    <engine:VisualElement class="menu-item">
+        <engine:Label name="action-name" text="Shoot" emoji-fallback-support="false" enable-rich-text="false" class="action-text" />
+        <engine:Label name="key-icon" text="F" enable-rich-text="false" emoji-fallback-support="false" class="key-hint-icon">
+            <Bindings>
+                <engine:DataBinding property="display" binding-path="IsIcon" binding-mode="ToTarget" />
+            </Bindings>
+        </engine:Label>
+    </engine:VisualElement>
+</engine:UXML>
