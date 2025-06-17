@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Audio_effect
+  - Audio_music
   layers:
   - Default
   - TransparentFX

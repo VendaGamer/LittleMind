@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using ZLinq;
 
 
 public class PauseManager : MonoBehaviour
@@ -17,24 +19,6 @@ public class PauseManager : MonoBehaviour
     [Tooltip("Audio panel holder that contains audio sliders")]
     [SerializeField]
     private GameObject audioPanel;
-
-    [Tooltip("Game objects with title texts like 'Pause menu' and 'Game Title'")]
-    [SerializeField]
-    private GameObject TitleTexts;
-
-    [Tooltip("The mask that darkens the scene")]
-    [SerializeField]
-    private GameObject mask;
-
-    [Header("Animators")]
-    [SerializeField]
-    private Animator audioPanelAnimator;
-
-    [SerializeField]
-    private Animator vidPanelAnimator;
-
-    [SerializeField]
-    private Animator quitPanelAnimator;
 
     [Header("UI Elements")]
     [SerializeField]
@@ -139,6 +123,16 @@ public class PauseManager : MonoBehaviour
 
     private void Awake()
     {
+        music = GameObject.FindGameObjectsWithTag("Audio_music")
+            .AsValueEnumerable()
+            .Select(g => g.GetComponent<AudioSource>())
+            .ToArray();
+
+        effects = GameObject.FindGameObjectsWithTag("Audio_effect")
+            .AsValueEnumerable()
+            .Select(g => g.GetComponent<AudioSource>())
+            .ToArray();
+        
         settingsHandler.InitValues();
         settingsHandler.qualitySetting.Label = presetLabel;
         settingsHandler.resolutions.Label = resolutionLabel;
@@ -152,6 +146,48 @@ public class PauseManager : MonoBehaviour
     public void PreviousResolution() => settingsHandler.resolutions.PreviousValue();
 
     public void NextResolution() => settingsHandler.resolutions.NextValue();
+
+    public void NextPreset() => settingsHandler.qualitySetting.NextValue();
     
+    public void PreviousPreset() => settingsHandler.qualitySetting.PreviousValue();
+
+    public void CancelSettings() => settingsHandler.ResetSettings();
+
+    public void ApplySettings() => settingsHandler.ApplySettings();
+
+    public void SetMasterVolume(float value) => AudioListener.volume = value;
+
+    private SettingsValue<float> musicVolume;
+    public void SetMusicVolume(float value)
+    {
+        foreach (var source in music)
+        {
+            source.volume = ;
+        }
+    }
+    public void ApplySoundSettings()
+    {
+        
+    }
+    
+
+}
+[System.Serializable]
+public class MenuBase
+{
+    public GameObject Root;
+
+    public void SetActive(bool value) => Root.SetActive(value);
+
+}
+[System.Serializable]
+public class PauseMenu : MenuBase
+{
+    public TMP_Text Title;
+}
+
+[System.Serializable]
+public class AudioMenu : MenuBase
+{
     
 }

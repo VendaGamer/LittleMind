@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -294,13 +295,63 @@ public class BoolSetting
     public override string ToString() => currentValue ? "Enabled" : "Disabled";
 }
 
-public class SettingsValue<T>
+public class SettingsSlider<T> : ISetting<T> where T : struct
+{
+    private T appliedValue;
+    private T currentValue;
+
+    public T AppliedValue
+    {
+        get
+        {
+            return appliedValue;
+        }
+        private set
+        {
+            if (!appliedValue.Equals(value))
+            {
+                appliedValue
+            }
+        }
+    }
+
+    public T CurrentValue
+    {
+        get
+        {
+            return currentValue;
+        }
+    }
+
+    private TMP_Text label;
+    
+    public TMP_Text Label
+    {
+        get => label;
+        set
+        {
+            label = value;
+            label.text = ToString();
+        }
+    }
+    
+    
+
+}
+
+public interface ISetting<T> where T : struct
+{
+    public T CurrentValue { get; }
+    public T AppliedValue { get; }
+}
+
+public class SettingsValue<T> : ISetting<T> where T : struct
 {
     private int appliedIndex;
     private int currentIndex;
 
-    private Text label;
-    public Text Label
+    private TMP_Text label;
+    public TMP_Text Label
     {
         get => label;
         set
