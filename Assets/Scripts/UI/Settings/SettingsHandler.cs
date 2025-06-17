@@ -2,8 +2,10 @@ using System;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using ZLinq;
 using ShadowResolution = UnityEngine.Rendering.Universal.ShadowResolution;
@@ -20,9 +22,13 @@ public class SettingsHandler : ScriptableObject
     [Header("Current Quality")]
     public GraphicsQuality currentQuality = GraphicsQuality.High;
 
+    [SerializeField] private AudioMixerGroup masterMixerGroup;
+    [SerializeField] private AudioMixerGroup effectMixerGroup;
+    [SerializeField] private AudioMixerGroup musicMixerGroup;
+
     // Display Settings
-    public SettingsValue<Resolution> resolutions { get; private set; }
-    public SettingsValue<FullScreenMode> screenModes { get; private set; }
+    public ValueSetting<Resolution> resolutions { get; private set; }
+    public ValueSetting<FullScreenMode> screenModes { get; private set; }
     
     // Post-Processing Settings
     public BoolSetting filmGrain { get; private set; }
@@ -34,16 +40,16 @@ public class SettingsHandler : ScriptableObject
     public BoolSetting vsync { get; private set; }
     
     // Custom URP Settings
-    public SettingsValue<float> renderScale { get; private set; }
-    public SettingsValue<MsaaQuality> msaaQuality { get; private set; }
-    public SettingsValue<float> shadowDistance { get; private set; }
-    public SettingsValue<ShadowResolution> shadowResolution { get; private set; }
-    public SettingsValue<GraphicsQuality> qualitySetting { get; private set; }
+    public ValueSetting<float> renderScale { get; private set; }
+    public ValueSetting<MsaaQuality> msaaQuality { get; private set; }
+    public ValueSetting<float> shadowDistance { get; private set; }
+    public ValueSetting<ShadowResolution> shadowResolution { get; private set; }
+    public ValueSetting<GraphicsQuality> Quality { get; private set; }
     
     // Texture and Performance Settings
-    public SettingsValue<int> textureQuality { get; private set; }
-    public SettingsValue<int> lodBias { get; private set; }
-    public SettingsValue<int> targetFramerate { get; private set; }
+    public ValueSetting<int> textureQuality { get; private set; }
+    public ValueSetting<int> lodBias { get; private set; }
+    public ValueSetting<int> targetFramerate { get; private set; }
 
     private UniversalRenderPipelineAsset customURPAsset;
 
@@ -54,7 +60,7 @@ public class SettingsHandler : ScriptableObject
         colorGrading.CanApplyOrReset || motionBlur.CanApplyOrReset ||
         renderScale.CanApplyOrReset || msaaQuality.CanApplyOrReset ||
         shadowDistance.CanApplyOrReset || shadowResolution.CanApplyOrReset ||
-        qualitySetting.CanApplyOrReset || textureQuality.CanApplyOrReset ||
+        Quality.CanApplyOrReset || textureQuality.CanApplyOrReset ||
         lodBias.CanApplyOrReset || vsync.CanApplyOrReset ||
         targetFramerate.CanApplyOrReset;
 
@@ -66,8 +72,8 @@ public class SettingsHandler : ScriptableObject
         screenModes.Apply();
         
         // Apply graphics quality
-        qualitySetting.Apply();
-        currentQuality = qualitySetting.CurrentValue;
+        Quality.Apply();
+        currentQuality = Quality.CurrentValue;
         
         // Apply URP settings
         ApplyURPSettings();
@@ -97,7 +103,7 @@ public class SettingsHandler : ScriptableObject
         msaaQuality.Reset();
         shadowDistance.Reset();
         shadowResolution.Reset();
-        qualitySetting.Reset();
+        Quality.Reset();
         textureQuality.Reset();
         lodBias.Reset();
         vsync.Reset();
@@ -107,7 +113,7 @@ public class SettingsHandler : ScriptableObject
     public void InitValues()
     {
         // Display Settings
-        screenModes = new SettingsValue<FullScreenMode>(
+        screenModes = new ValueSetting<FullScreenMode>(
             new[] { FullScreenMode.ExclusiveFullScreen, FullScreenMode.FullScreenWindow, FullScreenMode.Windowed },
             SetResolution,
             Screen.fullScreenMode
@@ -118,16 +124,15 @@ public class SettingsHandler : ScriptableObject
             .OrderBy(r => r.width)
             .ToArray();
             
-        resolutions = new SettingsValue<Resolution>(
+        resolutions = new ValueSetting<Resolution>(
             availableResolutions,
             SetResolution,
-            Screen.currentResolution,
-            () => resolutions.CurrentValue.width + "x" + resolutions.CurrentValue.height );
+            Screen.currentResolution);
         
         // Graphics Quality
-        qualitySetting = new SettingsValue<GraphicsQuality>(
+        Quality = new ValueSetting<GraphicsQuality>(
             Enum.GetValues(typeof(GraphicsQuality)).AsValueEnumerable().Cast<GraphicsQuality>().ToArray(),
-            () => { currentQuality = qualitySetting.CurrentValue; },
+            () => { currentQuality = Quality.CurrentValue; },
             GraphicsQuality.High
         );
         
@@ -140,38 +145,38 @@ public class SettingsHandler : ScriptableObject
         motionBlur = new BoolSetting(ApplyVolumeSettings, false);
         
         // Custom URP Settings
-        renderScale = new SettingsValue<float>(
+        renderScale = new ValueSetting<float>(
             new[] { 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f },
             () => { },
             1.0f
         );
         
-        msaaQuality = new SettingsValue<MsaaQuality>(
+        msaaQuality = new ValueSetting<MsaaQuality>(
             Enum.GetValues(typeof(MsaaQuality)).AsValueEnumerable().Cast<MsaaQuality>().ToArray(),
             () => { },
             MsaaQuality.Disabled
         );
         
-        shadowDistance = new SettingsValue<float>(
+        shadowDistance = new ValueSetting<float>(
             new[] { 50f, 100f, 150f, 200f, 300f },
             () => { },
             150f
         );
         
-        shadowResolution = new SettingsValue<ShadowResolution>(
+        shadowResolution = new ValueSetting<ShadowResolution>(
             Enum.GetValues(typeof(ShadowResolution)).AsValueEnumerable().Cast<ShadowResolution>().ToArray(),
             () => { },
             ShadowResolution._2048
         );
         
         // Performance Settings
-        textureQuality = new SettingsValue<int>(
+        textureQuality = new ValueSetting<int>(
             new[] { 3, 2, 1, 0 }, // 0 = full quality, higher = lower quality
             () => QualitySettings.globalTextureMipmapLimit = textureQuality.CurrentValue,
             0
         );
         
-        lodBias = new SettingsValue<int>(
+        lodBias = new ValueSetting<int>(
             new[] { 0, 1, 2 }, // LOD bias levels
             () => QualitySettings.lodBias = lodBias.CurrentValue,
             1
@@ -182,7 +187,7 @@ public class SettingsHandler : ScriptableObject
             true
         );
         
-        targetFramerate = new SettingsValue<int>(
+        targetFramerate = new ValueSetting<int>(
             new[] { 30, 60, 120, -1 }, // -1 = unlimited
             () => Application.targetFrameRate = targetFramerate.CurrentValue,
             60
@@ -295,31 +300,21 @@ public class BoolSetting
     public override string ToString() => currentValue ? "Enabled" : "Disabled";
 }
 
-public class SettingsSlider<T> : ISetting<T> where T : struct
+public class SliderSetting<T> : ISetting<T> where T : struct
 {
-    private T appliedValue;
     private T currentValue;
+    private readonly Action applyAction;
 
-    public T AppliedValue
-    {
-        get
-        {
-            return appliedValue;
-        }
-        private set
-        {
-            if (!appliedValue.Equals(value))
-            {
-                appliedValue
-            }
-        }
-    }
+    public T AppliedValue { get; }
+    public bool CanApplyOrReset => !currentValue.Equals(AppliedValue);
 
-    public T CurrentValue
+    public T CurrentValue => currentValue;
+
+    public void SetValue(T value)
     {
-        get
+        if (!currentValue.Equals(value))
         {
-            return currentValue;
+            label.text = value.ToString();
         }
     }
 
@@ -334,18 +329,39 @@ public class SettingsSlider<T> : ISetting<T> where T : struct
             label.text = ToString();
         }
     }
-    
-    
+
+    public SliderSetting(Action applyAction, T initialValue = default)
+    {
+        this.applyAction = applyAction;
+        currentValue = initialValue;
+        AppliedValue = currentValue;
+    }
+
+    public void Apply() => applyAction();
+
+    public void Reset()
+    {
+        if (CanApplyOrReset)
+        {
+            currentValue = AppliedValue;
+        }
+    }
 
 }
 
-public interface ISetting<T> where T : struct
+public interface ISetting<out T> where T : struct
 {
     public T CurrentValue { get; }
     public T AppliedValue { get; }
+    
+    public bool CanApplyOrReset { get; }
+
+    public void Apply();
+
+    public void Reset();
 }
 
-public class SettingsValue<T> : ISetting<T> where T : struct
+public class ValueSetting<T> : ISetting<T> where T : struct
 {
     private int appliedIndex;
     private int currentIndex;
@@ -362,16 +378,15 @@ public class SettingsValue<T> : ISetting<T> where T : struct
     }
     public T CurrentValue => possibleValues[currentIndex];
     public T AppliedValue => possibleValues[appliedIndex];
-
-    public readonly T[] possibleValues;
+    private readonly T[] possibleValues;
     private readonly Action applyAction;
+    
     [CanBeNull] private readonly Func<string> toStringOverride;
 
-    public SettingsValue(T[] possibleValues, Action applyAction, T initialValue = default, Func<string> toStringOverride = null)
+    public ValueSetting(T[] possibleValues, Action applyAction, T initialValue = default)
     {
         this.possibleValues = possibleValues ?? throw new ArgumentNullException(nameof(possibleValues));
         this.applyAction = applyAction;
-        this.toStringOverride = toStringOverride;
         currentIndex = Array.IndexOf(possibleValues, initialValue);
         if (currentIndex < 0) currentIndex = 0;
         
@@ -426,8 +441,7 @@ public class SettingsValue<T> : ISetting<T> where T : struct
         }
     }
 
-    public override string ToString() =>
-        toStringOverride != null ? toStringOverride.Invoke() : CurrentValue.ToString();
+    public override string ToString() => CurrentValue.ToString();
 }
 
 public enum GraphicsQuality
