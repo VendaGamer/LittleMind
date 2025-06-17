@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
@@ -136,13 +135,6 @@ public class PauseManager : MonoBehaviour
 
     [SerializeField]
     private AudioSource[] effects;
-    
-    [SerializeField]
-    private InteractionHandler interactionHandler;
-
-    [SerializeField] private GameObject root;
-
-    private Menu currentMenu;
 
 
     private void Awake()
@@ -152,50 +144,6 @@ public class PauseManager : MonoBehaviour
         settingsHandler.resolutions.Label = resolutionLabel;
         settingsHandler.screenModes.Label = windowModeLabel;
     }
-
-    public void Cancel()
-    {
-        settingsHandler.vsync.Reset();
-        settingsHandler.screenModes.Reset();
-        settingsHandler.qualitySetting.Reset();
-        settingsHandler.resolutions.Reset();
-    }
-
-    private void OnEnable()
-    {
-        interactionHandler.InputControls.General.Exit.performed += GoBack;
-    }
-    private void OnDisable()
-    {
-        interactionHandler.InputControls.General.Exit.performed -= GoBack;
-    }
-
-    private void GoBack(InputAction.CallbackContext obj)
-    {
-        switch (currentMenu)
-        {
-            case Menu.Main:
-                root.SetActive(false);
-                break;
-            case Menu.Audio:
-                audioPanel.SetActive(false);
-                mainPanel.SetActive(true);
-                break;
-            case Menu.Video:
-            default:
-                vidPanel.SetActive(false);
-                mainPanel.SetActive(true);
-                break;
-        }
-    }
-
-    public void Apply()
-    {
-        settingsHandler.vsync.Apply();
-        settingsHandler.screenModes.Apply();
-        settingsHandler.qualitySetting.Apply();
-        settingsHandler.resolutions.Apply();
-    }
     public void ToggleVsync(bool value) => settingsHandler.vsync.SetValue(value);
 
     public void NextWindowMode() => settingsHandler.screenModes.NextValue();
@@ -204,11 +152,6 @@ public class PauseManager : MonoBehaviour
     public void PreviousResolution() => settingsHandler.resolutions.PreviousValue();
 
     public void NextResolution() => settingsHandler.resolutions.NextValue();
-
-    private enum Menu
-    {
-        Main,
-        Video,
-        Audio
-    }
+    
+    
 }
