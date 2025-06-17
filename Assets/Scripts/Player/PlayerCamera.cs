@@ -22,7 +22,19 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
     public Plane[] FrustumPlanes { get; } = new Plane[6];
     private float frustumExpansionFactor = 1.1f;
     public event Action OnBlendFinished;
-    public int CameraPriority => cinemachineCamera.Priority.Value;
+
+    public int CurrentVirtualCameraPriority
+    {
+        get
+        {
+            if (cinemachineBrain.ActiveVirtualCamera is CinemachineCamera virtualCamera)
+            {
+                return virtualCamera.Priority;
+            }
+
+            return -1;
+        }
+    }
 
     public float FrustumExpansionFactor
     {

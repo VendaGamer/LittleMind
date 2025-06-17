@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 using ZLinq;
 using ShadowResolution = UnityEngine.Rendering.Universal.ShadowResolution;
 
@@ -25,10 +23,6 @@ public class SettingsHandler : ScriptableObject
     [SerializeField] private AudioMixerGroup masterMixerGroup;
     [SerializeField] private AudioMixerGroup effectMixerGroup;
     [SerializeField] private AudioMixerGroup musicMixerGroup;
-
-    // Display Settings
-    public ValueSetting<Resolution> resolutions { get; private set; }
-    public ValueSetting<FullScreenMode> screenModes { get; private set; }
     
     // Post-Processing Settings
     public BoolSetting filmGrain { get; private set; }
@@ -40,31 +34,41 @@ public class SettingsHandler : ScriptableObject
     public BoolSetting vsync { get; private set; }
     
     // Custom URP Settings
-    public ValueSetting<float> renderScale { get; private set; }
-    public ValueSetting<MsaaQuality> msaaQuality { get; private set; }
-    public ValueSetting<float> shadowDistance { get; private set; }
-    public ValueSetting<ShadowResolution> shadowResolution { get; private set; }
-    public ValueSetting<GraphicsQuality> Quality { get; private set; }
+    public DefinedSetting<float> renderScale { get; private set; }
+    public DefinedSetting<MsaaQuality> msaaQuality { get; private set; }
+    public DefinedSetting<float> ShadowDistance { get; private set; }
+    public DefinedSetting<ShadowResolution> ShadowResolution { get; private set; }
+    public DefinedSetting<GraphicsQuality> Quality { get; private set; }
+    
+    // Display Settings
+    public DefinedSetting<Resolution> resolutions { get; private set; }
+    public DefinedSetting<FullScreenMode> screenModes { get; private set; }
     
     // Texture and Performance Settings
-    public ValueSetting<int> textureQuality { get; private set; }
-    public ValueSetting<int> lodBias { get; private set; }
-    public ValueSetting<int> targetFramerate { get; private set; }
-
+    public DefinedSetting<int> TextureQuality { get; private set; }
+    public DefinedSetting<int> LODBias { get; private set; }
+    public ValueSetting<int> TargetFramerate { get; private set; }
+    public ValueSetting<float> MasterVolume { get; private set; }
+    public ValueSetting<float> MusicVolume { get; private set; }
+    public ValueSetting<float> EffectsVolume { get; private set; }
+    
     private UniversalRenderPipelineAsset customURPAsset;
 
-    public bool CanApplyOrReset() => 
-        resolutions.CanApplyOrReset || screenModes.CanApplyOrReset ||
-        filmGrain.CanApplyOrReset || bloom.CanApplyOrReset ||
-        vignette.CanApplyOrReset || chromaticAberration.CanApplyOrReset ||
-        colorGrading.CanApplyOrReset || motionBlur.CanApplyOrReset ||
-        renderScale.CanApplyOrReset || msaaQuality.CanApplyOrReset ||
-        shadowDistance.CanApplyOrReset || shadowResolution.CanApplyOrReset ||
-        Quality.CanApplyOrReset || textureQuality.CanApplyOrReset ||
-        lodBias.CanApplyOrReset || vsync.CanApplyOrReset ||
-        targetFramerate.CanApplyOrReset;
+    public void ApplyAudioSettings()
+    {
+        MasterVolume.Apply();
+        MusicVolume.Apply();
+        EffectsVolume.Apply();
+    }
 
-    public void ApplySettings()
+    public void ResetAudioSettings()
+    {
+        MasterVolume.Reset();
+        MusicVolume.Reset();
+        EffectsVolume.Reset();
+    }
+
+    public void ApplyVideoSettings()
     {
         
         // Apply display settings
@@ -83,12 +87,12 @@ public class SettingsHandler : ScriptableObject
         
         // Apply other settings
         vsync.Apply();
-        targetFramerate.Apply();
-        textureQuality.Apply();
-        lodBias.Apply();
+        TargetFramerate.Apply();
+        TextureQuality.Apply();
+        LODBias.Apply();
     }
 
-    public void ResetSettings()
+    public void ResetVideoSettings()
     {
         
         resolutions.Reset();
@@ -101,19 +105,19 @@ public class SettingsHandler : ScriptableObject
         motionBlur.Reset();
         renderScale.Reset();
         msaaQuality.Reset();
-        shadowDistance.Reset();
-        shadowResolution.Reset();
+        ShadowDistance.Reset();
+        ShadowResolution.Reset();
         Quality.Reset();
-        textureQuality.Reset();
-        lodBias.Reset();
+        TextureQuality.Reset();
+        LODBias.Reset();
         vsync.Reset();
-        targetFramerate.Reset();
+        TargetFramerate.Reset();
     }
 
-    public void InitValues()
+    public void InitValues(MenuBase mainMenu, AudioMenu audioMenu, VideoMenu videoMenu)
     {
         // Display Settings
-        screenModes = new ValueSetting<FullScreenMode>(
+        screenModes = new DefinedSetting<FullScreenMode>(
             new[] { FullScreenMode.ExclusiveFullScreen, FullScreenMode.FullScreenWindow, FullScreenMode.Windowed },
             SetResolution,
             Screen.fullScreenMode
@@ -124,13 +128,13 @@ public class SettingsHandler : ScriptableObject
             .OrderBy(r => r.width)
             .ToArray();
             
-        resolutions = new ValueSetting<Resolution>(
+        resolutions = new DefinedSetting<Resolution>(
             availableResolutions,
             SetResolution,
             Screen.currentResolution);
         
         // Graphics Quality
-        Quality = new ValueSetting<GraphicsQuality>(
+        Quality = new DefinedSetting<GraphicsQuality>(
             Enum.GetValues(typeof(GraphicsQuality)).AsValueEnumerable().Cast<GraphicsQuality>().ToArray(),
             () => { currentQuality = Quality.CurrentValue; },
             GraphicsQuality.High
@@ -145,52 +149,46 @@ public class SettingsHandler : ScriptableObject
         motionBlur = new BoolSetting(ApplyVolumeSettings, false);
         
         // Custom URP Settings
-        renderScale = new ValueSetting<float>(
+        renderScale = new DefinedSetting<float>(
             new[] { 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f },
             () => { },
             1.0f
         );
         
-        msaaQuality = new ValueSetting<MsaaQuality>(
+        msaaQuality = new DefinedSetting<MsaaQuality>(
             Enum.GetValues(typeof(MsaaQuality)).AsValueEnumerable().Cast<MsaaQuality>().ToArray(),
             () => { },
             MsaaQuality.Disabled
         );
         
-        shadowDistance = new ValueSetting<float>(
+        ShadowDistance = new DefinedSetting<float>(
             new[] { 50f, 100f, 150f, 200f, 300f },
             () => { },
             150f
         );
         
-        shadowResolution = new ValueSetting<ShadowResolution>(
+        ShadowResolution = new DefinedSetting<ShadowResolution>(
             Enum.GetValues(typeof(ShadowResolution)).AsValueEnumerable().Cast<ShadowResolution>().ToArray(),
             () => { },
-            ShadowResolution._2048
+            UnityEngine.Rendering.Universal.ShadowResolution._2048
         );
         
         // Performance Settings
-        textureQuality = new ValueSetting<int>(
+        TextureQuality = new DefinedSetting<int>(
             new[] { 3, 2, 1, 0 }, // 0 = full quality, higher = lower quality
-            () => QualitySettings.globalTextureMipmapLimit = textureQuality.CurrentValue,
+            () => QualitySettings.globalTextureMipmapLimit = TextureQuality.CurrentValue,
             0
         );
         
-        lodBias = new ValueSetting<int>(
+        LODBias = new DefinedSetting<int>(
             new[] { 0, 1, 2 }, // LOD bias levels
-            () => QualitySettings.lodBias = lodBias.CurrentValue,
+            () => QualitySettings.lodBias = LODBias.CurrentValue,
             1
         );
         
         vsync = new BoolSetting(
             () => QualitySettings.vSyncCount = vsync.CurrentValue ? 1 : 0,
             true
-        );
-        
-        targetFramerate = new ValueSetting<int>(
-            new[] { 30, 60, 120, -1 }, // -1 = unlimited
-            () => Application.targetFrameRate = targetFramerate.CurrentValue,
-            60
         );
     }
 
@@ -224,14 +222,14 @@ public class SettingsHandler : ScriptableObject
     {
         urpAsset.renderScale = renderScale.CurrentValue;
         urpAsset.msaaSampleCount = (int)msaaQuality.CurrentValue;
-        urpAsset.shadowDistance = shadowDistance.CurrentValue;
-        urpAsset.mainLightShadowmapResolution = (int)shadowResolution.CurrentValue;
-        urpAsset.additionalLightsShadowmapResolution = (int)shadowResolution.CurrentValue;
+        urpAsset.shadowDistance = ShadowDistance.CurrentValue;
+        urpAsset.mainLightShadowmapResolution = (int)ShadowResolution.CurrentValue;
+        urpAsset.additionalLightsShadowmapResolution = (int)ShadowResolution.CurrentValue;
     }
     
     private void ApplyVolumeSettings()
     {
-        if (volumeProfile == null) return;
+        if (!volumeProfile) return;
         
         ApplyVolumeEffect<FilmGrain>(filmGrain.CurrentValue);
         ApplyVolumeEffect<Bloom>(bloom.CurrentValue);
@@ -300,7 +298,7 @@ public class BoolSetting
     public override string ToString() => currentValue ? "Enabled" : "Disabled";
 }
 
-public class SliderSetting<T> : ISetting<T> where T : struct
+public class ValueSetting<T> : ISetting<T> where T : struct
 {
     private T currentValue;
     private readonly Action applyAction;
@@ -330,7 +328,7 @@ public class SliderSetting<T> : ISetting<T> where T : struct
         }
     }
 
-    public SliderSetting(Action applyAction, T initialValue = default)
+    public ValueSetting(Action applyAction, T initialValue = default)
     {
         this.applyAction = applyAction;
         currentValue = initialValue;
@@ -361,7 +359,7 @@ public interface ISetting<out T> where T : struct
     public void Reset();
 }
 
-public class ValueSetting<T> : ISetting<T> where T : struct
+public class DefinedSetting<T> : ISetting<T> where T : struct
 {
     private int appliedIndex;
     private int currentIndex;
@@ -383,7 +381,7 @@ public class ValueSetting<T> : ISetting<T> where T : struct
     
     [CanBeNull] private readonly Func<string> toStringOverride;
 
-    public ValueSetting(T[] possibleValues, Action applyAction, T initialValue = default)
+    public DefinedSetting(T[] possibleValues, Action applyAction, T initialValue = default)
     {
         this.possibleValues = possibleValues ?? throw new ArgumentNullException(nameof(possibleValues));
         this.applyAction = applyAction;
@@ -442,11 +440,4 @@ public class ValueSetting<T> : ISetting<T> where T : struct
     }
 
     public override string ToString() => CurrentValue.ToString();
-}
-
-public enum GraphicsQuality
-{
-    Low,
-    Medium,
-    High
 }

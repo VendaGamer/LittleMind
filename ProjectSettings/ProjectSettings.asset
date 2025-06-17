@@ -865,6 +865,7 @@ PlayerSettings:
     PS5: 1
     QNX: 1
     Stadia: 1
+    Standalone: 3
     VisionOS: 1
     WebGL: 1
     Windows Store Apps: 1
@@ -880,7 +881,7 @@ PlayerSettings:
   gcIncremental: 1
   gcWBarrierValidation: 0
   apiCompatibilityLevelPerPlatform: {}
-  editorAssembliesCompatibilityLevel: 1
+  editorAssembliesCompatibilityLevel: 3
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: LittleMind

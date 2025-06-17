@@ -56,7 +56,7 @@ public class Diary : MonoBehaviour
         interactionHandler.InputControls.General.Exit.performed += OnExit;
         interactionHandler.SetGlobalInteractions(globalInteractions);
         playerController.enabled = false;
-        virtualCamera.Priority = PlayerCamera.Instance.CameraPriority + 2;
+        virtualCamera.Priority = PlayerCamera.Instance.CurrentVirtualCameraPriority + 2;
     }
 
     private void OnDisable()
@@ -68,7 +68,7 @@ public class Diary : MonoBehaviour
         PlayerCamera.Instance.OnBlendFinished -= OnBlendFinished;
         interactionHandler.InputControls.General.Exit.performed -= OnExit;
         playerController.enabled = true;
-        virtualCamera.Priority = PlayerCamera.Instance.CameraPriority - 2;
+        virtualCamera.Priority = PlayerCamera.Instance.CurrentVirtualCameraPriority - 2;
     }
 
     private void OnBlendFinished()
