@@ -2,7 +2,6 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 
 public class HeartBeatSymptom : AnxietySymptom
 {

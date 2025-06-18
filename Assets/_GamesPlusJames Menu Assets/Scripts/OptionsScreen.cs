@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Collections;
-using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEditor.Search.Providers;
 
 public class Options : MonoBehaviour
 {

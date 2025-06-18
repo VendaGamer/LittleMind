@@ -10,6 +10,7 @@ public class MenuBase
     private GameObject root;
     
     [Header("Cinemachine camera")]
+    [SerializeField]
     private CinemachineCamera uiCamera;
     public void SetCameraPriority(int priority) => uiCamera.Priority = priority;
 

@@ -1,17 +1,14 @@
 using System;
 using JetBrains.Annotations;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using ZLinq;
-using ShadowQuality = UnityEngine.ShadowQuality;
 using ShadowResolution = UnityEngine.Rendering.Universal.ShadowResolution;
 
-[FilePath("PlayerSettings/Preferences.bin", FilePathAttribute.Location.PreferencesFolder)]
-public class SettingsHandler : ScriptableSingleton<SettingsHandler>
+public class SettingsHandler : ScriptableObject
 {
     [Header("Quality Presets")]
     [SerializeField] private UniversalRenderPipelineAsset lowQuality, mediumQuality, highQuality;
@@ -24,24 +21,23 @@ public class SettingsHandler : ScriptableSingleton<SettingsHandler>
     [SerializeField] private AudioMixerGroup musicMixerGroup;
     
     // Post-Processing Settings
-    public BoolSetting filmGrain { get; private set; }
-    public BoolSetting bloom { get; private set; }
-    public BoolSetting vignette { get; private set; }
-    public BoolSetting chromaticAberration { get; private set; }
-    public BoolSetting colorGrading { get; private set; }
-    public BoolSetting motionBlur { get; private set; }
+    public VolumeSetting<FilmGrain> FilmGrain { get; private set; }
+    public VolumeSetting<Bloom> Bloom { get; private set; }
+    public VolumeSetting<Vignette> Vignette { get; private set; }
+    public VolumeSetting<ChromaticAberration> ChromaticAberration { get; private set; }
+    public BoolSetting MotionBlur { get; private set; }
     public BoolSetting Vsync { get; private set; }
     
     // Custom URP Settings
-    public DefinedSetting<float> renderScale { get; private set; }
+    public ValueSetting<float> RenderScale { get; private set; }
     public DefinedSetting<MsaaQuality> MSAAQuality { get; private set; }
     public DefinedSetting<float> ShadowDistance { get; private set; }
     public DefinedSetting<ShadowResolution> ShadowResolution { get; private set; }
     public DefinedSetting<GraphicsQuality> Quality { get; private set; }
     
     // Display Settings
-    public DefinedSetting<Resolution> resolutions { get; private set; }
-    public DefinedSetting<FullScreenMode> screenModes { get; private set; }
+    public DefinedSetting<Resolution> Resolution { get; private set; }
+    public WindowModeSetting WindowMode { get; private set; }
     
     // Texture and Performance Settings
     public DefinedSetting<int> TextureQuality { get; private set; }
@@ -67,8 +63,8 @@ public class SettingsHandler : ScriptableSingleton<SettingsHandler>
         EffectsVolume.Reset();
     }
 
-    private bool CanApplyOrResetVideoSettings =>
-        resolutions.CanApplyOrReset || screenModes.CanApplyOrReset ||
+    public bool CanApplyOrResetVideoSettings =>
+        Resolution.CanApplyOrReset || WindowMode.CanApplyOrReset ||
         Quality.CanApplyOrReset || Vsync.CanApplyOrReset ||
         TargetFramerate.CanApplyOrReset || TextureQuality.CanApplyOrReset ||
         TextureQuality.CanApplyOrReset || LODBias.CanApplyOrReset;
@@ -77,41 +73,27 @@ public class SettingsHandler : ScriptableSingleton<SettingsHandler>
     {
         if (CanApplyOrResetVideoSettings)
         {
-            // Apply display settings
-            resolutions.Apply();
-            screenModes.Apply();
-        
-            // Apply graphics quality
+            Resolution.Apply();
+            WindowMode.Apply();
             Quality.Apply();
-        
-            // Apply URP settings
-            ApplyURPSettings();
-        
-            // Apply post-processing
-            ApplyVolumeSettings();
-        
-            // Apply other settings
             Vsync.Apply();
             TargetFramerate.Apply();
             TextureQuality.Apply();
             LODBias.Apply();
-
-            Save(false);
         }
     }
 
     public void ResetVideoSettings()
     {
         
-        resolutions.Reset();
-        screenModes.Reset();
-        filmGrain.Reset();
-        bloom.Reset();
-        vignette.Reset();
-        chromaticAberration.Reset();
-        colorGrading.Reset();
-        motionBlur.Reset();
-        renderScale.Reset();
+        Resolution.Reset();
+        WindowMode.Reset();
+        FilmGrain.Reset();
+        Bloom.Reset();
+        Vignette.Reset();
+        ChromaticAberration.Reset();
+        MotionBlur.Reset();
+        RenderScale.Reset();
         MSAAQuality.Reset();
         ShadowDistance.Reset();
         ShadowResolution.Reset();
@@ -120,24 +102,24 @@ public class SettingsHandler : ScriptableSingleton<SettingsHandler>
         LODBias.Reset();
         Vsync.Reset();
         TargetFramerate.Reset();
-        this.
     }
 
     public void InitValues(MenuBase mainMenu, AudioMenu audioMenu, VideoMenu videoMenu)
     {
         // Display Settings
-        screenModes = new DefinedSetting<FullScreenMode>(
+        WindowMode = new WindowModeSetting(
             new[] { FullScreenMode.ExclusiveFullScreen, FullScreenMode.FullScreenWindow, FullScreenMode.Windowed },
             SetResolution,
             Screen.fullScreenMode
         );
             
-        var availableResolutions = Screen.resolutions.AsValueEnumerable()
+        var availableResolutions = Screen.resolutions
+            .AsValueEnumerable()
             .Where(r => r.refreshRateRatio.Equals(Screen.currentResolution.refreshRateRatio))
             .OrderBy(r => r.width)
             .ToArray();
             
-        resolutions = new DefinedSetting<Resolution>(
+        Resolution = new DefinedSetting<Resolution>(
             availableResolutions,
             SetResolution,
             Screen.currentResolution);
@@ -154,18 +136,15 @@ public class SettingsHandler : ScriptableSingleton<SettingsHandler>
             GraphicsQuality.High
         );
         
-        // Post-Processing Settings
-        filmGrain = new BoolSetting(ApplyVolumeSettings, true);
-        bloom = new BoolSetting(ApplyVolumeSettings, true);
-        vignette = new BoolSetting(ApplyVolumeSettings, true);
-        chromaticAberration = new BoolSetting(ApplyVolumeSettings, true);
-        colorGrading = new BoolSetting(ApplyVolumeSettings, true);
-        motionBlur = new BoolSetting(ApplyVolumeSettings, false);
-        
-        // Custom URP Settings
-        renderScale = new DefinedSetting<float>(
-            new[] { 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f },
-            () => { },
+
+        RenderScale = new ValueSetting<float>(
+            () =>
+            {
+                if (GraphicsSettings.defaultRenderPipeline is UniversalRenderPipelineAsset pipeline)
+                {
+                    pipeline.renderScale = RenderScale.CurrentValue;
+                }
+            },
             1.0f
         );
         
@@ -202,14 +181,36 @@ public class SettingsHandler : ScriptableSingleton<SettingsHandler>
         
         Vsync = new BoolSetting(
             () => QualitySettings.vSyncCount = Vsync.CurrentValue ? 1 : 0,
-            true
+            QualitySettings.vSyncCount > 0
         );
+
+        TargetFramerate = new ValueSetting<int>(() =>
+            {
+                Application.targetFrameRate = TargetFramerate.CurrentValue;
+            },
+            Application.targetFrameRate
+        );
+
+        MasterVolume = new ValueSetting<float>(() =>
+        {
+            masterMixerGroup.audioMixer.SetFloat(masterMixerGroup.name, MasterVolume.CurrentValue);
+        });
+        
+        EffectsVolume = new ValueSetting<float>(() =>
+        {
+            effectMixerGroup.audioMixer.SetFloat(effectMixerGroup.name, EffectsVolume.CurrentValue);
+        });
+
+        MusicVolume = new ValueSetting<float>(() =>
+        {
+            musicMixerGroup.audioMixer.SetFloat(musicMixerGroup.name, MusicVolume.CurrentValue);
+        });
     }
 
     private void SetResolution()
     {
-        var resolution = resolutions.CurrentValue;
-        var screenMode = screenModes.CurrentValue;
+        var resolution = Resolution.CurrentValue;
+        var screenMode = WindowMode.CurrentValue;
         Screen.SetResolution(resolution.width, resolution.height, screenMode, resolution.refreshRateRatio);
     }
     
@@ -225,31 +226,30 @@ public class SettingsHandler : ScriptableSingleton<SettingsHandler>
     
     private void ApplyCustomURPSettings(UniversalRenderPipelineAsset urpAsset)
     {
-        urpAsset.renderScale = renderScale.CurrentValue;
+        urpAsset.renderScale = RenderScale.CurrentValue;
         urpAsset.msaaSampleCount = (int)MSAAQuality.CurrentValue;
         urpAsset.shadowDistance = ShadowDistance.CurrentValue;
         urpAsset.mainLightShadowmapResolution = (int)ShadowResolution.CurrentValue;
         urpAsset.additionalLightsShadowmapResolution = (int)ShadowResolution.CurrentValue;
     }
     
-    private void ApplyVolumeSettings()
+}
+
+public class VolumeSetting<T> : BoolSetting where T : VolumeComponent
+{
+    private readonly T volumeComponent;
+    public VolumeSetting(VolumeProfile volumeProfile, Action applyAction = null, bool initialValue = false) : base(applyAction, initialValue)
     {
-        ApplyVolumeEffect<FilmGrain>(filmGrain.CurrentValue);
-        ApplyVolumeEffect<Bloom>(bloom.CurrentValue);
-        ApplyVolumeEffect<Vignette>(vignette.CurrentValue);
-        ApplyVolumeEffect<ChromaticAberration>(chromaticAberration.CurrentValue);
-        ApplyVolumeEffect<ColorAdjustments>(colorGrading.CurrentValue);
-        ApplyVolumeEffect<MotionBlur>(motionBlur.CurrentValue);
-    }
-    
-    private void ApplyVolumeEffect<T>(bool enabled) where T : VolumeComponent
-    {
-        if (volumeProfile.TryGet<T>(out var effect))
+        if (volumeProfile.TryGet<T>(out var component))
         {
-            effect.active = enabled;
+            volumeComponent = component;
         }
+        
+        applyAction = () =>
+        {
+            volumeComponent.active = CurrentValue;
+        };
     }
-    
 }
 
 public class BoolSetting
@@ -279,11 +279,11 @@ public class BoolSetting
         currentValue = value;
     }
 
-    public void Apply()
+    public virtual void Apply()
     {
         if (CanApplyOrReset)
         {
-            applyAction?.Invoke();
+            applyAction.Invoke();
             appliedValue = currentValue;
         }
     }
@@ -301,12 +301,28 @@ public class BoolSetting
     public override string ToString() => currentValue ? "Enabled" : "Disabled";
 }
 
+public class WindowModeSetting : DefinedSetting<FullScreenMode>
+{
+    public WindowModeSetting(FullScreenMode[] possibleValues, Action applyAction, FullScreenMode initialValue = default) : base(possibleValues, applyAction, initialValue)
+    {
+    }
+
+    public override string ToString() =>
+        CurrentValue switch
+        {
+            FullScreenMode.Windowed => "Windowed",
+            FullScreenMode.ExclusiveFullScreen => "Exclusive Full Screen",
+            FullScreenMode.FullScreenWindow => "Full Screen",
+            _ => "Default"
+        };
+}
+
 public class ValueSetting<T> : ISetting<T> where T : struct
 {
     private T currentValue;
     private readonly Action applyAction;
 
-    public T AppliedValue { get; }
+    public T AppliedValue { get; private set; }
     public bool CanApplyOrReset => !currentValue.Equals(AppliedValue);
 
     public T CurrentValue => currentValue;
@@ -338,13 +354,22 @@ public class ValueSetting<T> : ISetting<T> where T : struct
         AppliedValue = currentValue;
     }
 
-    public void Apply() => applyAction();
+    public void Apply()
+    {
+        if (CanApplyOrReset)
+        {
+            applyAction.Invoke();
+            AppliedValue = currentValue;
+            label.text = ToString();
+        }
+    }
 
     public void Reset()
     {
         if (CanApplyOrReset)
         {
             currentValue = AppliedValue;
+            label.text = ToString();
         }
     }
 
@@ -381,8 +406,6 @@ public class DefinedSetting<T> : ISetting<T> where T : struct
     public T AppliedValue => possibleValues[appliedIndex];
     private readonly T[] possibleValues;
     private readonly Action applyAction;
-    
-    [CanBeNull] private readonly Func<string> toStringOverride;
 
     public DefinedSetting(T[] possibleValues, Action applyAction, T initialValue = default)
     {
@@ -427,7 +450,7 @@ public class DefinedSetting<T> : ISetting<T> where T : struct
     {
         if (CanApplyOrReset)
         {
-            applyAction?.Invoke();
+            applyAction.Invoke();
             appliedIndex = currentIndex;
         }
     }
@@ -439,6 +462,7 @@ public class DefinedSetting<T> : ISetting<T> where T : struct
         if (CanApplyOrReset)
         {
             currentIndex = appliedIndex;
+            label.text = ToString();
         }
     }
 
