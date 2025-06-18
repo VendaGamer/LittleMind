@@ -160,7 +160,7 @@ public class InteractionHandler : ScriptableObject
     }
     
     
-    private string EffetivePathToGamepadIcon(string effectivePath) =>
+    private static string EffetivePathToGamepadIcon(string effectivePath) =>
         effectivePath switch
         {
             "<Gamepad>/buttonSouth" => "\u21D3",
@@ -199,7 +199,7 @@ public class InteractionHandler : ScriptableObject
             _ => "?"
         };
 
-    private string EffectivePathToMouseIcon(string effectivePath) =>
+    private static string EffectivePathToMouseIcon(string effectivePath) =>
         effectivePath switch
         {
             "<Mouse>/scroll/up" => "\u27F0",

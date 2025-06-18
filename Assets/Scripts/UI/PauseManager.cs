@@ -17,7 +17,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private SettingsHandler settingsHandler;
     
-    public void ToggleVsync(bool value) => settingsHandler.vsync.SetValue(value);
+    public void ToggleVsync(bool value) => settingsHandler.Vsync.SetValue(value);
     public void NextWindowMode() => settingsHandler.screenModes.NextValue();
     public void PreviousWindowMode() => settingsHandler.screenModes.PreviousValue();
     public void PreviousResolution() => settingsHandler.resolutions.PreviousValue();

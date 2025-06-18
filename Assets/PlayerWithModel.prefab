@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1027583509779653667}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.032456018, z: 0.21052428}
+  m_LocalPosition: {x: -19.68, y: 50.67246, z: 3.7305245}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -515,7 +515,8 @@ MonoBehaviour:
   rightHandIKConstraint: {fileID: 3490099404196178330}
   rightHandIKConstraintTransform: {fileID: 0}
   leftHandIKConstraintTransform: {fileID: 0}
-  handRigBuilder: {fileID: 0}
+  handRigBuilder: {fileID: 1422894345955738392}
+  rightHandKeyLockTarget: {fileID: 0}
   pickupPoint: {fileID: 3207812161120748922}
   globalInteractionGroupPlayerControls:
     <InteractGroupLabel>k__BackingField: Player

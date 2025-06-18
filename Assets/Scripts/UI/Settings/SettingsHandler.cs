@@ -1,24 +1,23 @@
 using System;
 using JetBrains.Annotations;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using ZLinq;
+using ShadowQuality = UnityEngine.ShadowQuality;
 using ShadowResolution = UnityEngine.Rendering.Universal.ShadowResolution;
 
-[CreateAssetMenu(menuName = "GameSettings/SettingsHandler", fileName = "SettingsHandler")]
-public class SettingsHandler : ScriptableObject
+[FilePath("PlayerSettings/Preferences.bin", FilePathAttribute.Location.PreferencesFolder)]
+public class SettingsHandler : ScriptableSingleton<SettingsHandler>
 {
     [Header("Quality Presets")]
     [SerializeField] private UniversalRenderPipelineAsset lowQuality, mediumQuality, highQuality;
     
     [Header("Post-Processing")]
     [SerializeField] private VolumeProfile volumeProfile;
-    
-    [Header("Current Quality")]
-    public GraphicsQuality currentQuality = GraphicsQuality.High;
 
     [SerializeField] private AudioMixerGroup masterMixerGroup;
     [SerializeField] private AudioMixerGroup effectMixerGroup;
@@ -31,11 +30,11 @@ public class SettingsHandler : ScriptableObject
     public BoolSetting chromaticAberration { get; private set; }
     public BoolSetting colorGrading { get; private set; }
     public BoolSetting motionBlur { get; private set; }
-    public BoolSetting vsync { get; private set; }
+    public BoolSetting Vsync { get; private set; }
     
     // Custom URP Settings
     public DefinedSetting<float> renderScale { get; private set; }
-    public DefinedSetting<MsaaQuality> msaaQuality { get; private set; }
+    public DefinedSetting<MsaaQuality> MSAAQuality { get; private set; }
     public DefinedSetting<float> ShadowDistance { get; private set; }
     public DefinedSetting<ShadowResolution> ShadowResolution { get; private set; }
     public DefinedSetting<GraphicsQuality> Quality { get; private set; }
@@ -68,28 +67,37 @@ public class SettingsHandler : ScriptableObject
         EffectsVolume.Reset();
     }
 
+    private bool CanApplyOrResetVideoSettings =>
+        resolutions.CanApplyOrReset || screenModes.CanApplyOrReset ||
+        Quality.CanApplyOrReset || Vsync.CanApplyOrReset ||
+        TargetFramerate.CanApplyOrReset || TextureQuality.CanApplyOrReset ||
+        TextureQuality.CanApplyOrReset || LODBias.CanApplyOrReset;
+
     public void ApplyVideoSettings()
     {
+        if (CanApplyOrResetVideoSettings)
+        {
+            // Apply display settings
+            resolutions.Apply();
+            screenModes.Apply();
         
-        // Apply display settings
-        resolutions.Apply();
-        screenModes.Apply();
+            // Apply graphics quality
+            Quality.Apply();
         
-        // Apply graphics quality
-        Quality.Apply();
-        currentQuality = Quality.CurrentValue;
+            // Apply URP settings
+            ApplyURPSettings();
         
-        // Apply URP settings
-        ApplyURPSettings();
+            // Apply post-processing
+            ApplyVolumeSettings();
         
-        // Apply post-processing
-        ApplyVolumeSettings();
-        
-        // Apply other settings
-        vsync.Apply();
-        TargetFramerate.Apply();
-        TextureQuality.Apply();
-        LODBias.Apply();
+            // Apply other settings
+            Vsync.Apply();
+            TargetFramerate.Apply();
+            TextureQuality.Apply();
+            LODBias.Apply();
+
+            Save(false);
+        }
     }
 
     public void ResetVideoSettings()
@@ -104,14 +112,15 @@ public class SettingsHandler : ScriptableObject
         colorGrading.Reset();
         motionBlur.Reset();
         renderScale.Reset();
-        msaaQuality.Reset();
+        MSAAQuality.Reset();
         ShadowDistance.Reset();
         ShadowResolution.Reset();
         Quality.Reset();
         TextureQuality.Reset();
         LODBias.Reset();
-        vsync.Reset();
+        Vsync.Reset();
         TargetFramerate.Reset();
+        this.
     }
 
     public void InitValues(MenuBase mainMenu, AudioMenu audioMenu, VideoMenu videoMenu)
@@ -136,7 +145,12 @@ public class SettingsHandler : ScriptableObject
         // Graphics Quality
         Quality = new DefinedSetting<GraphicsQuality>(
             Enum.GetValues(typeof(GraphicsQuality)).AsValueEnumerable().Cast<GraphicsQuality>().ToArray(),
-            () => { currentQuality = Quality.CurrentValue; },
+            () =>
+            {
+                var targetAsset = GetCurrentURPAsset(Quality.CurrentValue);
+                GraphicsSettings.defaultRenderPipeline = targetAsset;
+                QualitySettings.renderPipeline = targetAsset;
+            },
             GraphicsQuality.High
         );
         
@@ -155,7 +169,7 @@ public class SettingsHandler : ScriptableObject
             1.0f
         );
         
-        msaaQuality = new DefinedSetting<MsaaQuality>(
+        MSAAQuality = new DefinedSetting<MsaaQuality>(
             Enum.GetValues(typeof(MsaaQuality)).AsValueEnumerable().Cast<MsaaQuality>().ToArray(),
             () => { },
             MsaaQuality.Disabled
@@ -186,8 +200,8 @@ public class SettingsHandler : ScriptableObject
             1
         );
         
-        vsync = new BoolSetting(
-            () => QualitySettings.vSyncCount = vsync.CurrentValue ? 1 : 0,
+        Vsync = new BoolSetting(
+            () => QualitySettings.vSyncCount = Vsync.CurrentValue ? 1 : 0,
             true
         );
     }
@@ -198,10 +212,9 @@ public class SettingsHandler : ScriptableObject
         var screenMode = screenModes.CurrentValue;
         Screen.SetResolution(resolution.width, resolution.height, screenMode, resolution.refreshRateRatio);
     }
+    
 
-
-
-    private UniversalRenderPipelineAsset GetCurrentURPAsset() =>
+    private UniversalRenderPipelineAsset GetCurrentURPAsset(GraphicsQuality currentQuality) =>
         currentQuality switch
         {
             GraphicsQuality.Low => lowQuality,
@@ -210,18 +223,10 @@ public class SettingsHandler : ScriptableObject
             _ => mediumQuality
         };
     
-    private void ApplyURPSettings()
-    {
-        var targetAsset = GetCurrentURPAsset();
-        
-        GraphicsSettings.defaultRenderPipeline = targetAsset;
-        QualitySettings.renderPipeline = targetAsset;
-    }
-    
     private void ApplyCustomURPSettings(UniversalRenderPipelineAsset urpAsset)
     {
         urpAsset.renderScale = renderScale.CurrentValue;
-        urpAsset.msaaSampleCount = (int)msaaQuality.CurrentValue;
+        urpAsset.msaaSampleCount = (int)MSAAQuality.CurrentValue;
         urpAsset.shadowDistance = ShadowDistance.CurrentValue;
         urpAsset.mainLightShadowmapResolution = (int)ShadowResolution.CurrentValue;
         urpAsset.additionalLightsShadowmapResolution = (int)ShadowResolution.CurrentValue;
@@ -229,8 +234,6 @@ public class SettingsHandler : ScriptableObject
     
     private void ApplyVolumeSettings()
     {
-        if (!volumeProfile) return;
-        
         ApplyVolumeEffect<FilmGrain>(filmGrain.CurrentValue);
         ApplyVolumeEffect<Bloom>(bloom.CurrentValue);
         ApplyVolumeEffect<Vignette>(vignette.CurrentValue);
