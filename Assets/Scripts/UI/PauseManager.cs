@@ -25,12 +25,12 @@ public class PauseManager : MonoBehaviour
     private InteractionHandler interactionHandler;
     
     public void ToggleVsync(bool value) => settingsHandler.Vsync.SetValue(value);
-    public void NextWindowMode() => settingsHandler.WindowMode.NextValue();
-    public void PreviousWindowMode() => settingsHandler.WindowMode.PreviousValue();
-    public void PreviousResolution() => settingsHandler.Resolution.PreviousValue();
-    public void NextResolution() => settingsHandler.Resolution.NextValue();
-    public void NextPreset() => settingsHandler.Quality.NextValue();
-    public void PreviousPreset() => settingsHandler.Quality.PreviousValue();
+    public void NextWindowMode() => settingsHandler.WindowModeSetting.NextValue();
+    public void PreviousWindowMode() => settingsHandler.WindowModeSetting.PreviousValue();
+    public void PreviousResolution() => settingsHandler.ResolutionSetting.PreviousValue();
+    public void NextResolution() => settingsHandler.ResolutionSetting.NextValue();
+    public void NextPreset() => settingsHandler.QualitySetting.NextValue();
+    public void PreviousPreset() => settingsHandler.QualitySetting.PreviousValue();
     public void CancelSettings() => settingsHandler.ResetVideoSettings();
     public void ApplySettings() => settingsHandler.ApplyVideoSettings();
     
@@ -40,9 +40,9 @@ public class PauseManager : MonoBehaviour
     private void Awake()
     {
         settingsHandler.InitValues(mainMenu, audioMenu, videoMenu);
-        settingsHandler.Quality.Label = videoMenu.PresetLabel;
-        settingsHandler.Resolution.Label = videoMenu.ResolutionLabel;
-        settingsHandler.WindowMode.Label = videoMenu.WindowModeLabel;
+        settingsHandler.QualitySetting.Label = videoMenu.PresetLabel;
+        settingsHandler.ResolutionSetting.Label = videoMenu.ResolutionLabel;
+        settingsHandler.WindowModeSetting.Label = videoMenu.WindowModeLabel;
     }
 
     private void OnEnable()

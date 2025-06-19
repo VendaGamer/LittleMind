@@ -39,7 +39,6 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         chapterLabel.text = $"Chapter {chapterNum}";
         chapterTitle.text = contents;
         newChapterSeq.Play();
-        
     }
 
     public void SetGlobalInteractions(VisualElement[] interactions)

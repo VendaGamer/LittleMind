@@ -7,7 +7,6 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
 {
     [CanBeNull]
     private static T _instance;
-    [CanBeNull]
     public static T Instance
     {
         get
