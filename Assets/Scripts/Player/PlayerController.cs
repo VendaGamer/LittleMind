@@ -26,9 +26,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private float maxPlayerBodCamRotDiff = 45f;
 
     [SerializeField]
-    private Transform playerBodyTransform;
-
-    [SerializeField]
     private float sprintSpeed = 7f;
 
     [SerializeField]
@@ -52,17 +49,18 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private bool canJump = true;
     private bool isGrounded;
     private bool isCrouching;
-    private static Camera playerCamera => PlayerCamera.Instance.Camera;
 
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning;
     private Animator animator;
+    private Camera playerCamera;
 
     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        rb = GetComponentInParent<Rigidbody>();
+        playerCamera = Camera.main;
     }
 
     private void Start()
@@ -127,8 +125,10 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void FixedUpdate()
     {
+
         HandleMovement();
         HandleJump();
+        
         HandleInteraction();
     }
 
@@ -166,7 +166,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void RotatePlayerBody()
     {
         float cameraYaw = playerCamera.transform.eulerAngles.y;
-        float bodyYaw = playerBodyTransform.eulerAngles.y;
+        float bodyYaw = transform.eulerAngles.y;
 
         float angleDiff = Mathf.DeltaAngle(bodyYaw, cameraYaw);
 
@@ -177,12 +177,12 @@ public partial class PlayerController : MonoBehaviour, IInteractor
             float newBodyYaw = bodyYaw + correction;
 
             Quaternion newRotation = Quaternion.Euler(0f, newBodyYaw, 0f);
-            playerBodyTransform.rotation = newRotation;
+            transform.rotation = newRotation;
         }
 
         Quaternion targetRotation = Quaternion.Euler(0f, cameraYaw, 0f);
-        playerBodyTransform.rotation = Quaternion.Slerp(
-            playerBodyTransform.rotation,
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
             targetRotation,
             playerRotateSpeed * Time.deltaTime
         );

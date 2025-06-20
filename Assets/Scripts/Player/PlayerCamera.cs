@@ -18,6 +18,9 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
     [SerializeField]
     private LayerMask collisionMask;
     public Camera Camera { get; private set; }
+    
+    [SerializeField]
+    private CinemachineBrain cinemachineBrain;
 
     public float PlayerCameraFOV
     {
@@ -51,15 +54,12 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
             UpdateFrustum();
         }
     }
-
-    private CinemachineBrain cinemachineBrain;
     private bool wasBlending = false;
 
     protected override void Awake()
     {
         base.Awake();
         Camera = Camera.main;
-        cinemachineBrain = GetComponent<CinemachineBrain>();
     }
 
     private void Update()

@@ -69,6 +69,11 @@ public class PauseManager : MonoBehaviour
         currentMenu = videoMenu;
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     private void OnExit(CallbackContext _)
     {
         if (ReferenceEquals(_currentMenu, videoMenu) || ReferenceEquals(_currentMenu, audioMenu))
