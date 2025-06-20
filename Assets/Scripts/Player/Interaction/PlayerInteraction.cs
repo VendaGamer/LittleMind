@@ -122,4 +122,9 @@ public partial class PlayerController
         InteractableLookingAt.ToggleOutline(false);
         InteractableLookingAt = null;
     }
+
+    public void SwitchToPlayer()
+    {
+        
+    }
 }

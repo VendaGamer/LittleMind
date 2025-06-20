@@ -1,20 +1,22 @@
-﻿using UnityEditor;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
+using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 
 public class PauseManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject root;
-    [SerializeField] private MenuBase mainMenu;
-
-    [SerializeField] private AudioMenu audioMenu;
-
-    [SerializeField] private VideoMenu videoMenu;
     
-    [Tooltip("For player to be able to turn off film grain and so on")]
+    [SerializeField] 
+    private MenuBase mainMenu;
+
+    [SerializeField] 
+    private AudioMenu audioMenu;
+
+    [SerializeField] 
+    private VideoMenu videoMenu;
+    
     [SerializeField]
     private VolumeProfile volumeProfile;
     
@@ -24,65 +26,91 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private InteractionHandler interactionHandler;
     
-    public void ToggleVsync(bool value) => settingsHandler.Vsync.SetValue(value);
-    public void NextWindowMode() => settingsHandler.WindowModeSetting.NextValue();
-    public void PreviousWindowMode() => settingsHandler.WindowModeSetting.PreviousValue();
-    public void PreviousResolution() => settingsHandler.ResolutionSetting.PreviousValue();
-    public void NextResolution() => settingsHandler.ResolutionSetting.NextValue();
-    public void NextPreset() => settingsHandler.QualitySetting.NextValue();
-    public void PreviousPreset() => settingsHandler.QualitySetting.PreviousValue();
-    public void CancelSettings() => settingsHandler.ResetVideoSettings();
-    public void ApplySettings() => settingsHandler.ApplyVideoSettings();
+
     
-    private MenuBase currentMenu;
+    
+    private MenuBase _currentMenu;
+
+    private MenuBase currentMenu
+    {
+        set
+        {
+            _currentMenu?.Hide();
+            _currentMenu = value;
+            _currentMenu?.Show();
+        }
+    }
+    private PlayerController playerController;
 
 
     private void Awake()
     {
-        settingsHandler.InitValues(mainMenu, audioMenu, videoMenu);
-        settingsHandler.QualitySetting.Label = videoMenu.PresetLabel;
-        settingsHandler.ResolutionSetting.Label = videoMenu.ResolutionLabel;
-        settingsHandler.WindowModeSetting.Label = videoMenu.WindowModeLabel;
+        playerController = FindFirstObjectByType<PlayerController>();
+        settingsHandler.InitValues(audioMenu, videoMenu);
     }
 
     private void OnEnable()
     {
-        interactionHandler.InputControls.General.Exit.performed += OnExit;
+        currentMenu = mainMenu;
     }
     
     private void OnDisable()
     {
-        interactionHandler.InputControls.General.Exit.performed -= OnExit;
-        currentMenu = mainMenu;
+        currentMenu = null;
     }
 
     public void ShowAudioSettings()
     {
-        audioMenu.SetCameraPriority(PlayerCamera.Instance.CurrentVirtualCameraPriority + 1);
         currentMenu = audioMenu;
     }
 
     public void ShowVideoSettings()
     {
-        videoMenu.SetCameraPriority(PlayerCamera.Instance.CurrentVirtualCameraPriority + 1);
         currentMenu = videoMenu;
     }
 
-    private void OnExit(InputAction.CallbackContext obj)
+    private void OnExit(CallbackContext _)
     {
-        if (currentMenu == audioMenu || currentMenu == videoMenu)
+        if (ReferenceEquals(_currentMenu, videoMenu) || ReferenceEquals(_currentMenu, audioMenu))
         {
-            ShowVideoSettings();
+            currentMenu = mainMenu;
         }
         else
         {
+            currentMenu = null;
             root.SetActive(false);
+            playerController.SwitchToPlayer();
         }
+        
     }
     
-    public void SetMusicVolume(float value) => settingsHandler.MusicVolume.SetValue(value);
-    public void SetMasterVolume(float value) => settingsHandler.MasterVolume.SetValue(value);
-    public void ApplyAudioSettings() => settingsHandler.ApplyAudioSettings();
+    //video settings - general
+    public void NextVsync() => settingsHandler.VsyncSetting.NextValue();
+    public void NextWindowMode() => settingsHandler.WindowModeSetting.NextValue();
+    public void NextResolution() => settingsHandler.ResolutionSetting.NextValue();
+    public void NextPreset() => settingsHandler.QualitySetting.NextValue();
+    public void NextAntialiasingMode() => settingsHandler.AntialiasingModeSetting.NextValue();
+    public void NextAntialiasingQuality() => settingsHandler.AntialiasingQualitySetting.NextValue();
+    
+    public void PreviousVsync() => settingsHandler.VsyncSetting.PreviousValue();
+    public void PreviousWindowMode() => settingsHandler.WindowModeSetting.PreviousValue();
+    public void PreviousResolution() => settingsHandler.ResolutionSetting.PreviousValue();
+    public void PreviousAntialiasingMode() => settingsHandler.AntialiasingModeSetting.PreviousValue();
+    public void PreviousPreset() => settingsHandler.QualitySetting.PreviousValue();
+    public void PreviousAntialiasingQuality() => settingsHandler.AntialiasingQualitySetting.PreviousValue();
+    
+    public void ApplyVideoSettings() => settingsHandler.ApplyVideoSettings();
+    public void CancelVideoSettings() => settingsHandler.ResetVideoSettings();
+    
 
-    public void ResetSoundSettings() => settingsHandler.ResetAudioSettings();
+    //video settings - post process
+    public void SetBloom(bool value) => settingsHandler.BloomSetting.SetValue(value);
+    public void SetMotionBlur(bool value) => settingsHandler.MotionBlurSetting.SetValue(value);
+    public void SetChromaticAberration(bool value) => settingsHandler.ChromaticAberrationSetting.SetValue(value);
+    public void SetFilmGrain(bool value) => settingsHandler.FilmGrainSetting.SetValue(value);
+    public void SetVignette(bool value) => settingsHandler.VignetteSetting.SetValue(value);
+    
+    
+    public void ApplyAudioSettings() => settingsHandler.ApplyAudioSettings();
+    public void CancelAudioSettings() => settingsHandler.ResetAudioSettings();
 }

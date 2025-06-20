@@ -9016,7 +9016,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1274577943}
         m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
-        m_MethodName: CancelSettings
+        m_MethodName: CancelVideoSettings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9778,7 +9778,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1274577943}
         m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
-        m_MethodName: ToggleVsync
+        m_MethodName: SetVsync
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10099,7 +10099,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1274577943}
         m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
-        m_MethodName: ApplySettings
+        m_MethodNApplyVideoSettingstings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

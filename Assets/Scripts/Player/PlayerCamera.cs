@@ -6,11 +6,11 @@ using UnityEngine;
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
 /// Stara se taky o prepinani mezi mody kamery
 /// </summary>
-[DefaultExecutionOrder(10)]
+[DefaultExecutionOrder(-10)]
 public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
 {
     [SerializeField]
-    private Transform headTransform;
+    private CinemachineCamera PlayerCinCamera;
 
     [SerializeField]
     private float maxDistance = 0.05f;
@@ -18,6 +18,12 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
     [SerializeField]
     private LayerMask collisionMask;
     public Camera Camera { get; private set; }
+
+    public float PlayerCameraFOV
+    {
+        get => PlayerCinCamera.Lens.FieldOfView;
+        set => PlayerCinCamera.Lens.FieldOfView = value;
+    }
 
     public Plane[] FrustumPlanes { get; } = new Plane[6];
     private float frustumExpansionFactor = 1.1f;
@@ -27,7 +33,7 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
     {
         get
         {
-            if (cinemachineBrain.ActiveVirtualCamera is CinemachineCamera virtualCamera)
+            if (cinemachineBrain.ActiveVirtualCamera is CinemachineVirtualCameraBase virtualCamera)
             {
                 return virtualCamera.Priority;
             }
@@ -47,15 +53,13 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
     }
 
     private CinemachineBrain cinemachineBrain;
-    private CinemachineCamera cinemachineCamera;
     private bool wasBlending = false;
 
     protected override void Awake()
     {
         base.Awake();
-        Camera = GetComponentInChildren<Camera>();
-        cinemachineBrain = GetComponentInChildren<CinemachineBrain>();
-        cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
+        Camera = Camera.main;
+        cinemachineBrain = GetComponent<CinemachineBrain>();
     }
 
     private void Update()
@@ -74,32 +78,6 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
     private void LateUpdate()
     {
         UpdateFrustum();
-        CheckCameraClipping();
-    }
-
-    private void CheckCameraClipping()
-    {
-        Vector3 desiredCameraPosition = headTransform.position;
-        Vector3 offsetDirection = Camera.transform.forward;
-        Vector3 checkPosition = desiredCameraPosition + offsetDirection * maxDistance;
-
-        if (
-            Physics.Linecast(
-                desiredCameraPosition,
-                checkPosition,
-                out RaycastHit hit,
-                collisionMask
-            )
-        )
-        {
-            Camera.transform.position = hit.point - offsetDirection * 0.01f;
-        }
-        else
-        {
-            Camera.transform.position = checkPosition;
-        }
-
-        Camera.transform.rotation = headTransform.rotation;
     }
 
     private void UpdateFrustum()

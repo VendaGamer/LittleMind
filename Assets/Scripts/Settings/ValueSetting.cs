@@ -1,50 +1,50 @@
 ﻿using System;
+using System.Globalization;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class ValueSetting<T> : ISetting<T> where T : struct
+public class ValueSetting: IAppliableSetting<float>
 {
-    private T currentValue;
-    private readonly Action applyAction;
+    private readonly TMP_Text label;
+    private readonly Slider slider;
+    private readonly Action<float> applyAction;
+    private readonly int roundDigits;
 
-    public T AppliedValue { get; private set; }
-    public bool CanApplyOrReset => !currentValue.Equals(AppliedValue);
+    public float AppliedValue { get; private set; }
+    public float CurrentValue { get; private set; }
+    public bool CanApplyOrReset => !Mathf.Approximately(CurrentValue, AppliedValue);
 
-    public T CurrentValue => currentValue;
-
-    public void SetValue(T value)
+    public ValueSetting(Slider slider, TMP_Text label, Action<float> applyAction,  float initialValue = 0, int roundDigits = 0)
     {
-        if (!currentValue.Equals(value))
-        {
-            label.text = value.ToString();
-        }
-    }
-
-    private TMP_Text label;
-    
-    public TMP_Text Label
-    {
-        get => label;
-        set
-        {
-            label = value;
-            label.text = ToString();
-        }
-    }
-
-    public ValueSetting(Action applyAction, T initialValue = default)
-    {
+        slider.onValueChanged.AddListener(OnValueChanged);
+        this.slider = slider;
         this.applyAction = applyAction;
-        currentValue = initialValue;
-        AppliedValue = currentValue;
+        this.roundDigits = roundDigits;
+        this.label = label;
+        
+        CurrentValue = (float)Math.Round(initialValue, roundDigits);
+        AppliedValue = CurrentValue;
+        label.text = Math.Round(CurrentValue, roundDigits).ToString(CultureInfo.InvariantCulture);
+        
+        slider.SetValueWithoutNotify(CurrentValue);
+        applyAction(CurrentValue);
+    }
+
+    private void OnValueChanged(float _)
+    {
+        CurrentValue = (float)Math.Round(slider.value, roundDigits);
+        slider.SetValueWithoutNotify(CurrentValue);
+        label.text = CurrentValue.ToString(CultureInfo.InvariantCulture);
     }
 
     public void Apply()
     {
         if (CanApplyOrReset)
         {
-            applyAction.Invoke();
-            AppliedValue = currentValue;
-            label.text = ToString();
+            applyAction.Invoke(CurrentValue);
+            AppliedValue = CurrentValue;
+            label.text = CurrentValue.ToString(CultureInfo.InvariantCulture);
         }
     }
 
@@ -52,8 +52,9 @@ public class ValueSetting<T> : ISetting<T> where T : struct
     {
         if (CanApplyOrReset)
         {
-            currentValue = AppliedValue;
-            label.text = ToString();
+            CurrentValue = AppliedValue;
+            slider.SetValueWithoutNotify(CurrentValue);
+            label.text = CurrentValue.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

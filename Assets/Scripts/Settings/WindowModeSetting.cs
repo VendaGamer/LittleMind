@@ -1,9 +1,10 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 
 public class WindowModeSetting : DefinedSetting<FullScreenMode>
 {
-    public WindowModeSetting(FullScreenMode[] possibleValues, Action applyAction, FullScreenMode initialValue = default) : base(possibleValues, applyAction, initialValue)
+    public WindowModeSetting(TMP_Text label,FullScreenMode[] possibleValues, Action<FullScreenMode> applyAction, FullScreenMode initialValue = default) : base(label,possibleValues, applyAction, initialValue)
     {
     }
 
@@ -11,8 +12,8 @@ public class WindowModeSetting : DefinedSetting<FullScreenMode>
         CurrentValue switch
         {
             FullScreenMode.Windowed => "Windowed",
-            FullScreenMode.ExclusiveFullScreen => "Exclusive Full Screen",
-            FullScreenMode.FullScreenWindow => "Full Screen",
+            FullScreenMode.ExclusiveFullScreen => "Exclusive FullScreen",
+            FullScreenMode.FullScreenWindow => "FullScreen",
             _ => "Default"
         };
 }

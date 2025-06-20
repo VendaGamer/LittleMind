@@ -1,17 +1,17 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class VideoMenu : MenuBase
 {
-    [Header("Video menu text fields")]
-    [field:SerializeField]
-    public TMP_Text PresetLabel { get; private set; }
-
-    [field:SerializeField]
-    public TMP_Text ResolutionLabel { get; private set; }
+    public TMP_Text PresetLabel, ResolutionLabel, WindowModeLabel, FOVValueLabel, RenderScaleValueLabel,
+        AntialiasingModeLabel, AntialiasingQualityLabel, VsyncLabel;
     
-    [field:SerializeField]
-    public TMP_Text WindowModeLabel { get; private set; }
+    public Toggle FilmGrainToggle, MotionBlurToggle, VignetteToggle, BloomToggle, ChromaticAberrationToggle;
+    
+    public Slider FOVSlider, RenderScaleSlider;
+    
+    public GameObject AntialiasingQualitySettingRoot;
 }

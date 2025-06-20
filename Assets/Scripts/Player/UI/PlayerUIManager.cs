@@ -71,7 +71,6 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     protected override void Awake()
     {
         base.Awake();
-        
         var root = playerUI.rootVisualElement;
         chapterPopup = root.Q<VisualElement>("chapter-popup");
         chapterTitle = root.Q<Label>("chapter-title");

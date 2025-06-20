@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
@@ -8,15 +7,18 @@ using ZLinq;
 
 public class SettingsHandler : ScriptableObject
 {
+    public const string masterVolumeKey = "MASTER";
+    public const string effectsVolumeKey = "SFX";
+    public const string musicVolumeKey = "MUSIC";
+    
+    
     [Header("Quality Presets")]
     [SerializeField] private UniversalRenderPipelineAsset lowQuality, mediumQuality, highQuality;
     
     [Header("Post-Processing")]
     [SerializeField] private VolumeProfile volumeProfile;
 
-    [SerializeField] private AudioMixerGroup masterMixerGroup;
-    [SerializeField] private AudioMixerGroup effectMixerGroup;
-    [SerializeField] private AudioMixerGroup musicMixerGroup;
+    [SerializeField] private AudioMixer mixer;
     
     // Post-Processing Settings
     public VolumeSetting<FilmGrain> FilmGrainSetting { get; private set; }
@@ -24,28 +26,25 @@ public class SettingsHandler : ScriptableObject
     public VolumeSetting<Vignette> VignetteSetting { get; private set; }
     public VolumeSetting<ChromaticAberration> ChromaticAberrationSetting { get; private set; }
     public VolumeSetting<MotionBlur> MotionBlurSetting { get; private set; }
-    public BoolSetting Vsync { get; private set; }
+    public DefinedSetting<VsyncType> VsyncSetting { get; private set; }
     
     // Custom URP Settings
     public DefinedSetting<GraphicsQuality> QualitySetting { get; private set; }
-    
-    public ValueSetting<float> RenderScaleSetting { get; private set; }
+    public ValueSetting RenderScaleSetting { get; private set; }
     
     public DefinedSetting<AntialiasingQuality> AntialiasingQualitySetting { get; private set; }
-    public DefinedSetting<AntialiasingMode> AntialiasingModeSetting { get; private set; }
-    public DefinedSetting<SettingQuality> ShadowQualitySetting { get; private set; }
+    public AntialiasingModeSetting AntialiasingModeSetting { get; private set; }
     
     // Display Settings
     public DefinedSetting<Resolution> ResolutionSetting { get; private set; }
     public WindowModeSetting WindowModeSetting { get; private set; }
     
     // Texture and Performance Settings
-    public DefinedSetting<int> TextureQuality { get; private set; }
-    public DefinedSetting<int> LODBias { get; private set; }
-    public ValueSetting<int> TargetFramerate { get; private set; }
-    public ValueSetting<float> MasterVolume { get; private set; }
-    public ValueSetting<float> MusicVolume { get; private set; }
-    public ValueSetting<float> EffectsVolume { get; private set; }
+    
+    public ValueSetting FOVSetting { get; private set; }
+    public ValueSetting MasterVolume { get; private set; }
+    public ValueSetting MusicVolume { get; private set; }
+    public ValueSetting EffectsVolume { get; private set; }
     
     private UniversalRenderPipelineAsset customURPAsset;
 
@@ -65,101 +64,112 @@ public class SettingsHandler : ScriptableObject
 
     public bool CanApplyOrResetVideoSettings =>
         ResolutionSetting.CanApplyOrReset || WindowModeSetting.CanApplyOrReset ||
-        QualitySetting.CanApplyOrReset || Vsync.CanApplyOrReset ||
-        TargetFramerate.CanApplyOrReset || TextureQuality.CanApplyOrReset ||
-        TextureQuality.CanApplyOrReset || LODBias.CanApplyOrReset;
+        QualitySetting.CanApplyOrReset || VsyncSetting.CanApplyOrReset ||
+        AntialiasingQualitySetting.CanApplyOrReset || AntialiasingModeSetting.CanApplyOrReset ||
+        BloomSetting.CanApplyOrReset || FilmGrainSetting.CanApplyOrReset ||
+        ChromaticAberrationSetting.CanApplyOrReset || MotionBlurSetting.CanApplyOrReset ||
+        RenderScaleSetting.CanApplyOrReset || VignetteSetting.CanApplyOrReset ||
+        FOVSetting.CanApplyOrReset;
     
 
     public void ApplyVideoSettings()
     {
         if (CanApplyOrResetVideoSettings)
         {
+            FOVSetting.Apply();
             ResolutionSetting.Apply();
             WindowModeSetting.Apply();
+            FilmGrainSetting.Apply();
+            BloomSetting.Apply();
+            VignetteSetting.Apply();
+            ChromaticAberrationSetting.Apply();
+            MotionBlurSetting.Apply();
+            RenderScaleSetting.Apply();
             QualitySetting.Apply();
-            Vsync.Apply();
-            TargetFramerate.Apply();
-            TextureQuality.Apply();
-            LODBias.Apply();
+            AntialiasingQualitySetting.Apply();
+            AntialiasingModeSetting.Apply();
+            VsyncSetting.Apply();
         }
     }
 
     public void ResetVideoSettings()
     {
-        
-        ResolutionSetting.Reset();
-        WindowModeSetting.Reset();
-        FilmGrainSetting.Reset();
-        BloomSetting.Reset();
-        VignetteSetting.Reset();
-        ChromaticAberrationSetting.Reset();
-        MotionBlurSetting.Reset();
-        RenderScaleSetting.Reset();
-        ShadowQualitySetting.Reset();
-        QualitySetting.Reset();
-        TextureQuality.Reset();
-        LODBias.Reset();
-        Vsync.Reset();
-        TargetFramerate.Reset();
+        if (CanApplyOrResetVideoSettings)
+        {
+            FOVSetting.Reset();
+            ResolutionSetting.Reset();
+            WindowModeSetting.Reset();
+            FilmGrainSetting.Reset();
+            BloomSetting.Reset();
+            VignetteSetting.Reset();
+            ChromaticAberrationSetting.Reset();
+            MotionBlurSetting.Reset();
+            RenderScaleSetting.Reset();
+            QualitySetting.Reset();
+            AntialiasingQualitySetting.Reset();
+            AntialiasingModeSetting.Reset();
+            VsyncSetting.Reset();
+        }
+
     }
 
-    public void InitValues(MenuBase mainMenu, AudioMenu audioMenu, VideoMenu videoMenu)
+    public void InitValues(AudioMenu audioMenu, VideoMenu videoMenu)
     {
         // Display Settings
         WindowModeSetting = new WindowModeSetting(
+            videoMenu.WindowModeLabel,
             new[] { FullScreenMode.ExclusiveFullScreen, FullScreenMode.FullScreenWindow, FullScreenMode.Windowed },
-            () =>
+            mode =>
             {
-                Screen.fullScreenMode = WindowModeSetting.CurrentValue;
+                Screen.fullScreenMode = mode;
             },
             Screen.fullScreenMode
         );
-        
-            
-        var availableResolutions = Screen.resolutions
-            .AsValueEnumerable()
-            .Where(r => r.refreshRateRatio.Equals(Screen.currentResolution.refreshRateRatio))
-            .OrderBy(r => r.width)
-            .ToArray();
+        WindowModeSetting.ForceApply();
             
         ResolutionSetting = new DefinedSetting<Resolution>(
-            availableResolutions,
-            SetResolution,
+            videoMenu.ResolutionLabel,
+            Screen.resolutions
+                .AsValueEnumerable()
+                .Where(r => r.refreshRateRatio.Equals(Screen.currentResolution.refreshRateRatio))
+                .OrderBy(r => r.width)
+                .ToArray(),
+            resolution =>
+            {
+                Screen.SetResolution(resolution.width, resolution.height,
+                    WindowModeSetting.AppliedValue, resolution.refreshRateRatio);
+            },
             Screen.currentResolution);
+        
+        ResolutionSetting.ForceApply();
         
         
         // Graphics Quality
         QualitySetting = new DefinedSetting<GraphicsQuality>(
+            videoMenu.PresetLabel,
             Enum.GetValues(typeof(GraphicsQuality)).AsValueEnumerable().Cast<GraphicsQuality>().ToArray(),
-            () =>
+            quality =>
             {
-                var targetAsset = GetCurrentURPAsset(QualitySetting.CurrentValue);
+                var targetAsset = GetCurrentURPAsset(quality);
                 QualitySettings.renderPipeline = targetAsset;
-                PlayerPrefs.SetInt(GameSettings.VideoSettings.Quality, (int)QualitySetting.CurrentValue);
+                PlayerPrefs.SetInt(GameSettings.VideoSettings.Quality, (int)quality);
             },
             (GraphicsQuality)PlayerPrefs.GetInt(
                 GameSettings.VideoSettings.Quality,
                 (int)GetCurrentGraphicsQuality(QualitySettings.renderPipeline))
         );
+        QualitySetting.ForceApply();
 
-        var initialRenderScale = 1.0f;
-        
-        {
-            if (QualitySettings.renderPipeline is UniversalRenderPipelineAsset pipeline)
-            {
-                initialRenderScale = pipeline.renderScale;
-            }
-        }
-
-        RenderScaleSetting = new ValueSetting<float>(
-            () =>
+        RenderScaleSetting = new ValueSetting(videoMenu.RenderScaleSlider, videoMenu.RenderScaleValueLabel,
+            value =>
             {
                 if (QualitySettings.renderPipeline is UniversalRenderPipelineAsset pipeline)
                 {
-                    pipeline.renderScale = RenderScaleSetting.CurrentValue;
+                    pipeline.renderScale = value;
                 }
             },
-            PlayerPrefs.GetFloat(GameSettings.VideoSettings.RenderScale, initialRenderScale)
+            PlayerPrefs.GetFloat(GameSettings.VideoSettings.RenderScale, 1.0f),
+            1
         );
         
         var urpCameraData = PlayerCamera.Instance.Camera.GetUniversalAdditionalCameraData();
@@ -167,80 +177,84 @@ public class SettingsHandler : ScriptableObject
         var initialAntialiasingMode = urpCameraData.antialiasing;
         
         AntialiasingQualitySetting = new DefinedSetting<AntialiasingQuality>(
+            videoMenu.AntialiasingQualityLabel,
             EnumValues.GetAllValues<AntialiasingQuality>(),
-            () =>
+            quality =>
             {
                 var data = PlayerCamera.Instance.Camera.GetUniversalAdditionalCameraData();
-                data.antialiasingQuality = AntialiasingQualitySetting.CurrentValue;
+                data.antialiasingQuality = quality;
+                PlayerPrefs.SetInt(GameSettings.VideoSettings.AntialiasingQuality, (int)quality);
             },
-            (AntialiasingQuality)PlayerPrefs.GetInt(GameSettings.VideoSettings.AntialiasingQuality, (int)initialAntialiasingQuality)
+            (AntialiasingQuality)PlayerPrefs.GetInt(GameSettings.VideoSettings.AntialiasingQuality,
+                (int)initialAntialiasingQuality)
         );
+        AntialiasingQualitySetting.ForceApply();
 
-        AntialiasingModeSetting = new DefinedSetting<AntialiasingMode>(
+        AntialiasingModeSetting = new AntialiasingModeSetting(
+            videoMenu.AntialiasingQualitySettingRoot,
+            videoMenu.AntialiasingModeLabel,
             EnumValues.GetAllValues<AntialiasingMode>(),
-            () =>
+            mode =>
             {
                 var data = PlayerCamera.Instance.Camera.GetUniversalAdditionalCameraData();
-                data.antialiasing = AntialiasingModeSetting.CurrentValue;
+                data.antialiasing = mode;
+                PlayerPrefs.SetInt(GameSettings.VideoSettings.AntialiasingMode, (int)mode);
             },
-            (AntialiasingMode)PlayerPrefs.GetInt(GameSettings.VideoSettings.AntialiasingMode, (int)initialAntialiasingQuality)
+            (AntialiasingMode)PlayerPrefs.GetInt(GameSettings.VideoSettings.AntialiasingMode, (int)initialAntialiasingMode)
         );
-
-        ShadowQualitySetting = new DefinedSetting<SettingQuality>(
-            EnumValues.GetAllValues<SettingQuality>(),
-            () =>
+        AntialiasingModeSetting.ForceApply();
+        
+        FOVSetting = new ValueSetting(videoMenu.FOVSlider,videoMenu.FOVValueLabel,
+            value =>
             {
-                
-            }
-            );
-        
-        // Performance Settings
-        TextureQuality = new DefinedSetting<int>(
-            new[] { 3, 2, 1, 0 }, // 0 = full quality, higher = lower quality
-            () => QualitySettings.globalTextureMipmapLimit = TextureQuality.CurrentValue,
-            0
-        );
-        
-        LODBias = new DefinedSetting<int>(
-            new[] { 0, 1, 2 }, // LOD bias levels
-            () => QualitySettings.lodBias = LODBias.CurrentValue,
-            1
-        );
-        
-        Vsync = new BoolSetting(
-            () => QualitySettings.vSyncCount = Vsync.CurrentValue ? 1 : 0,
-            QualitySettings.vSyncCount > 0
-        );
-
-        TargetFramerate = new ValueSetting<int>(() =>
-            {
-                Application.targetFrameRate = TargetFramerate.CurrentValue;
+                PlayerCamera.Instance.PlayerCameraFOV = value;
+                PlayerPrefs.SetFloat(GameSettings.VideoSettings.FOV, value);
             },
-            Application.targetFrameRate
+            PlayerPrefs.GetFloat(GameSettings.VideoSettings.FOV, PlayerCamera.Instance.PlayerCameraFOV));
+
+        VsyncSetting = new DefinedSetting<VsyncType>(
+            videoMenu.VsyncLabel,
+            new [] { VsyncType.Off ,VsyncType.On, VsyncType.HalfRefreshRate},
+            value =>
+            {
+                QualitySettings.vSyncCount = (int)value;
+                PlayerPrefs.SetInt(GameSettings.VideoSettings.Vsync, (int)value);
+            },
+            (VsyncType)PlayerPrefs.GetInt(GameSettings.VideoSettings.Vsync, QualitySettings.vSyncCount)
         );
-
-        MasterVolume = new ValueSetting<float>(() =>
-        {
-            masterMixerGroup.audioMixer.SetFloat(masterMixerGroup.name, MasterVolume.CurrentValue);
-        });
         
-        EffectsVolume = new ValueSetting<float>(() =>
+        VsyncSetting.ForceApply();
+
+        MasterVolume = new ValueSetting(audioMenu.MasterVolSlider,audioMenu.MasterVolValueLabel,
+        value =>
         {
-            effectMixerGroup.audioMixer.SetFloat(effectMixerGroup.name, EffectsVolume.CurrentValue);
+            mixer.SetFloat(masterVolumeKey, SliderValueToDB(value));
+            PlayerPrefs.SetFloat(GameSettings.AudioSettings.MasterVolume, value);
+        },
+        PlayerPrefs.GetFloat(GameSettings.AudioSettings.MasterVolume, 100f));
+        
+        EffectsVolume = new ValueSetting(audioMenu.EffectVolSlider,audioMenu.EffectVolValueLabel,
+        value =>
+        {
+            mixer.SetFloat(effectsVolumeKey, SliderValueToDB(value));
+            PlayerPrefs.SetFloat(GameSettings.AudioSettings.EffectsVolume, 100f);
         });
 
-        MusicVolume = new ValueSetting<float>(() =>
+        MusicVolume = new ValueSetting(audioMenu.MusicVolSlider,audioMenu.MusicVolValueLabel,
+        value =>
         {
-            musicMixerGroup.audioMixer.SetFloat(musicMixerGroup.name, MusicVolume.CurrentValue);
+            mixer.SetFloat(musicVolumeKey, SliderValueToDB(value));
+            PlayerPrefs.SetFloat(GameSettings.AudioSettings.MusicVolume, 100f);
         });
+
+        BloomSetting = new VolumeSetting<Bloom>(videoMenu.BloomToggle,volumeProfile);
+        VignetteSetting = new VolumeSetting<Vignette>(videoMenu.VignetteToggle,volumeProfile);
+        ChromaticAberrationSetting = new VolumeSetting<ChromaticAberration>(videoMenu.ChromaticAberrationToggle,volumeProfile);
+        FilmGrainSetting = new VolumeSetting<FilmGrain>(videoMenu.FilmGrainToggle,volumeProfile);
+        MotionBlurSetting = new VolumeSetting<MotionBlur>(videoMenu.MotionBlurToggle,volumeProfile);
     }
 
-    private void SetResolution()
-    {
-        var resolution = ResolutionSetting.CurrentValue;
-        var screenMode = WindowModeSetting.CurrentValue;
-        Screen.SetResolution(resolution.width, resolution.height, screenMode, resolution.refreshRateRatio);
-    }
+    private float SliderValueToDB(float sliderValue) => 20.0f * Mathf.Log10(sliderValue / 100f);
 
     private GraphicsQuality GetCurrentGraphicsQuality(RenderPipelineAsset asset)
     {

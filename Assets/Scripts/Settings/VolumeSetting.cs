@@ -1,21 +1,33 @@
-﻿using UnityEngine.Rendering;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 
-public class VolumeSetting<T> : ISetting<bool> where T : VolumeComponent
+public class VolumeSetting<T> : IAppliableSetting<bool> where T : VolumeComponent
 {
+    private static readonly string volumeKey = "gfx_volume_" + typeof(T).Name.ToLower();
+
     private readonly T volumeComponent;
     
+    private readonly Toggle toggle;
+    
     public bool CurrentValue { get; private set; }
-
     public bool AppliedValue { get; private set; }
+    
+    public bool CanApplyOrReset => AppliedValue != CurrentValue;
 
-    public VolumeSetting(VolumeProfile volumeProfile, bool initialValue = false)
+    public VolumeSetting(Toggle toggle, VolumeProfile volumeProfile)
     {
+        this.toggle = toggle;
+        if (!volumeProfile.TryGet<T>(out var component))
+            throw new NullReferenceException("There is no such volume profile component");
+        
+        volumeComponent = component;
+        var initialValue = PlayerPrefs.GetInt(volumeKey, volumeComponent.active ? 1 : 0) is not 0;
+        volumeComponent.active = initialValue;
+        toggle.SetIsOnWithoutNotify(initialValue);
         CurrentValue = initialValue;
         AppliedValue = initialValue;
-        if (volumeProfile.TryGet<T>(out var component))
-        {
-            volumeComponent = component;
-        }
     }
 
     public bool Toggle()
@@ -33,18 +45,19 @@ public class VolumeSetting<T> : ISetting<bool> where T : VolumeComponent
     {
         if (CanApplyOrReset)
         {
-            volumeComponent.active = CurrentValue;
             AppliedValue = CurrentValue;
+            volumeComponent.active = CurrentValue;
+            VolumeManager.instance.CheckDefaultVolumeState();
+            PlayerPrefs.SetInt(volumeKey, AppliedValue ? 1 : 0);
         }
     }
-
-    public bool CanApplyOrReset => AppliedValue != CurrentValue;
 
     public void Reset()
     {
         if (CanApplyOrReset)
         {
             CurrentValue = AppliedValue;
+            toggle.SetIsOnWithoutNotify(CurrentValue);
         }
     }
 

@@ -1,37 +1,44 @@
 ﻿using System;
+using UnityEngine.UI;
 
-public class BoolSetting : ISetting<bool>
+public class BoolSetting : IAppliableSetting<bool>
 {
-    private readonly Action applyAction;
+    private readonly Toggle toggle;
+    private readonly Action<bool> applyAction;
 
     public bool CurrentValue { get; private set; }
 
     public bool AppliedValue { get; private set; }
 
-    public BoolSetting(Action applyAction, bool initialValue = false)
+    public BoolSetting(Toggle toggle,Action<bool> applyAction, bool initialValue = false)
     {
+        this.toggle = toggle;
         this.applyAction = applyAction;
         CurrentValue = initialValue;
         AppliedValue = initialValue;
+        toggle.isOn = CurrentValue;
+        applyAction(CurrentValue);
     }
 
-    public bool Toggle()
+    public void Toggle()
     {
         CurrentValue = !CurrentValue;
-        return CurrentValue;
+        toggle.isOn = CurrentValue;
     }
 
     public void SetValue(bool value)
     {
         CurrentValue = value;
+        toggle.isOn = CurrentValue;
     }
 
     public void Apply()
     {
         if (CanApplyOrReset)
         {
-            applyAction.Invoke();
+            applyAction.Invoke(CurrentValue);
             AppliedValue = CurrentValue;
+            toggle.isOn = CurrentValue;
         }
     }
 
@@ -42,6 +49,7 @@ public class BoolSetting : ISetting<bool>
         if (CanApplyOrReset)
         {
             CurrentValue = AppliedValue;
+            toggle.isOn = CurrentValue;
         }
     }
 

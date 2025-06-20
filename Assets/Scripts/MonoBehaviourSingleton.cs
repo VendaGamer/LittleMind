@@ -7,15 +7,8 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
 {
     [CanBeNull]
     private static T _instance;
-    public static T Instance
-    {
-        get
-        {
-            Assert.IsNotNull(_instance, $"There is no instance of {typeof(T).Name}");
 
-            return _instance;
-        }
-    }
+    public static T Instance => _instance;
 
 
 

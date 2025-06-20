@@ -10,6 +10,8 @@
         public const string Vsync = prefix + "vsync";
         public const string TargetFramerate = prefix + "target_framerate";
         
+        public const string FOV = prefix + "fov";
+        
         // Quality Settings
         public const string Quality = prefix + "quality";
         public const string RenderScale = prefix + "render_scale";

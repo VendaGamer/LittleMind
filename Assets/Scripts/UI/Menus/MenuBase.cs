@@ -12,7 +12,10 @@ public class MenuBase
     [Header("Cinemachine camera")]
     [SerializeField]
     private CinemachineCamera uiCamera;
-    public void SetCameraPriority(int priority) => uiCamera.Priority = priority;
+
+    public void Show() => uiCamera.Prioritize();
+    
+    public void Hide() => uiCamera.Priority = -1;
 
     public void SetActive(bool value) => root.SetActive(value);
 
