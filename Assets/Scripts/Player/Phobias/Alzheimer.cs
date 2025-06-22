@@ -30,7 +30,7 @@ public class Alzheimer : MonoBehaviour
         {
             return;
         }
-
+        
         PlayerUIManager.Instance.MemoryIconVisibility = GeometryUtility.TestPlanesAABB(
             PlayerCamera.Instance.FrustumPlanes,
             currentMemoryTrigger.BoundsToLookAt

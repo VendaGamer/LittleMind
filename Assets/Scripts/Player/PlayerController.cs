@@ -77,7 +77,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Drop.performed -= OnDrop;
         controlsPlayer.Crouch.performed -= OnCrouch;
 
-        if (currentLock != HandTargetType.none)
+        if (currentLock != IKTargetType.none)
         {
             UnlockLeftHand();
             UnlockRightHand();

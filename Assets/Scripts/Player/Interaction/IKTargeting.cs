@@ -45,7 +45,7 @@ public partial class PlayerController
     [SerializeField]
     private Transform leftLegKeyLockTarget;
 
-    private HandTargetType currentLock;
+    private IKTargetType currentLock;
 
     private void LockLeftHandTo(Transform target)
     {
@@ -59,7 +59,7 @@ public partial class PlayerController
 
     private void UnlockLeftHand()
     {
-        if (currentLock == HandTargetType.none)
+        if (currentLock == IKTargetType.none)
             return;
         leftHandIKConstraint.weight = 0f;
         leftHandIKConstraint.data.target = null;
@@ -79,7 +79,7 @@ public partial class PlayerController
 
     private void UnlockRightHand()
     {
-        if (currentLock == HandTargetType.none)
+        if (currentLock == IKTargetType.none)
             return;
         rightHandIKConstraint.weight = 0f;
         rightHandIKConstraint.data.target = null;
@@ -91,28 +91,28 @@ public partial class PlayerController
     {
         switch (currentLock)
         {
-            case HandTargetType.key:
+            case IKTargetType.key:
                 UnlockRightHand();
                 break;
-            case HandTargetType.twoHand:
+            case IKTargetType.twoHand:
 
                 break;
             default:
                 break;
         }
 
-        currentLock = HandTargetType.none;
+        currentLock = IKTargetType.none;
     }
 
-    public void SetHandTarget(HandTargetType targetType)
+    public void SetHandTarget(IKTargetType targetType)
     {
         currentLock = targetType;
         switch (targetType)
         {
-            case HandTargetType.key:
+            case IKTargetType.key:
                 LockRightHandTo(rightHandKeyLockTarget);
                 break;
-            case HandTargetType.twoHand:
+            case IKTargetType.twoHand:
 
                 break;
             default:

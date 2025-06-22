@@ -47,7 +47,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (IsOpen)
         {
-            if (invokedAction.id == data.CloseDoorInteraction.ActionRef.action.id)
+            if (invokedAction.id == data.CloseDoorInteraction.Action.id)
             {
                 if (currentRotateCoroutine != null)
                     StopCoroutine(currentRotateCoroutine);
@@ -57,7 +57,7 @@ public class Door : MonoBehaviour, IInteractable
                 return true;
             }
         }
-        else if(invokedAction.id == data.OpenDoorInteraction.ActionRef.action.id)
+        else if(invokedAction.id == data.OpenDoorInteraction.Action.id)
         {
             if (currentRotateCoroutine != null)
                 StopCoroutine(currentRotateCoroutine);

@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public partial class PlayerController
     [SerializeField]
     private Transform pickupPoint;
     public Transform PickupPoint => pickupPoint;
+    
 
     [Header("Interaction Settings")]
     [SerializeField]

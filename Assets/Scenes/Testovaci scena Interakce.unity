@@ -268,7 +268,7 @@ MonoBehaviour:
   topPointOfStep: {fileID: 2089007190}
   bottomPointOfStep: {fileID: 2097153198}
   topBottomCrop: 0
-  climbProgress: 0.577
+  climbProgress: 0.671
   leftHandPosition: {x: -6.565, y: 3.6225, z: 0.13}
   rightHandPosition: {x: -6.1349998, y: 3.0741668, z: 0.13}
   leftLegPosition: {x: -6.565, y: 2.5258334, z: 0.13}
@@ -440,6 +440,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b,
         type: 3}
+    - target: {fileID: 1827902573783906949, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2423045592127304009, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -726,20 +731,25 @@ PrefabInstance:
       propertyPath: Lens.FieldOfView
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 8135479580748277857, guid: 8c68e2e78cbcff14086fc6e384d096da,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8476556591668560585, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.373221
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8476556591668560585, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.072
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8476556591668560585, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.177
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8476556591668560585, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
@@ -794,7 +804,7 @@ PrefabInstance:
     - target: {fileID: 8969526630786293787, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.21052437
+      value: 0.21052428
       objectReference: {fileID: 0}
     - target: {fileID: 8994490072695586067, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
@@ -802,14 +812,14 @@ PrefabInstance:
       value: Player View Camera
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 5725025119909576658, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
-    - {fileID: 8203769644442041215, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
-    - {fileID: 6587680018139101589, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
-    - {fileID: 6572192723100917483, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
-    - {fileID: 7450276126335632937, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
-    - {fileID: 6709296640583249834, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
-    - {fileID: 6890776848851758864, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
-    - {fileID: 6684517232751294616, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_RemovedGameObjects:
     - {fileID: 6787365886992557282, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
     - {fileID: 8460727079587248769, guid: 8c68e2e78cbcff14086fc6e384d096da, type: 3}
@@ -1577,8 +1587,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -1666,7 +1676,7 @@ Transform:
   m_GameObject: {fileID: 1151097686}
   serializedVersion: 2
   m_LocalRotation: {x: 0.17181781, y: 0, z: 0, w: 0.98512876}
-  m_LocalPosition: {x: -6.368221, y: 3.1063406, z: -0.049397737}
+  m_LocalPosition: {x: 0.0050001144, y: 2.0343406, z: 0.12760226}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

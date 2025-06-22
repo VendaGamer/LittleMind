@@ -16,10 +16,10 @@ MonoBehaviour:
   <InteractablePriority>k__BackingField: 0
   <LerpDuration>k__BackingField: 1
   <PickupInteraction>k__BackingField:
-    ActionName: Pickup
-    ActionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    actionName: Pickup
+    actionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}
   <DropInteraction>k__BackingField:
-    ActionName: Drop
-    ActionRef: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    actionName: Drop
+    actionRef: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}

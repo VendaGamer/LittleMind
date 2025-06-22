@@ -67,7 +67,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
     {
         if (IsOpen)
         {
-            if (invokedAction.id == data.CloseDrawerInteraction.ActionRef.action.id)
+            if (invokedAction.id == data.CloseDrawerInteraction.Action.id)
             {
                 if (currentMoveCoroutine != null)
                     StopCoroutine(currentMoveCoroutine);
@@ -77,7 +77,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
                 return true;
             }
         }
-        else if(invokedAction.id == data.OpenDrawerInteraction.ActionRef.action.id)
+        else if(invokedAction.id == data.OpenDrawerInteraction.Action.id)
         {
             if (currentMoveCoroutine != null)
                 StopCoroutine(currentMoveCoroutine);

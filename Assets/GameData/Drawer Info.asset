@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Drawer Info
   m_EditorClassIdentifier: 
   <InteractableGroupLabel>k__BackingField: Drawer
+  <InteractablePriority>k__BackingField: 0
   <LerpDuration>k__BackingField: 1
   <OpenX>k__BackingField: -1.5
   <OpenDrawerInteraction>k__BackingField:
-    ActionName: Open Drawer
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    actionName: Open
+    actionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}
   <CloseDrawerInteraction>k__BackingField:
-    ActionName: Close Drawer
-    Action: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    actionName: Close
+    actionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}

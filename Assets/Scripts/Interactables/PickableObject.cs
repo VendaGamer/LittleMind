@@ -105,14 +105,14 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
     {
         if (IsPicked)
         {
-            if (invokedAction.id == Data.DropInteraction.ActionRef.action.id)
+            if (invokedAction.id == Data.DropInteraction.Action.id)
             {
                 DropObject();
                 IsPicked = false;
                 return true;
             }
         }
-        else if (invokedAction.id == Data.PickupInteraction.ActionRef.action.id)
+        else if (invokedAction.id == Data.PickupInteraction.Action.id)
         {
             PickObject(interactor.PickupPoint);
             IsPicked = true;

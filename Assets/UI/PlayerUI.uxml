@@ -1,32 +1,26 @@
 <engine:UXML xmlns:engine="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PlayerUIStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#PlayerUIStyles" />
-    <engine:VisualElement name="Container" class="container">
-        <engine:VisualElement name="status-bar-container" class="status-bar-container">
+    <engine:VisualElement name="Container" data-source="project://database/Assets/UI/interactHandler.asset?fileID=11400000&amp;guid=8354aec3e80db6c4b93b57951eba3dd1&amp;type=2#interactHandler" enabled="true" class="player-ui-container">
+        <engine:VisualElement name="status-bar" class="status-bar">
             <engine:VisualElement name="status-icons" class="status-icons">
-                <engine:VisualElement name="memory-icon" class="icon-image status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/light%20bulb.svg?fileID=7388822144124034973&amp;guid=e95cff2e3d097f2428677daf85ac073e&amp;type=3#light bulb&quot;); -unity-background-image-tint-color: rgb(226, 226, 226); background-color: rgba(242, 255, 0, 0); display: none;" />
-                <engine:VisualElement name="health-icon" class="icon-image status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/heart.svg?fileID=7388822144124034973&amp;guid=d9fddde7b578b8d48b808567340af0c8&amp;type=3#heart&quot;); display: none;" />
+                <engine:VisualElement name="heart-icon" class="status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/heart.svg?fileID=7388822144124034973&amp;guid=d9fddde7b578b8d48b808567340af0c8&amp;type=3#heart&quot;); display: flex;" />
+                <engine:VisualElement name="bulb-icon" class="status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/light%20bulb.svg?fileID=7388822144124034973&amp;guid=e95cff2e3d097f2428677daf85ac073e&amp;type=3#light bulb&quot;); display: flex; margin-bottom: 0;" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="interactions-hint" class="context-menu">
-            <engine:VisualElement name="interaction-groups-container" enabled="false" class="menu-container" style="display: none; opacity: 0.75;">
-                <engine:VisualElement name="global-interactions-group" enabled="false" class="interactions-group" style="display: flex;">
-                    <engine:Label name="global-interactions-label" text="Test" class="interactions-label" />
-                    <engine:VisualElement name="global-interactions-container" style="flex-grow: 1;" />
-                </engine:VisualElement>
-                <engine:VisualElement name="current-interactions-group" enabled="false" class="interactions-group" style="display: none;">
-                    <engine:Label name="current-interactions-label" text="Test" class="interactions-label" />
-                    <engine:VisualElement name="current-interactions-container" style="flex-grow: 1;" />
-                </engine:VisualElement>
+        <engine:VisualElement name="chapter-popup" class="chapter-popup" style="opacity: 1; display: none;">
+            <engine:VisualElement name="chapter" class="chapter-border">
+                <engine:Label name="chapter-title" text="I" class="chapter-number" />
+                <engine:VisualElement name="chapter-divider" class="chapter-divider" />
+                <engine:Label name="chapter-label" text="AWAKENING" class="chapter-title" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/OpenSans-Light%20SDF.asset?fileID=11400000&amp;guid=9e566c4120afe0349963b11beb47b5f4&amp;type=2#OpenSans-Light SDF&quot;);" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="crosshair-container" class="crosshair-container">
-            <engine:VisualElement name="crosshair" class="crosshair" />
+        <engine:VisualElement name="interactable-interactions" class="interactable-interactions">
+            <engine:ListView item-template="project://database/Assets/UI/InteractionItem.uxml?fileID=9197481963319205126&amp;guid=fe8085d39552ba54e8b1fbc47f237af5&amp;type=3#InteractionItem" binding-source-selection-mode="AutoAssign" show-add-remove-footer="false" selection-type="None" virtualization-method="DynamicHeight" />
         </engine:VisualElement>
-        <engine:VisualElement name="chapter-popup" class="chapter-popup">
-            <engine:VisualElement name="chapter-container" class="chapter-container">
-                <engine:Label name="chapter-label" text="CHAPTER" class="chapter-label" />
-                <engine:Label name="chapter-title" text="New Beginning" class="chapter-title" />
-            </engine:VisualElement>
+        <engine:VisualElement name="Crosshair" class="crosshair">
+            <Bindings>
+                <engine:DataBinding property="enabledSelf" data-source-path="CanInteract" binding-mode="ToTarget" />
+            </Bindings>
         </engine:VisualElement>
     </engine:VisualElement>
 </engine:UXML>

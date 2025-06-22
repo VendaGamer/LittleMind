@@ -48,6 +48,7 @@ public class Diary : MonoBehaviour
 
     private void OnEnable()
     {
+        interactionHandler.InputControls.General.Enable();
         var diaryControls = interactionHandler.InputControls.Diary;
         diaryControls.Enable();
         diaryControls.TurnPageLeft.performed += TurnLeft;
@@ -61,6 +62,7 @@ public class Diary : MonoBehaviour
 
     private void OnDisable()
     {
+        interactionHandler.InputControls.General.Disable();
         var diaryControls = interactionHandler.InputControls.Diary;
         diaryControls.Disable();
         diaryControls.TurnPageLeft.performed -= TurnLeft;

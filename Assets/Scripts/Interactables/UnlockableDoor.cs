@@ -1,4 +1,3 @@
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,7 +19,6 @@ public class UnlockableDoor : Door
         }
     }
     
-    private bool _isOpen;
     public override Interaction[] CurrentInteractions
     {
         get
@@ -37,7 +35,7 @@ public class UnlockableDoor : Door
     {
         if (IsLocked)
         {
-            if (invokedAction.id == ((UnlockableDoorData)data).UnlockDoorInteraction.ActionRef.action.id)
+            if (invokedAction.id == ((UnlockableDoorData)data).UnlockDoorInteraction.Action.id)
             {
                 if (ReferenceEquals(interactor.InteractableHolding, requiredKey))
                 {
