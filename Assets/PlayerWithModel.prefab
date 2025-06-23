@@ -1746,8 +1746,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandIKConstraint: {fileID: 6889743400757279340}
   rightHandIKConstraint: {fileID: 3490099404196178330}
-  rightHandKeyLockTarget: {fileID: 0}
-  leftHandKeyLockTarget: {fileID: 0}
   leftLegIKConstraint: {fileID: 2704080397098152785}
   rightLegIKConstraint: {fileID: 4545977518529543124}
   rigBuilder: {fileID: 1422894345955738392}
@@ -1776,7 +1774,7 @@ MonoBehaviour:
   jumpPointRayCast: 0.3
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 887
+    m_Bits: 839
 --- !u!4 &4476688630060171545 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 658689967997702607, guid: 7a82c0231913e8c4cbcec824fe1c49ea,

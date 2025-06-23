@@ -119,7 +119,7 @@ public class SettingsHandler : ScriptableObject
         WindowModeSetting = new WindowModeSetting(
             videoMenu.WindowModeLabel,
             new[] { FullScreenMode.ExclusiveFullScreen, FullScreenMode.FullScreenWindow, FullScreenMode.Windowed },
-            mode =>
+            static mode =>
             {
                 Screen.fullScreenMode = mode;
             },
@@ -137,7 +137,7 @@ public class SettingsHandler : ScriptableObject
             resolution =>
             {
                 Screen.SetResolution(resolution.width, resolution.height,
-                    WindowModeSetting.AppliedValue, resolution.refreshRateRatio);
+                    WindowModeSetting.CurrentValue, resolution.refreshRateRatio);
             },
             Screen.currentResolution);
         
@@ -161,7 +161,7 @@ public class SettingsHandler : ScriptableObject
         QualitySetting.ForceApply();
 
         RenderScaleSetting = new ValueSetting(videoMenu.RenderScaleSlider, videoMenu.RenderScaleValueLabel,
-            value =>
+            static value =>
             {
                 if (QualitySettings.renderPipeline is UniversalRenderPipelineAsset pipeline)
                 {
@@ -172,16 +172,18 @@ public class SettingsHandler : ScriptableObject
             1
         );
         
-        var urpCameraData = PlayerCamera.Instance.Camera.GetUniversalAdditionalCameraData();
+        var urpCameraData = Camera.main.GetUniversalAdditionalCameraData();
         var initialAntialiasingQuality = urpCameraData.antialiasingQuality;
         var initialAntialiasingMode = urpCameraData.antialiasing;
         
         AntialiasingQualitySetting = new DefinedSetting<AntialiasingQuality>(
             videoMenu.AntialiasingQualityLabel,
             EnumValues.GetAllValues<AntialiasingQuality>(),
-            quality =>
+            static quality =>
             {
-                var data = PlayerCamera.Instance.Camera.GetUniversalAdditionalCameraData();
+                var data = Camera.main.GetUniversalAdditionalCameraData();
+                Debug.Log($"Current quality: {quality}");
+                Debug.Log($"Current camera antialiasing quality: {data.antialiasingQuality}");
                 data.antialiasingQuality = quality;
                 PlayerPrefs.SetInt(GameSettings.VideoSettings.AntialiasingQuality, (int)quality);
             },
@@ -194,9 +196,11 @@ public class SettingsHandler : ScriptableObject
             videoMenu.AntialiasingQualitySettingRoot,
             videoMenu.AntialiasingModeLabel,
             EnumValues.GetAllValues<AntialiasingMode>(),
-            mode =>
+            static mode =>
             {
                 var data = PlayerCamera.Instance.Camera.GetUniversalAdditionalCameraData();
+                Debug.Log($"Current mode: {mode}");
+                Debug.Log($"Current camera antialiasing mode: {data.antialiasing}");
                 data.antialiasing = mode;
                 PlayerPrefs.SetInt(GameSettings.VideoSettings.AntialiasingMode, (int)mode);
             },
@@ -205,7 +209,7 @@ public class SettingsHandler : ScriptableObject
         AntialiasingModeSetting.ForceApply();
         
         FOVSetting = new ValueSetting(videoMenu.FOVSlider,videoMenu.FOVValueLabel,
-            value =>
+            static value =>
             {
                 PlayerCamera.Instance.PlayerCameraFOV = value;
                 PlayerPrefs.SetFloat(GameSettings.VideoSettings.FOV, value);
@@ -215,7 +219,7 @@ public class SettingsHandler : ScriptableObject
         VsyncSetting = new DefinedSetting<VsyncType>(
             videoMenu.VsyncLabel,
             new [] { VsyncType.Off ,VsyncType.On, VsyncType.HalfRefreshRate},
-            value =>
+            static value =>
             {
                 QualitySettings.vSyncCount = (int)value;
                 PlayerPrefs.SetInt(GameSettings.VideoSettings.Vsync, (int)value);
@@ -225,7 +229,7 @@ public class SettingsHandler : ScriptableObject
         
         VsyncSetting.ForceApply();
 
-        MasterVolume = new ValueSetting(audioMenu.MasterVolSlider,audioMenu.MasterVolValueLabel,
+        MasterVolume = new ValueSetting(audioMenu.MasterVolSlider,audioMenu.MasterVolValueLabel, 
         value =>
         {
             mixer.SetFloat(masterVolumeKey, SliderValueToDB(value));
@@ -233,7 +237,7 @@ public class SettingsHandler : ScriptableObject
         },
         PlayerPrefs.GetFloat(GameSettings.AudioSettings.MasterVolume, 100f));
         
-        EffectsVolume = new ValueSetting(audioMenu.EffectVolSlider,audioMenu.EffectVolValueLabel,
+        EffectsVolume = new ValueSetting(audioMenu.EffectVolSlider,audioMenu.EffectVolValueLabel, 
         value =>
         {
             mixer.SetFloat(effectsVolumeKey, SliderValueToDB(value));
@@ -254,7 +258,7 @@ public class SettingsHandler : ScriptableObject
         MotionBlurSetting = new VolumeSetting<MotionBlur>(videoMenu.MotionBlurToggle,volumeProfile);
     }
 
-    private float SliderValueToDB(float sliderValue) => 20.0f * Mathf.Log10(sliderValue / 100f);
+    private static float SliderValueToDB(float sliderValue) => 20.0f * Mathf.Log10(sliderValue / 100f);
 
     private GraphicsQuality GetCurrentGraphicsQuality(RenderPipelineAsset asset)
     {

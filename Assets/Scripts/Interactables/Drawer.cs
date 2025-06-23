@@ -5,12 +5,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
-public class Drawer : MonoBehaviour, IInteractable, IDisposable
+public class Drawer : BaseInteractable
 {
-    [FormerlySerializedAs("info")] [SerializeField] private DrawerData data;
+    [SerializeField] private DrawerData data;
+    protected override InteractableData InteractableData => data;
     [field:SerializeField] public string InteractGroupLabel { get; private set; }
-    
-    public event Action InteractionsChanged;
 
     protected bool IsOpen
     {
@@ -20,7 +19,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
             if (value == _isOpen)
                 return;
             _isOpen = value;
-            InteractionsChanged?.Invoke();
+            OnInteractionsChanged();
         }
     }
     
@@ -36,7 +35,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         outline = GetComponent<Outline>();
     }
     [CreateProperty]
-    public Interaction[] CurrentInteractions
+    public override Interaction[] CurrentInteractions
     {
         get
         {
@@ -63,7 +62,7 @@ public class Drawer : MonoBehaviour, IInteractable, IDisposable
         transform.position = destination;
     }
     
-    public bool Interact(IInteractor interactor, InputAction invokedAction)
+    public override bool Interact(IInteractor interactor, InputAction invokedAction)
     {
         if (IsOpen)
         {

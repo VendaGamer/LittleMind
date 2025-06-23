@@ -37,7 +37,7 @@ public class InteractionHandler : ScriptableObject
     private void RefreshUI()
     {
         SetGlobalInteractions(currentGlobalInteractionGroup);
-        SetCurrentInteractableInteractions(currentInteractable);
+        SetCurrentInteractable(currentInteractable);
     }
     
     public void SetGlobalInteractions([CanBeNull] GlobalInteractionGroup newGlobalInteractions)
@@ -45,7 +45,7 @@ public class InteractionHandler : ScriptableObject
         currentGlobalInteractionGroup = newGlobalInteractions;
     }
 
-    public void SetCurrentInteractableInteractions([CanBeNull] IInteractable interactions)
+    public void SetCurrentInteractable([CanBeNull] IInteractable interactions)
     {
        currentInteractable = interactions;
     }

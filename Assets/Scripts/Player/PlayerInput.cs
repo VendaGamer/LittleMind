@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInput : UnityEngine.InputSystem.PlayerInput
 {

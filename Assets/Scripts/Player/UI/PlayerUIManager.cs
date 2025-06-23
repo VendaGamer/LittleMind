@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Humanizer;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -26,10 +27,10 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         set => playerUI.rootVisualElement.visible = value;
     }
 
-    public void NewChapter(byte chapterNum, string contents)
+    public void NewChapter(int chapterNum, string contents)
     {
-        chapterLabel.text = $"Chapter {chapterNum}";
-        chapterTitle.text = contents;
+        chapterTitle.text = chapterNum.ToRoman();
+        chapterLabel.text = contents;
         newChapterSeq.Play();
     }
 

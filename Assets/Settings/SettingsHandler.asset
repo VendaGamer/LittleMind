@@ -15,10 +15,5 @@ MonoBehaviour:
   lowQuality: {fileID: 11400000, guid: d0e2fc18fe036412f8223b3b3d9ad574, type: 2}
   mediumQuality: {fileID: 11400000, guid: e1260c1148f6143b28bae5ace5e9c5d1, type: 2}
   highQuality: {fileID: 11400000, guid: 7b7fd9122c28c4d15b667c7040e3b3fd, type: 2}
-  volumeProfile: {fileID: 11400000, guid: dabf2edba2717f94d9adc58618fec8e3, type: 2}
+  volumeProfile: {fileID: 11400000, guid: 1af75a6c1a5470e43a46e02c78849c0f, type: 2}
   mixer: {fileID: 24100000, guid: b846566bc6f38f24980c3d53182fb0b8, type: 2}
-  masterMixerGroup: {fileID: 24300002, guid: b846566bc6f38f24980c3d53182fb0b8, type: 2}
-  effectMixerGroup: {fileID: -6077727014120846575, guid: b846566bc6f38f24980c3d53182fb0b8,
-    type: 2}
-  musicMixerGroup: {fileID: 8083978966675426974, guid: b846566bc6f38f24980c3d53182fb0b8,
-    type: 2}

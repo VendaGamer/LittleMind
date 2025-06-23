@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class Dizzyness : AnxietySymptom
 {
-    private Camera playerCamera => PlayerCamera.Instance.Camera;
+    private Camera playerCamera;
     private float originalFov;
     private TweenerCore<float, float, FloatOptions> currentCycle;
+
+    private void Awake()
+    {
+        playerCamera = Camera.main;
+    }
 
     public override void ActivateSymptom(float intensity)
     {

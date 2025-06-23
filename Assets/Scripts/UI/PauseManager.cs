@@ -109,11 +109,6 @@ public class PauseManager : MonoBehaviour
     
 
     //video settings - post process
-    public void SetBloom(bool value) => settingsHandler.BloomSetting.SetValue(value);
-    public void SetMotionBlur(bool value) => settingsHandler.MotionBlurSetting.SetValue(value);
-    public void SetChromaticAberration(bool value) => settingsHandler.ChromaticAberrationSetting.SetValue(value);
-    public void SetFilmGrain(bool value) => settingsHandler.FilmGrainSetting.SetValue(value);
-    public void SetVignette(bool value) => settingsHandler.VignetteSetting.SetValue(value);
     
     
     public void ApplyAudioSettings() => settingsHandler.ApplyAudioSettings();

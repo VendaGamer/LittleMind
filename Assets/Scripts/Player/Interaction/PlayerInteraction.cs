@@ -8,7 +8,6 @@ public partial class PlayerController
     [SerializeField]
     private Transform pickupPoint;
     public Transform PickupPoint => pickupPoint;
-    
 
     [Header("Interaction Settings")]
     [SerializeField]
@@ -24,38 +23,13 @@ public partial class PlayerController
     private float rayCastDistance = 3f;
 
     [CanBeNull]
-    private IInteractable _interactableLookingAt;
+    private IInteractable interactableLookingAt;
 
     [CanBeNull]
-    private IInteractable _interactableHolding;
-
-    [CanBeNull]
-    public IInteractable InteractableHolding
-    {
-        get => _interactableHolding;
-        private set
-        {
-            if (ReferenceEquals(_interactableHolding, value))
-                return;
-
-            _interactableHolding = value;
-            interactionHandler.SetCurrentInteractableInteractions(value);
-        }
-    }
-
-    [CanBeNull]
-    public IInteractable InteractableLookingAt
-    {
-        get => _interactableLookingAt;
-        private set
-        {
-            if (ReferenceEquals(_interactableLookingAt, value))
-                return;
-
-            _interactableLookingAt = value;
-            interactionHandler.SetCurrentInteractableInteractions(value);
-        }
-    }
+    private IInteractable interactableHolding;
+    
+    public void PickUp(IInteractable itemToPickUp) => interactableHolding = itemToPickUp;
+    public IInteractable InteractableHolding => interactableHolding;
 
     [SerializeField]
     private float pickupLerpDuration = 1f;
@@ -90,8 +64,6 @@ public partial class PlayerController
         }
     }
 
-    public void PickUp(IInteractable itemToPickUp) => InteractableHolding = itemToPickUp;
-
     private void OnDrop(InputAction.CallbackContext obj)
     {
         if (InteractableHolding == null)
@@ -99,7 +71,7 @@ public partial class PlayerController
 
         if (InteractableHolding.Interact(this, obj.action))
         {
-            InteractableHolding = null;
+            interactableHolding = null;
             OnInteractableDrop();
         }
     }
@@ -107,25 +79,28 @@ public partial class PlayerController
     private void HandleInteractableHit(IInteractable interactable)
     {
         // Only update if we're looking at a different interactable
-        if (ReferenceEquals(interactable, InteractableLookingAt))
+        if (ReferenceEquals(interactable, interactableLookingAt))
             return;
-
-        InteractableLookingAt?.ToggleOutline(false);
-        interactable.ToggleOutline(true);
-        InteractableLookingAt = interactable;
+        
+        interactableLookingAt?.OnEndedToLookAt(this);
+        interactableLookingAt = interactable;
+        interactable.OnStartedToLookAt(this);
+        interactionHandler.SetCurrentInteractable(interactable);
     }
 
     private void ClearCurrentInteractable()
     {
-        if (InteractableLookingAt == null)
+        if (interactableLookingAt == null)
             return;
 
-        InteractableLookingAt.ToggleOutline(false);
-        InteractableLookingAt = null;
+        interactableLookingAt.OnEndedToLookAt(this);
+        interactableLookingAt = null;
+        interactionHandler.SetCurrentInteractable(null);
     }
-
-    public void SwitchToPlayer()
+    
+    private void OnUse(InputAction.CallbackContext obj)
     {
-        
+        interactableLookingAt?.Interact(this, obj.action);
     }
+    
 }

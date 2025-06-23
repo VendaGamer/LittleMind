@@ -35,19 +35,18 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private Transform jumpPoint;
 
     [SerializeField]
-    private float maxJumpPointDist = 0.001f;
+    private float maxJumpPointDist = 0.5f;
 
     [SerializeField]
     private float jumpCooldown = 0.1f;
 
     [SerializeField]
-    private float jumpPointRayCast = 0.3f;
+    private float jumpPointRadius = 0.3f;
 
     [SerializeField]
     private LayerMask groundLayerMask;
 
     private bool canJump = true;
-    private bool isGrounded;
     private bool isCrouching;
     private bool isClimbing;
     
@@ -112,11 +111,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         currentSpeed = isRunning ? sprintSpeed : moveSpeed;
     }
 
-    private void OnUse(InputAction.CallbackContext obj)
-    {
-        InteractableLookingAt?.Interact(this, obj.action);
-    }
-
     private void FixedUpdate()
     {
         HandleMovement();
@@ -127,20 +121,14 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleJump()
     {
-        if (interactionHandler.InputControls.Player.Jump.IsPressed() && canJump)
+        if (!canJump || !interactionHandler.InputControls.Player.Jump.IsPressed())
+            return;
+
+        if (Physics.SphereCast(new Ray(jumpPoint.position, -transform.up),
+                jumpPointRadius, maxJumpPointDist, groundLayerMask))
         {
-            if (
-                Physics.SphereCast(
-                    new Ray(jumpPoint.position, Vector3.down),
-                    jumpPointRayCast,
-                    maxJumpPointDist,
-                    groundLayerMask
-                )
-            )
-            {
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
-                StartCoroutine(JumpCooldown());
-            }
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Force);
+            StartCoroutine(JumpCooldown());
         }
     }
 

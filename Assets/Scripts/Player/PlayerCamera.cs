@@ -1,6 +1,7 @@
 using System;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy
@@ -27,6 +28,8 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
         get => PlayerCinCamera.Lens.FieldOfView;
         set => PlayerCinCamera.Lens.FieldOfView = value;
     }
+
+    public void PrioritizePlayerCamera() => PlayerCinCamera.Prioritize();
 
     public Plane[] FrustumPlanes { get; } = new Plane[6];
     private float frustumExpansionFactor = 1.1f;

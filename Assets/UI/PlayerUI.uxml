@@ -7,7 +7,7 @@
                 <engine:VisualElement name="bulb-icon" class="status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/light%20bulb.svg?fileID=7388822144124034973&amp;guid=e95cff2e3d097f2428677daf85ac073e&amp;type=3#light bulb&quot;); display: flex; margin-bottom: 0;" />
             </engine:VisualElement>
         </engine:VisualElement>
-        <engine:VisualElement name="chapter-popup" class="chapter-popup" style="opacity: 1; display: none;">
+        <engine:VisualElement name="chapter-popup" enabled="false" class="chapter-popup" style="opacity: 1; display: flex;">
             <engine:VisualElement name="chapter" class="chapter-border">
                 <engine:Label name="chapter-title" text="I" class="chapter-number" />
                 <engine:VisualElement name="chapter-divider" class="chapter-divider" />

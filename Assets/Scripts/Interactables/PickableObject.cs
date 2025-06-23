@@ -5,9 +5,12 @@ using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class PickableObject : MonoBehaviour, IInteractable
+public abstract class PickableObject : BaseInteractable
 {
     protected abstract PickableObjectData Data { get; }
+
+    protected override InteractableData InteractableData => Data;
+
     protected bool IsPicked
     {
         get => _isPicked;
@@ -16,13 +19,11 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
             if (value == _isPicked)
                 return;
             _isPicked = value;
-            InteractionsChanged?.Invoke();
+            OnInteractionsChanged();
         }
     }
 
     private CancellationTokenSource curTokScr;
-    public event Action InteractionsChanged;
-    public string InteractGroupLabel => Data.InteractableGroupLabel;
 
     private Rigidbody rb;
     private Collider col;
@@ -30,14 +31,8 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
     private Coroutine currentPickupCoroutine;
     private Transform Container;
     private bool _isPicked = false;
-
-    protected void OnInteractionsChanged()
-    {
-        InteractionsChanged?.Invoke();
-    }
-
-    [CreateProperty]
-    public Interaction[] CurrentInteractions
+    
+    public override Interaction[] CurrentInteractions
     {
         get { return IsPicked ? new[] { Data.DropInteraction } : new[] { Data.PickupInteraction }; }
     }
@@ -101,7 +96,7 @@ public abstract class PickableObject : MonoBehaviour, IInteractable
 
     protected virtual void OnDropped() { }
 
-    public virtual bool Interact(IInteractor interactor, InputAction invokedAction)
+    public override bool Interact(IInteractor interactor, InputAction invokedAction)
     {
         if (IsPicked)
         {

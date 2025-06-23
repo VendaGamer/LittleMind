@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
-public class Door : MonoBehaviour, IInteractable
+public class Door : BaseInteractable
 {
     [FormerlySerializedAs("info")] [SerializeField] protected DoorData data;
+    
+    protected override InteractableData InteractableData => data;
     private Quaternion closedRotation;
     private bool _isOpen = false;
 
@@ -19,14 +21,9 @@ public class Door : MonoBehaviour, IInteractable
             if (value == _isOpen)
                 return;
             _isOpen = value;
-            InteractionsChanged?.Invoke();
+            OnInteractionsChanged();
         }
     }
-    
-    protected void OnInteractionsChanged() => InteractionsChanged?.Invoke();
-    
-    public string InteractGroupLabel => data.InteractableGroupLabel;
-    public event Action InteractionsChanged;
     
     private Coroutine currentRotateCoroutine;
     
@@ -34,8 +31,8 @@ public class Door : MonoBehaviour, IInteractable
     {
         closedRotation = transform.parent.rotation;
     }
-    [CreateProperty]
-    public virtual Interaction[] CurrentInteractions
+    
+    public override Interaction[] CurrentInteractions
     {
         get
         {
@@ -43,7 +40,7 @@ public class Door : MonoBehaviour, IInteractable
         }
     }
 
-    public virtual bool Interact(IInteractor interactor, InputAction invokedAction)
+    public override bool Interact(IInteractor interactor, InputAction invokedAction)
     {
         if (IsOpen)
         {
@@ -67,11 +64,6 @@ public class Door : MonoBehaviour, IInteractable
             IsOpen = true;
             return true;
         }
-        return false;
-    }
-
-    public bool ToggleOutline(bool value)
-    {
         return false;
     }
 
