@@ -49,7 +49,8 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private bool canJump = true;
     private bool isGrounded;
     private bool isCrouching;
-
+    private bool isClimbing;
+    
     private float currentSpeed;
     private Rigidbody rb;
     private bool isRunning;
@@ -76,12 +77,8 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Sprint.performed -= OnSprint;
         controlsPlayer.Drop.performed -= OnDrop;
         controlsPlayer.Crouch.performed -= OnCrouch;
-
-        if (currentLock != IKTargetType.none)
-        {
-            UnlockLeftHand();
-            UnlockRightHand();
-        }
+        
+        // TODO: maybe unlock the IK
     }
 
     private void OnEnable()
@@ -95,9 +92,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Drop.performed += OnDrop;
         controlsPlayer.Crouch.performed += OnCrouch;
         interactionHandler.SetGlobalInteractions(globalInteractionGroupPlayerControls);
-
-        LockLeftHandTo(leftHandIKConstraintTransform);
-        LockRightHandTo(rightHandIKConstraintTransform);
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)
@@ -125,7 +119,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void FixedUpdate()
     {
-
         HandleMovement();
         HandleJump();
         
@@ -192,6 +185,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleMovement()
     {
+        
         Vector2 moveInput = interactionHandler.InputControls.Player.Move.ReadValue<Vector2>();
 
         currentMoveVelocity = Vector2.Lerp(

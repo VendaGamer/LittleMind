@@ -1,13 +1,17 @@
+using System;
 using UnityEngine;
 
-public class Ladder : MonoBehaviour
+public class Ladder : MonoBehaviour, ILadderTargets
 {
     [Header("Ladder Configuration")]
     [SerializeField] 
-    private uint numberOfSteps = 7;
+    private int numberOfSteps = 7;
     
     [SerializeField]
     private float ladderWidth = 0.8f;
+    
+    [SerializeField]
+    private float targetPositionsOffset = 0f;
     
     [SerializeField]
     private Transform topPointOfStep;
@@ -19,26 +23,46 @@ public class Ladder : MonoBehaviour
     private float topBottomCrop = 0f;
 
     [SerializeField] 
-    [Range(0f, 1f)]
     private float climbProgress = 0f;
 
     private Vector3[] targetPositions;
     
-    [Header("Current Limb Positions")]
-    public Vector3 leftHandPosition;
-    public Vector3 rightHandPosition;
-    public Vector3 leftLegPosition;
-    public Vector3 rightLegPosition;
+    [Header("Positions of Targets of limbs")]
+    [Tooltip("Determines destination of limb")]
+    private int leftHandTargetDestinationIndex;
+    private int rightHandTargetDestinationIndex;
+    private int leftLegTargetDestinationIndex;
+    private int rightLegTargetDestinationIndex;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
+    [Header("Current index of targets base")]
+    [Tooltip("Determines position from which targets should lerp")]
+    private int leftHandTargetCurrentIndex;
+    private int rightHandTargetCurrentIndex;
+    private int leftLegTargetCurrentIndex;
+    private int rightLegTargetCurrentIndex;
+    
+    [Header("Targets of the limbs")]
+    [Tooltip("IK constraints should be locked to them when climbing")]
+    [SerializeField]
+    private Transform leftHandTarget;
+    [SerializeField]
+    private Transform rightHandTarget;
+    [SerializeField]
+    private Transform leftLegTarget;
+    [SerializeField]
+    private Transform rightLegTarget;
+    
+    public Transform LeftHandTarget => leftHandTarget;
+    public Transform RightHandTarget => rightHandTarget;
+    public Transform LeftLegTarget => leftLegTarget;
+    public Transform RightLegTarget => rightLegTarget;
 
-    private void OnTriggerExit(Collider other)
-    {
+    [SerializeField] 
+    private float playerBodyOffset = 1f;
 
-    }
+    [SerializeField]
+    private AnimationCurve limbMovement;
+    
     
     private void OnDrawGizmosSelected()
     {
@@ -53,12 +77,20 @@ public class Ladder : MonoBehaviour
             
             // Draw current limb positions
             Gizmos.color = Color.green;
-            Gizmos.DrawCube(leftHandPosition, Vector3.one * 0.08f);
-            Gizmos.DrawCube(rightHandPosition, Vector3.one * 0.08f);
+            Gizmos.DrawCube(targetPositions[leftHandTargetDestinationIndex],Vector3.one * 0.08f);
+            Gizmos.DrawCube(targetPositions[rightHandTargetDestinationIndex], Vector3.one * 0.08f);
             
             Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(leftLegPosition, 0.06f);
-            Gizmos.DrawSphere(rightLegPosition, 0.06f);
+            Gizmos.DrawSphere(targetPositions[leftLegTargetDestinationIndex], 0.06f);
+            Gizmos.DrawSphere(targetPositions[rightLegTargetDestinationIndex], 0.06f);
+            
+            Gizmos.color = Color.orangeRed;
+            Gizmos.DrawCube(leftLegTarget.position, Vector3.one * 0.08f);
+            Gizmos.DrawCube(rightLegTarget.position, Vector3.one * 0.08f);
+            
+            Gizmos.color = Color.dodgerBlue;
+            Gizmos.DrawCube(leftHandTarget.position, Vector3.one * 0.08f);
+            Gizmos.DrawCube(rightHandTarget.position, Vector3.one * 0.08f);
         }
     }
     
@@ -71,66 +103,142 @@ public class Ladder : MonoBehaviour
         }
     }
 
+
     private void CalculateStepProgress()
     {
         if (targetPositions == null || targetPositions.Length == 0)
             return;
         
-        climbProgress = Mathf.Clamp01(climbProgress);
+        // Clamp progress to valid range (0 to numberOfSteps-1)
+        climbProgress = Mathf.Clamp(climbProgress, 0f, numberOfSteps - 1);
         
-        float progressSteps = climbProgress * numberOfSteps;
-        int baseLegStep = Mathf.FloorToInt(progressSteps);
-        int baseHandStep = Mathf.Min(baseLegStep + 2, targetPositions.Length - 1);
+        // Calculate current step and fraction within that step
+        int currentStep = Mathf.FloorToInt(climbProgress);
+        float stepFraction = climbProgress - currentStep; // 0-1 within current step
         
-        // Determine which limbs are on which steps
-        // The climbing pattern: at any point, 3 limbs are placed, 1 is moving
+        // Calculate base positions for limbs (3-step offset pattern)
+        int legStep = currentStep;
+        int handStep = Mathf.Min(currentStep + 3, numberOfSteps - 1);
         
-        if (baseLegStep % 2 == 0) // Even step - left leg is the base
+        // Determine climbing pattern based on current step
+        if (currentStep % 2 == 0) // Even step - left side leads
         {
-            leftLegPosition = GetStepPosition(baseLegStep);
-            rightLegPosition = GetStepPosition(Mathf.Max(0, baseLegStep - 1));
+            // Calculate destination indices
+            leftLegTargetDestinationIndex = Mathf.Min(legStep, numberOfSteps - 1);
+            rightLegTargetDestinationIndex = Mathf.Max(0, legStep - 1);
+            leftHandTargetDestinationIndex = Mathf.Min(handStep, numberOfSteps - 1);
+            rightHandTargetDestinationIndex = Mathf.Max(0, handStep - 1);
             
-            leftHandPosition = GetStepPosition(baseHandStep);
-            rightHandPosition = GetStepPosition(Mathf.Max(0, baseHandStep - 1));
+            if (stepFraction < 0.5f) // First half - right leg moves
+            {
+                // Static positions
+                leftLegTarget.position = targetPositions[leftLegTargetDestinationIndex];
+                leftHandTarget.position = targetPositions[leftHandTargetDestinationIndex];
+                rightHandTarget.position = targetPositions[rightHandTargetDestinationIndex];
+                
+                // Moving limb - right leg
+                rightLegTargetCurrentIndex = Mathf.Max(0, legStep - 2);
+                float moveProgress = stepFraction * 2f; // Scale 0-0.5 to 0-1
+                rightLegTarget.position = Vector3.Lerp(
+                    targetPositions[rightLegTargetCurrentIndex], 
+                    targetPositions[rightLegTargetDestinationIndex], 
+                    moveProgress
+                );
+            }
+            else // Second half - left hand moves
+            {
+                // Static positions
+                leftLegTarget.position = targetPositions[leftLegTargetDestinationIndex];
+                rightLegTarget.position = targetPositions[rightLegTargetDestinationIndex];
+                rightHandTarget.position = targetPositions[rightHandTargetDestinationIndex];
+                
+                // Moving limb - left hand
+                leftHandTargetCurrentIndex = Mathf.Max(0, handStep - 1);
+                float moveProgress = (stepFraction - 0.5f) * 2f; // Scale 0.5-1 to 0-1
+                leftHandTarget.position = Vector3.Lerp(
+                    targetPositions[leftHandTargetCurrentIndex], 
+                    targetPositions[leftHandTargetDestinationIndex], 
+                    moveProgress
+                );
+            }
         }
-        else // Odd step - right leg is the base
+        else // Odd step - right side leads
         {
-            rightLegPosition = GetStepPosition(baseLegStep);
-            leftLegPosition = GetStepPosition(Mathf.Max(0, baseLegStep - 1));
+            // Calculate destination indices
+            rightLegTargetDestinationIndex = Mathf.Min(legStep, numberOfSteps - 1);
+            leftLegTargetDestinationIndex = Mathf.Max(0, legStep - 1);
+            rightHandTargetDestinationIndex = Mathf.Min(handStep, numberOfSteps - 1);
+            leftHandTargetDestinationIndex = Mathf.Max(0, handStep - 1);
             
-            rightHandPosition = GetStepPosition(baseHandStep);
-            leftHandPosition = GetStepPosition(Mathf.Max(0, baseHandStep - 1));
+            if (stepFraction < 0.5f) // First half - left leg moves
+            {
+                // Static positions
+                rightLegTarget.position = targetPositions[rightLegTargetDestinationIndex];
+                leftHandTarget.position = targetPositions[leftHandTargetDestinationIndex];
+                rightHandTarget.position = targetPositions[rightHandTargetDestinationIndex];
+                
+                // Moving limb - left leg
+                leftLegTargetCurrentIndex = Mathf.Max(0, legStep - 2);
+                float moveProgress = stepFraction * 2f; // Scale 0-0.5 to 0-1
+                leftLegTarget.position = Vector3.Lerp(
+                    targetPositions[leftLegTargetCurrentIndex], 
+                    targetPositions[leftLegTargetDestinationIndex], 
+                    moveProgress
+                );
+            }
+            else // Second half - right hand moves
+            {
+                // Static positions
+                rightLegTarget.position = targetPositions[rightLegTargetDestinationIndex];
+                leftLegTarget.position = targetPositions[leftLegTargetDestinationIndex];
+                leftHandTarget.position = targetPositions[leftHandTargetDestinationIndex];
+                
+                // Moving limb - right hand
+                rightHandTargetCurrentIndex = Mathf.Max(0, handStep - 1);
+                float moveProgress = (stepFraction - 0.5f) * 2f; // Scale 0.5-1 to 0-1
+                rightHandTarget.position = Vector3.Lerp(
+                    targetPositions[rightHandTargetCurrentIndex], 
+                    targetPositions[rightHandTargetDestinationIndex], 
+                    moveProgress
+                );
+            }
         }
     }
-    
-    private Vector3 GetStepPosition(int stepIndex)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (stepIndex < 0 || stepIndex >= targetPositions.Length)
-            return Vector3.zero;
-            
-        return targetPositions[stepIndex];
+        if (other.TryGetComponent<PlayerController>(out var PlayerController))
+        {
+            Debug.Log($"PlayerController: {other.name}");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        
     }
     
     private void CalculateStepPositions()
     {
         targetPositions = new Vector3[numberOfSteps];
 
-        float croppedBottomY = bottomPointOfStep.position.y + topBottomCrop;
-        
-        float interval = (topPointOfStep.position.y - topBottomCrop) - croppedBottomY;
-        interval /= (numberOfSteps - 1);
+        // Get the actual direction vector of the ladder
+        Vector3 ladderDirection = (topPointOfStep.position - bottomPointOfStep.position).normalized;
+    
+        // Calculate cropped bottom and top positions
+        Vector3 croppedBottomPos = bottomPointOfStep.position + ladderDirection * topBottomCrop;
+        Vector3 croppedTopPos = topPointOfStep.position - ladderDirection * topBottomCrop;
+    
+        // Get the ladder's right direction for alternating step positions
         Vector3 ladderRight = transform.right;
 
         for (var i = 0; i < numberOfSteps; i++)
         {
-            var targetY = croppedBottomY + (interval * i);
-            
-            Vector3 centerPosition = new Vector3(
-                bottomPointOfStep.position.x, 
-                targetY, 
-                bottomPointOfStep.position.z
-            );
-            
+            // Interpolate along the ladder's direction
+            float t = (float)i / (numberOfSteps - 1);
+            Vector3 centerPosition = Vector3.Lerp(croppedBottomPos, croppedTopPos, t);
+        
+            // Alternate sides based on step index
             if (i % 2 == 0)
             {
                 targetPositions[i] = centerPosition - ladderRight * (ladderWidth / 2);
@@ -139,6 +247,7 @@ public class Ladder : MonoBehaviour
             {
                 targetPositions[i] = centerPosition + ladderRight * (ladderWidth / 2);
             }
+            targetPositions[i] += transform.forward * targetPositionsOffset;
         }
     }
 }

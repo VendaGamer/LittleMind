@@ -10,19 +10,6 @@ public partial class PlayerController
     [SerializeField]
     private TwoBoneIKConstraint rightHandIKConstraint;
 
-    [SerializeField]
-    Transform rightHandIKConstraintTransform,
-        leftHandIKConstraintTransform;
-
-    [SerializeField]
-    private RigBuilder handRigBuilder;
-
-    [Header("Hand Targets")]
-    [SerializeField]
-    private Transform rightHandKeyLockTarget;
-    
-    [SerializeField]
-    private Transform leftHandKeyLockTarget;
     
     [Header("Leg Settings")]
     [SerializeField]
@@ -30,42 +17,12 @@ public partial class PlayerController
     
     [SerializeField]
     private TwoBoneIKConstraint rightLegIKConstraint;
-
-    [SerializeField]
-    Transform rightLegIKConstraintTransform,
-        leftLegIKConstraintTransform;
-
-    [SerializeField]
-    private RigBuilder LegRigBuilder;
-
-    [Header("Leg Targets")]
-    [SerializeField]
-    private Transform rightLegKeyLockTarget;
     
     [SerializeField]
-    private Transform leftLegKeyLockTarget;
+    private RigBuilder rigBuilder;
 
     private IKTargetType currentLock;
-
-    private void LockLeftHandTo(Transform target)
-    {
-        if (!target)
-            return;
-        leftHandIKConstraint.data.target = target;
-        leftHandIKConstraint.weight = 1f;
-        handRigBuilder.Build();
-        animator.Rebind();
-    }
-
-    private void UnlockLeftHand()
-    {
-        if (currentLock == IKTargetType.none)
-            return;
-        leftHandIKConstraint.weight = 0f;
-        leftHandIKConstraint.data.target = null;
-        handRigBuilder.Build();
-        animator.Rebind();
-    }
+    
 
     private void LockRightHandTo(Transform target)
     {
@@ -73,7 +30,7 @@ public partial class PlayerController
             return;
         rightHandIKConstraint.data.target = target;
         rightHandIKConstraint.weight = 1f;
-        handRigBuilder.Build();
+        rigBuilder.Build();
         animator.Rebind();
     }
 
@@ -83,7 +40,7 @@ public partial class PlayerController
             return;
         rightHandIKConstraint.weight = 0f;
         rightHandIKConstraint.data.target = null;
-        handRigBuilder.Build();
+        rigBuilder.Build();
         animator.Rebind();
     }
 
@@ -104,13 +61,13 @@ public partial class PlayerController
         currentLock = IKTargetType.none;
     }
 
-    public void SetHandTarget(IKTargetType targetType)
+    public void SetIKTarget(IKTargetType targetType)
     {
         currentLock = targetType;
         switch (targetType)
         {
             case IKTargetType.key:
-                LockRightHandTo(rightHandKeyLockTarget);
+                
                 break;
             case IKTargetType.twoHand:
 
