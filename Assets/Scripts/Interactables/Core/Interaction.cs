@@ -1,29 +1,69 @@
 using System;
+using System.Runtime.CompilerServices;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
+
+[GeneratePropertyBag]
 [Serializable]
-public class Interaction
+public partial class Interaction : INotifyBindablePropertyChanged, IDataSourceViewHashProvider
 {
-    [SerializeField]
+    [SerializeField, DontCreateProperty]
     private string actionName;
 
     [FormerlySerializedAs("Action")]
-    [SerializeField]
+    [SerializeField, DontCreateProperty]
     private InputActionReference actionRef;
 
+    [CreateProperty]
     public InputAction Action => actionRef.action;
-
-    private bool isIcon;
+    
+    [CreateProperty]
+    public string ActionName => actionName;
+    
     private string key;
+    private bool isIcon;
+
+    [CreateProperty]
+    public bool IsIcon
+    {
+        get => isIcon;
+        private set
+        {
+            if(value == isIcon)
+                return;
+            
+            isIcon = value;
+            Notify();
+        }
+    }
     
     [CreateProperty]
-    public bool IsIcon => isIcon;
-    
-    [CreateProperty]
-    public string Key => key;
+    public string Key
+    {
+        get
+        {
+            if (key == null)
+            {
+                RebuildKey();
+            }
+            return key;
+        }
+        private set
+        {
+            if(value == key)
+                return;
+            
+            key = value;
+            Notify();
+        }
+    }
+        
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+
 
     /// <summary>
     /// Should be called when changing control schemes.
@@ -32,36 +72,36 @@ public class Interaction
     private const string WASDIcon = "\u2423";
     public void RebuildKey()
     {
-        var bindingIndex = Action.GetBindingIndex(InteractionHandler.Instance.currentControlSchemeName);
+        var bindingIndex = Action.GetBindingIndex(InputManager.CurrentControlScheme);
         var binding = Action.bindings[bindingIndex];
         
         if (binding.effectivePath.StartsWith("<Keyboard>"))
         {
             if (binding.isPartOfComposite)
             {
-                key = WASDIcon;
-                isIcon = true;
+                Key = WASDIcon;
+                IsIcon = true;
             }
             else
             {
-                key = binding.ToDisplayString();
-                isIcon = false;
+                Key = binding.ToDisplayString();
+                IsIcon = false;
             }
         }
         else if (binding.effectivePath.StartsWith("<Gamepad>"))
         {
-            key = EffetivePathToGamepadIcon(binding.effectivePath);
-            isIcon = true;
+            Key = EffetivePathToGamepadIcon(binding.effectivePath);
+            IsIcon = true;
         }
         else if (binding.effectivePath.StartsWith("<Mouse>"))
         {
-            key = EffectivePathToMouseIcon(binding.effectivePath);
-            isIcon = true;
+            Key = EffectivePathToMouseIcon(binding.effectivePath);
+            IsIcon = true;
         }
         else
         {
-            key = binding.ToDisplayString();
-            isIcon = false;
+            Key = binding.ToDisplayString();
+            IsIcon = false;
         }
         
     }
@@ -122,4 +162,18 @@ public class Interaction
             _ => "\u27FC"
         };
     
+    private void Notify([CallerMemberName] string property = "")
+    {
+        propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
+    }
+
+    public long GetViewHashCode() => (Action, key, actionName).GetHashCode();
+    
+        
+    public override string ToString()
+    {
+        return $"|{ActionName}| - {Key}";
+    }
+
+
 }

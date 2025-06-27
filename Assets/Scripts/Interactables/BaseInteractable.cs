@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,20 +10,30 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     public abstract Interaction[] CurrentInteractions { get; }
     public event Action InteractionsChanged;
     
-    public abstract bool Interact(IInteractor interactor, InputAction invokedAction);
+    [CanBeNull]
+    protected Outline Outline;
 
+    protected virtual void Start()
+    {
+        Outline = GetComponent<Outline>();
+    }
+    
     protected void OnInteractionsChanged()
     {
         InteractionsChanged?.Invoke();
     }
 
-    public virtual void OnEndedToLookAt(IInteractor interactor)
+    public abstract bool Interact(IInteractor interactor, InputAction invokedAction);
+
+    public virtual void OnEndedLookingAt(IInteractor interactor)
     {
-        
+        if(Outline)
+            Outline.enabled = false;
     }
 
-    public virtual void OnStartedToLookAt(IInteractor interactor)
+    public virtual void OnStartedLookingAt(IInteractor interactor)
     {
-        
+        if(Outline)
+            Outline.enabled = true;
     }
 }

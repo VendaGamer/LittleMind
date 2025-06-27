@@ -5,12 +5,16 @@
     -unity-font-definition: url("project://database/Assets/UI/Fonts/OpenSans-Light.ttf?fileID=12800000&guid=d9dffe1eb66f6b14b95fdff9609adf7c&type=3#OpenSans-Light");
     -unity-text-align: middle-center;
     width: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .keyboard-key {
     background-color: darkgray;
-    width: 30px;
-    height: 30px;
+    width: auto;
+    height: auto;
     align-self: center;
     border-top-width: 1px;
     border-right-width: 1px;
@@ -23,15 +27,22 @@
     text-overflow: clip;
     margin-left: 10px;
     align-content: center;
+    min-width: 15px;
+    min-height: 15px;
+    margin-right: 0;
+    justify-content: center;
+    align-items: center;
 }
 
 .promt-font-key {
     -unity-font-definition: url("project://database/Assets/UI/Fonts/promptfont.ttf?fileID=12800000&guid=786e752106593ae4da07d2e2f13225eb&type=3#promptfont");
-    padding-left: 10px;
+    padding-left: 0;
     -unity-text-align: middle-center;
-    width: 30px;
-    height: 30px;
+    width: 15px;
+    height: 15px;
     align-self: center;
+    margin-right: 0;
+    margin-left: 10px;
 }
 
 .crosshair {
@@ -48,6 +59,7 @@
     border-width: 1px;
     border-radius: 50%;
     opacity: 0.8;
+    translate: -4px -4px;
 }
 
 .crosshair--interactive {
@@ -75,7 +87,7 @@
     top: 20px;
     right: 20px;
     width: 30px;
-    min-height: 60px;
+    min-height: auto;
     background-color: rgba(15, 15, 20, 0.85);
     border-width: 1px;
     border-color: rgba(80, 80, 90, 0.4);
@@ -143,7 +155,7 @@
     color: rgba(220, 220, 230, 0.8);
     -unity-font-style: bold;
     -unity-text-align: middle-center;
-    margin-bottom: 4px;
+    margin-bottom: 0;
     letter-spacing: 2px;
     text-shadow: 0 0 8px rgba(220, 220, 230, 0.3);
 }
@@ -167,4 +179,5 @@
 .interactable-interactions {
     align-items: flex-end;
     flex-grow: 1;
+    justify-content: flex-end;
 }

@@ -11,13 +11,12 @@ public class Switch : BaseInteractable
     private Tween SwitchOnTween;
 
     protected override InteractableData InteractableData => data;
-    private Outline outline;
 
     public override Interaction[] CurrentInteractions
     {
         get
         {
-            return new Interaction[] { };
+            return new Interaction[] { isOn ? data.switchOff : data.switchOn };
         }
     }
     
@@ -36,19 +35,11 @@ public class Switch : BaseInteractable
 
     private void Awake()
     {
-        SwitchOnTween = transform.DOLocalMoveX(data.switchMoveDist, data.switchMoveSpeed);
-        outline = GetComponent<Outline>();
+        SwitchOnTween = transform.DOLocalMoveX(data.switchMoveDist, data.switchMoveSpeed)
+            .SetAutoKill(false)
+            .Pause();
     }
 
-    public override void OnStartedToLookAt(IInteractor interactor)
-    {
-        outline.enabled = true;
-    }
-
-    public override void OnEndedToLookAt(IInteractor interactor)
-    {
-        outline.enabled = false;
-    }
 
     public override bool Interact(IInteractor interactor, InputAction invokedAction)
     {
@@ -73,18 +64,6 @@ public class Switch : BaseInteractable
     private void SwitchOn()
     {
         isOn = true;
-        if (SwitchOnTween.IsPlaying())
-        {
-            if (SwitchOnTween.isBackwards)
-            {
-                SwitchOnTween.Kill();
-            }
-            else
-            {
-                return;
-            }
-        }
-        
         SwitchOnTween.Play();
         
     }
@@ -92,17 +71,6 @@ public class Switch : BaseInteractable
     private void SwitchOff()
     {
         isOn = false;
-        if (SwitchOnTween.IsPlaying())
-        {
-            if (!SwitchOnTween.isBackwards)
-            {
-                SwitchOnTween.Kill();
-            }
-            else
-            {
-                return;
-            }
-        }
         
         SwitchOnTween.PlayBackwards();
     }

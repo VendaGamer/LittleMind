@@ -9,6 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43c0a4b6c28b435cbd7ebeaf63061af5, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b7d0f47a5d343ff97733ae2b5874ea0, type: 3}
   m_Name: interactHandler
   m_EditorClassIdentifier: 
+  interactable:
+    interactGroupLabel: aaaaaaaa
+    currentInteractions:
+    - actionName: sdsa
+      actionRef: {fileID: 8909975673403271220, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - actionName: dsad
+      actionRef: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}
+    - actionName: dsad
+      actionRef: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+        type: 3}

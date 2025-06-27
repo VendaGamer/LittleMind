@@ -14,9 +14,6 @@ public class Diary : MonoBehaviour
     [SerializeField]
     private GlobalInteractionGroup globalInteractions;
 
-    [SerializeField]
-    private InteractionHandler interactionHandler;
-
     private DiaryPage[] leftPages;
     private DiaryPage[] rightPages;
     private PlayerController playerController;
@@ -48,27 +45,26 @@ public class Diary : MonoBehaviour
 
     private void OnEnable()
     {
-        interactionHandler.InputControls.General.Enable();
-        var diaryControls = interactionHandler.InputControls.Diary;
+        InputManager.InputControls.General.Enable();
+        var diaryControls = InputManager.InputControls.Diary;
         diaryControls.Enable();
         diaryControls.TurnPageLeft.performed += TurnLeft;
         diaryControls.TurnPageRight.performed += TurnRight;
         PlayerCamera.Instance.OnBlendFinished += OnBlendFinished;
-        interactionHandler.InputControls.General.Exit.performed += OnExit;
-        interactionHandler.SetGlobalInteractions(globalInteractions);
+        InputManager.InputControls.General.Exit.performed += OnExit;
         playerController.enabled = false;
         virtualCamera.Priority = PlayerCamera.Instance.CurrentVirtualCameraPriority + 2;
     }
 
     private void OnDisable()
     {
-        interactionHandler.InputControls.General.Disable();
-        var diaryControls = interactionHandler.InputControls.Diary;
+        InputManager.InputControls.General.Disable();
+        var diaryControls = InputManager.InputControls.Diary;
         diaryControls.Disable();
         diaryControls.TurnPageLeft.performed -= TurnLeft;
         diaryControls.TurnPageRight.performed -= TurnRight;
         PlayerCamera.Instance.OnBlendFinished -= OnBlendFinished;
-        interactionHandler.InputControls.General.Exit.performed -= OnExit;
+        InputManager.InputControls.General.Exit.performed -= OnExit;
         playerController.enabled = true;
         virtualCamera.Priority = PlayerCamera.Instance.CurrentVirtualCameraPriority - 2;
     }

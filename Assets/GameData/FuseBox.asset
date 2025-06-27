@@ -24,5 +24,6 @@ MonoBehaviour:
     actionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}
   <LookThroughKeyHoleInteraction>k__BackingField:
-    actionName: 
-    actionRef: {fileID: 0}
+    actionName: test
+    actionRef: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+      type: 3}

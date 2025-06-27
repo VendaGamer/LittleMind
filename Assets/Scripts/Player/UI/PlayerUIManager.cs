@@ -7,18 +7,32 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
 {
     [SerializeField]
     private UIDocument playerUI;
-    
     private VisualElement chapterPopup;
     private Label chapterTitle;
     private Label chapterLabel;
     private VisualElement memoryIcon;
     private VisualElement heartIcon;
     private Sequence newChapterSeq;
+    private ListView interactableListView;
+    private VisualElement interactableInteractions;
+    private VisualElement statusBar;
+    private VisualElement crossHair;
 
     public bool MemoryIconVisibility
     {
-        get => memoryIcon.visible; 
-        set => memoryIcon.visible = value;
+        get => memoryIcon.visible;
+        set
+        {
+            if (value == memoryIcon.visible)
+                return;
+            
+            memoryIcon.visible = value;
+            
+            if (value == heartIcon.visible)
+            {
+                statusBar.visible = value;
+            }
+        }
     }
     
     public bool Visibility
@@ -34,6 +48,22 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         newChapterSeq.Play();
     }
 
+    public void RefreshInteractionsListView()
+    {
+        interactableListView.Rebuild();
+    }
+    public void ShowInteractableContainer()
+    {
+        interactableInteractions.visible = true;
+        crossHair.AddToClassList("crosshair--interactive");
+    }
+    
+    public void HideInteractableContainer()
+    {
+        interactableInteractions.visible = false;
+        crossHair.RemoveFromClassList("crosshair--interactive");
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -43,10 +73,14 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         chapterLabel = root.Q<Label>("chapter-label");
         memoryIcon = root.Q<VisualElement>("bulb-icon");
         heartIcon = root.Q<VisualElement>("heart-icon");
-        
-        
-        memoryIcon.style.display = DisplayStyle.None;
-        heartIcon.style.display = DisplayStyle.None;
+        crossHair = root.Q<VisualElement>("crosshair");
+        interactableListView = root.Q<ListView>("interactable-listview");
+        interactableInteractions = root.Q<VisualElement>("interactable-interactions");
+        statusBar = root.Q<VisualElement>("status-bar");
+        interactableInteractions.visible = false;
+        memoryIcon.visible = false;
+        heartIcon.visible = false;
+        statusBar.visible = false;
         
         newChapterSeq = DOTween
             .Sequence()
@@ -54,5 +88,4 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
             .Append(chapterPopup.DOFadeOut(3f).SetDelay(5f));
         NewChapter(1, "What is upon us");
     }
-    
 }

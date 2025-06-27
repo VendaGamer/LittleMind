@@ -1,12 +1,19 @@
 using System;
+using Unity.Properties;
 using UnityEngine;
 
 [Serializable]
 public class GlobalInteractionGroup : IInteractionGroup
 {
-    [field: SerializeField]
-    public string InteractGroupLabel { get; private set; }
+    [SerializeField, DontCreateProperty] 
+    private string interactGroupLabel;
+    
+    [CreateProperty]
+    public string InteractGroupLabel => interactGroupLabel;
 
-    [field: SerializeField]
-    public Interaction[] CurrentInteractions { get; private set; }
+    [SerializeField, DontCreateProperty]
+    public Interaction[] currentInteractions;
+    
+    [CreateProperty]
+    public Interaction[] CurrentInteractions => currentInteractions;
 }

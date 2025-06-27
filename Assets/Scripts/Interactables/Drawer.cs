@@ -1,15 +1,12 @@
-using System;
 using System.Collections;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class Drawer : BaseInteractable
 {
     [SerializeField] private DrawerData data;
     protected override InteractableData InteractableData => data;
-    [field:SerializeField] public string InteractGroupLabel { get; private set; }
 
     protected bool IsOpen
     {
@@ -26,15 +23,14 @@ public class Drawer : BaseInteractable
     
     private Vector3 closedPosition;
     private Coroutine currentMoveCoroutine;
-    private Outline outline;
     private bool _isOpen = false;
     
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         closedPosition = transform.position;
-        outline = GetComponent<Outline>();
     }
-    [CreateProperty]
+    
     public override Interaction[] CurrentInteractions
     {
         get
@@ -87,17 +83,5 @@ public class Drawer : BaseInteractable
             return true;
         }
         return false;
-    }
-
-    public bool ToggleOutline(bool value)
-    {
-        outline.enabled = value;
-        return true;
-    }
-
-    public void Dispose()
-    {
-        if (currentMoveCoroutine != null)
-            StopCoroutine(currentMoveCoroutine);
     }
 }

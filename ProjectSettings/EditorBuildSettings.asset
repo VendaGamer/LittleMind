@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Map_backup.unity
+    path: Assets/Scenes/Map.unity
     guid: f520036d6f179184bb0c49c99f5268e2
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 8a06d92fe03088c4ea424a873a4b11a3,

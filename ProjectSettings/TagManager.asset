@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Audio_effect
   - Audio_music
+  - PlayerCinCamera
   layers:
   - Default
   - TransparentFX

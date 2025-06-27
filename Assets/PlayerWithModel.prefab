@@ -1755,7 +1755,6 @@ MonoBehaviour:
     <CurrentInteractions>k__BackingField:
     - actionName: 
       actionRef: {fileID: 0}
-  interactionHandler: {fileID: 11400000, guid: 8354aec3e80db6c4b93b57951eba3dd1, type: 2}
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -1771,10 +1770,13 @@ MonoBehaviour:
   jumpPoint: {fileID: 7955756814250554620}
   maxJumpPointDist: 0.2
   jumpCooldown: 0.1
-  jumpPointRayCast: 0.3
+  jumpPointRadius: 0.3
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 839
+  playerCamera: {fileID: 7240546982011560759}
+  playerRoot: {fileID: 6185675373264984707}
+  pauseMenuManager: {fileID: 0}
 --- !u!4 &4476688630060171545 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 658689967997702607, guid: 7a82c0231913e8c4cbcec824fe1c49ea,

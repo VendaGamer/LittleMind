@@ -1,9 +1,64 @@
 fileFormatVersion: 2
-guid: f47fcc65628384e41a97c6f057720c50
+guid: 4fc410f38fc61fd4196330016c28ad17
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: b9d9c2b6045278d41ba707588468918f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hallway_base
+    second: {fileID: 2100000, guid: 568c90b54d0fe2743a30763d965c2a9f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Main_main
+    second: {fileID: 2100000, guid: 0b38f7bbe1bdb7f42baec13404b3406b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Main_wood_floor
+    second: {fileID: 2100000, guid: 39288c392cf2984459d097a11172672e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MetalPlate
+    second: {fileID: 2100000, guid: 7e178cdb233dd1b4e933c0813f3da59c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal_support
+    second: {fileID: 2100000, guid: 8c7f3e0f4a6397b4d8e9a71d927c2f79, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Storage_Roof
+    second: {fileID: 2100000, guid: 91573b76f6ff25b4483ce3645da3ca5d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Storage_floor
+    second: {fileID: 2100000, guid: 1b9a4d48279f0ec4ea9f02349329f240, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Storage_main
+    second: {fileID: 2100000, guid: a4ea09f4f90d3004097579679aa3449a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WindowFrame
+    second: {fileID: 2100000, guid: 16596b1846547af478837767fd49909b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood_support
+    second: {fileID: 2100000, guid: c3a83605c607fb14abdccc2ed00d7159, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -69,7 +124,7 @@ ModelImporter:
     strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0

@@ -1,8 +1,5 @@
-using System;
 using DG.Tweening;
-using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 public class SubwayMovement : MonoBehaviour
@@ -15,9 +12,7 @@ public class SubwayMovement : MonoBehaviour
     private Rigidbody rb;
     private int currentLane = 0; // -1 = left, 0 = middle, 1 = right
     private bool isChangingLanes;
-
-    [SerializeField]
-    private InteractionHandler interactionHandler;
+    
 
     void Start()
     {
@@ -26,14 +21,14 @@ public class SubwayMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        interactionHandler.InputControls.Player.Enable();
-        interactionHandler.InputControls.Player.Move.performed += OnMove;
+        InputManager.InputControls.Player.Enable();
+        InputManager.InputControls.Player.Move.performed += OnMove;
     }
 
     private void OnDisable()
     {
-        interactionHandler.InputControls.Player.Disable();
-        interactionHandler.InputControls.Player.Move.performed -= OnMove;
+        InputManager.InputControls.Player.Disable();
+        InputManager.InputControls.Player.Move.performed -= OnMove;
     }
 
     void FixedUpdate()

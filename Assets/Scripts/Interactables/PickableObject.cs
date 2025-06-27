@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading;
+using JetBrains.Annotations;
 using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -27,7 +28,6 @@ public abstract class PickableObject : BaseInteractable
 
     private Rigidbody rb;
     private Collider col;
-    private Outline outline;
     private Coroutine currentPickupCoroutine;
     private Transform Container;
     private bool _isPicked = false;
@@ -42,7 +42,7 @@ public abstract class PickableObject : BaseInteractable
         Container = transform.parent ?? transform;
         rb = GetComponentInParent<Rigidbody>();
         col = GetComponent<Collider>();
-        outline = GetComponent<Outline>();
+        Outline = GetComponent<Outline>();
     }
 
     private void DropObject()
@@ -116,11 +116,5 @@ public abstract class PickableObject : BaseInteractable
             return true;
         }
         return false;
-    }
-
-    public bool ToggleOutline(bool value)
-    {
-        outline.enabled = value;
-        return true;
     }
 }

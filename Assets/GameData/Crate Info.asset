@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Crate Info
   m_EditorClassIdentifier: 
   <InteractableGroupLabel>k__BackingField: Crate
-  <InteractablePriority>k__BackingField: 0
   <LerpDuration>k__BackingField: 1
   <PickupInteraction>k__BackingField:
     actionName: Pickup
-    actionRef: {fileID: -3550544013171843405, guid: d28e1abc489e3544d8273f9d2a57ed9e,
+    actionRef: {fileID: -7867832723914823774, guid: d28e1abc489e3544d8273f9d2a57ed9e,
       type: 3}
   <DropInteraction>k__BackingField:
     actionName: Drop

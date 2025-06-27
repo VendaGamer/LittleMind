@@ -12,9 +12,7 @@ public partial class PlayerController
     [Header("Interaction Settings")]
     [SerializeField]
     private GlobalInteractionGroup globalInteractionGroupPlayerControls;
-
-    [SerializeField]
-    private InteractionHandler interactionHandler;
+    
 
     [SerializeField]
     private LayerMask interactableLayerMask;
@@ -28,7 +26,6 @@ public partial class PlayerController
     [CanBeNull]
     private IInteractable interactableHolding;
     
-    public void PickUp(IInteractable itemToPickUp) => interactableHolding = itemToPickUp;
     public IInteractable InteractableHolding => interactableHolding;
 
     [SerializeField]
@@ -39,29 +36,22 @@ public partial class PlayerController
     {
         if (
             Physics.Raycast(
-                playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)),
+                PlayerCamera.Instance.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)),
                 out var raycastHit,
                 rayCastDistance,
                 interactableLayerMask
             )
         )
         {
-            if (raycastHit.collider.TryGetComponent<IInteractable>(out var interactable))
+            if (raycastHit.collider.TryGetComponent<BaseInteractable>(out var interactable))
             {
                 // hit interactable, maybe the same, maybe new one
                 HandleInteractableHit(interactable);
-            }
-            else
-            {
-                // hit something that is not interactable
-                ClearCurrentInteractable();
+                return;
             }
         }
-        else
-        {
-            // hit nothing
-            ClearCurrentInteractable();
-        }
+        
+        ClearCurrentInteractable();
     }
 
     private void OnDrop(InputAction.CallbackContext obj)
@@ -72,35 +62,50 @@ public partial class PlayerController
         if (InteractableHolding.Interact(this, obj.action))
         {
             interactableHolding = null;
+            InteractionHandler.Instance.SetCurrentInteractable(null);
             OnInteractableDrop();
         }
     }
 
-    private void HandleInteractableHit(IInteractable interactable)
+    private void HandleInteractableHit(BaseInteractable interactable)
     {
         // Only update if we're looking at a different interactable
         if (ReferenceEquals(interactable, interactableLookingAt))
             return;
         
-        interactableLookingAt?.OnEndedToLookAt(this);
+        interactableLookingAt?.OnEndedLookingAt(this);
         interactableLookingAt = interactable;
-        interactable.OnStartedToLookAt(this);
-        interactionHandler.SetCurrentInteractable(interactable);
+        interactable.OnStartedLookingAt(this);
+        InteractionHandler.Instance.SetCurrentInteractable(interactableLookingAt);
     }
-
+    
     private void ClearCurrentInteractable()
     {
         if (interactableLookingAt == null)
             return;
 
-        interactableLookingAt.OnEndedToLookAt(this);
+        interactableLookingAt.OnEndedLookingAt(this);
         interactableLookingAt = null;
-        interactionHandler.SetCurrentInteractable(null);
+
+        InteractionHandler.Instance.SetCurrentInteractable(interactableHolding);
     }
     
     private void OnUse(InputAction.CallbackContext obj)
     {
-        interactableLookingAt?.Interact(this, obj.action);
+        if (interactableHolding == null)
+        {
+            interactableLookingAt?.Interact(this, obj.action);
+        }
+        else
+        {
+            interactableHolding.Interact(this, obj.action);
+        }
+    }
+    
+    public void PickUp(IInteractable itemToPickUp)
+    {
+        interactableHolding = itemToPickUp;
+        InteractionHandler.Instance.SetCurrentInteractable(interactableHolding);
     }
     
 }

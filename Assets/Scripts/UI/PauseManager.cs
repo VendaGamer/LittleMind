@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering;
 using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
-
 
 public class PauseManager : MonoBehaviour
 {
@@ -18,55 +16,48 @@ public class PauseManager : MonoBehaviour
     private VideoMenu videoMenu;
     
     [SerializeField]
-    private VolumeProfile volumeProfile;
-    
-    [SerializeField]
     private SettingsHandler settingsHandler;
     
-    [SerializeField]
-    private InteractionHandler interactionHandler;
-    
-
-    
-    
     private MenuBase _currentMenu;
-
-    private MenuBase currentMenu
-    {
-        set
-        {
-            _currentMenu?.Hide();
-            _currentMenu = value;
-            _currentMenu?.Show();
-        }
-    }
-    private PlayerController playerController;
-
-
+    
+    [SerializeField]
+    private GameObject playerRoot;
+    
+    
     private void Awake()
     {
-        playerController = FindFirstObjectByType<PlayerController>();
         settingsHandler.InitValues(audioMenu, videoMenu);
     }
 
     private void OnEnable()
     {
-        currentMenu = mainMenu;
+        TransitionToMenu(mainMenu);
+        InputManager.InputControls.General.Enable();
+        InputManager.InputControls.General.Exit.performed += OnExit;
     }
     
     private void OnDisable()
     {
-        currentMenu = null;
+        TransitionToMenu(null);
+        InputManager.InputControls.General.Disable();
+        InputManager.InputControls.General.Exit.performed -= OnExit;
     }
 
     public void ShowAudioSettings()
     {
-        currentMenu = audioMenu;
+        TransitionToMenu(audioMenu);
     }
 
     public void ShowVideoSettings()
     {
-        currentMenu = videoMenu;
+        TransitionToMenu(videoMenu);
+    }
+
+    private void TransitionToMenu(MenuBase menu)
+    {
+        _currentMenu?.Hide();
+        _currentMenu = menu;
+        _currentMenu?.Show();
     }
 
     public void QuitGame()
@@ -76,15 +67,15 @@ public class PauseManager : MonoBehaviour
 
     private void OnExit(CallbackContext _)
     {
-        if (ReferenceEquals(_currentMenu, videoMenu) || ReferenceEquals(_currentMenu, audioMenu))
+        if (_currentMenu == videoMenu || _currentMenu ==audioMenu)
         {
-            currentMenu = mainMenu;
+            TransitionToMenu(mainMenu);
         }
         else
         {
-            currentMenu = null;
+            TransitionToMenu(null);
             root.SetActive(false);
-            playerController.SwitchToPlayer();
+            playerRoot.SetActive(true);
         }
         
     }

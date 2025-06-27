@@ -10,10 +10,6 @@ public class Alzheimer : MonoBehaviour
     [CanBeNull]
     private MemoryTrigger currentMemoryTrigger;
 
-    [Header("Interaction Settings")]
-    [SerializeField]
-    private InteractionHandler interactionHandler;
-
     public void RegisterMemoryTrigger(MemoryTrigger trigger) => currentMemoryTrigger = trigger;
 
     public void UnregisterMemoryTrigger(MemoryTrigger trigger)
@@ -39,12 +35,12 @@ public class Alzheimer : MonoBehaviour
 
     private void OnEnable()
     {
-        interactionHandler.InputControls.Player.Journal.performed += OnJournal;
+        InputManager.InputControls.Player.Journal.performed += OnJournal;
     }
 
     private void OnDisable()
     {
-        interactionHandler.InputControls.Player.Journal.performed -= OnJournal;
+        InputManager.InputControls.Player.Journal.performed -= OnJournal;
     }
 
     private void OnJournal(CallbackContext _)

@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -45,6 +45,9 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     [SerializeField]
     private LayerMask groundLayerMask;
+    
+    [SerializeField]
+    private CinemachineCamera playerCamera;
 
     private bool canJump = true;
     private bool isCrouching;
@@ -54,13 +57,14 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private Rigidbody rb;
     private bool isRunning;
     private Animator animator;
-    private Camera playerCamera;
+    
+    public static PlayerInput PlayerInput { get; private set; }
 
     private void Awake()
     {
+        PlayerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
         rb = GetComponentInParent<Rigidbody>();
-        playerCamera = Camera.main;
     }
 
     private void Start()
@@ -70,7 +74,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void OnDisable()
     {
-        var controlsPlayer = interactionHandler.InputControls.Player;
+        var controlsPlayer = InputManager.InputControls.Player;
         controlsPlayer.Disable();
         controlsPlayer.Use.performed -= OnUse;
         controlsPlayer.Sprint.performed -= OnSprint;
@@ -84,13 +88,12 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        var controlsPlayer = interactionHandler.InputControls.Player;
+        var controlsPlayer = InputManager.InputControls.Player;
         controlsPlayer.Enable();
         controlsPlayer.Use.performed += OnUse;
         controlsPlayer.Sprint.performed += OnSprint;
         controlsPlayer.Drop.performed += OnDrop;
         controlsPlayer.Crouch.performed += OnCrouch;
-        interactionHandler.SetGlobalInteractions(globalInteractionGroupPlayerControls);
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)
@@ -115,13 +118,21 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     {
         HandleMovement();
         HandleJump();
-        
+    }
+
+    private void Update()
+    {
         HandleInteraction();
+    }
+    
+    private void LateUpdate()
+    {
+        RotatePlayerBody();
     }
 
     private void HandleJump()
     {
-        if (!canJump || !interactionHandler.InputControls.Player.Jump.IsPressed())
+        if (!canJump || !InputManager.InputControls.Player.Jump.IsPressed())
             return;
 
         if (Physics.SphereCast(new Ray(jumpPoint.position, -transform.up),
@@ -137,11 +148,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         canJump = false;
         yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
-    }
-
-    private void LateUpdate()
-    {
-        RotatePlayerBody();
     }
 
     private void RotatePlayerBody()
@@ -174,7 +180,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void HandleMovement()
     {
         
-        Vector2 moveInput = interactionHandler.InputControls.Player.Move.ReadValue<Vector2>();
+        Vector2 moveInput = InputManager.InputControls.Player.Move.ReadValue<Vector2>();
 
         currentMoveVelocity = Vector2.Lerp(
             currentMoveVelocity,

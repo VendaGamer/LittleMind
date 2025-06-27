@@ -29,4 +29,5 @@ public abstract class MonoBehaviourSingleton<T> : MonoBehaviour where T : MonoBe
             _instance = null;
         }
     }
+    
 }

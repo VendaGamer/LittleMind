@@ -1,58 +1,106 @@
+using System;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Unity.Properties;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-[CreateAssetMenu(menuName = "Interactions/Interactions",fileName = "Interactions")]
-public class InteractionHandler : ScriptableObject
+[GeneratePropertyBag]
+public partial class InteractionHandler : ScriptableObject, INotifyBindablePropertyChanged, IDataSourceViewHashProvider
 {
     [CreateProperty]
-    public bool CanInteract => currentInteractable is not null;
-    public static InteractionHandler Instance { get; private set; }
-    public Controls InputControls { get; private set; }
-    
-    
-    private IInteractable currentInteractable;
-    private GlobalInteractionGroup currentGlobalInteractionGroup;
-
-    private string _currentControlSchemeName;
-    public string currentControlSchemeName
+    public string CurrentInteractionGroupLabel
     {
-        get => _currentControlSchemeName;
-        set
+        get => currentInteractionGroupLabel;
+        private set
         {
-            if (value == _currentControlSchemeName) return;
-            
-            _currentControlSchemeName = value;
-            RefreshUI();
+            currentInteractionGroupLabel = value;
+            Notify();
         }
     }
+    
+    [CreateProperty]
+    public Interaction[] CurrentInteractions
+    {
+
+        get => currentInteractions;
+        private set
+        {
+            currentInteractions = value;
+            Notify();
+        }
+    }
+    
+    public static InteractionHandler Instance { get; private set; }
+    
+    [CanBeNull]
+    private IInteractable shownInteractable;
+    
+    private string currentInteractionGroupLabel;
+    private Interaction[] currentInteractions;
+    public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
+
+    public void SetCurrentInteractable([CanBeNull] IInteractable newInteractable)
+    {
+        if (ReferenceEquals(shownInteractable, newInteractable))
+            return;
+
+        //unregister current
+        if (shownInteractable != null)
+            shownInteractable.InteractionsChanged -= OnInteractionsChanged;
+
+
+        PlayerUIManager.Instance.HideInteractableContainer();
+        if (newInteractable == null)
+        {
+            CurrentInteractionGroupLabel = null;
+            CurrentInteractions = null;
+            shownInteractable = null;
+            return;
+        }
+        
+        CurrentInteractionGroupLabel = newInteractable.InteractGroupLabel;
+        CurrentInteractions = newInteractable.CurrentInteractions;
+        newInteractable.RebuildKeys();
+        PlayerUIManager.Instance.ShowInteractableContainer();
+        shownInteractable = newInteractable;
+        shownInteractable.InteractionsChanged += OnInteractionsChanged;
+    }
+
+    private void OnInteractionsChanged()
+    { 
+
+        CurrentInteractions = shownInteractable?.CurrentInteractions;
+    }
+
 
     private void OnEnable()
     {
         Instance = this;
-        InputControls = new Controls();
-        currentControlSchemeName = InputControls.KeyboardMouseScheme.name;
+        InputManager.ControlSchemeChanged.AddListener(RefreshUI);
     }
     
-    private void RefreshUI()
+    private void OnDisable()
     {
-        SetGlobalInteractions(currentGlobalInteractionGroup);
-        SetCurrentInteractable(currentInteractable);
+        InputManager.ControlSchemeChanged.RemoveListener(RefreshUI);
+    }
+
+    private void RefreshUI(string _)
+    {
+        if (CurrentInteractions == null)
+            return;
+        
+        foreach (var interaction in CurrentInteractions)
+        {
+            interaction.RebuildKey();
+        }
     }
     
-    public void SetGlobalInteractions([CanBeNull] GlobalInteractionGroup newGlobalInteractions)
+    public long GetViewHashCode() => (currentInteractionGroupLabel, currentInteractions).GetHashCode();
+
+    private void Notify([CallerMemberName] string property = "")
     {
-        currentGlobalInteractionGroup = newGlobalInteractions;
+        Debug.Log($"Property: {property}, has changed");
+        propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
-
-    public void SetCurrentInteractable([CanBeNull] IInteractable interactions)
-    {
-       currentInteractable = interactions;
-    }
-    
-    public void OnControlsChanged(UnityEngine.InputSystem.PlayerInput playerInput)
-        => currentControlSchemeName = playerInput.currentControlScheme;
-
-
-
 }
