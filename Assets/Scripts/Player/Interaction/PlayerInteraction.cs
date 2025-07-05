@@ -43,7 +43,7 @@ public partial class PlayerController
             )
         )
         {
-            if (raycastHit.collider.TryGetComponent<BaseInteractable>(out var interactable))
+            if (raycastHit.collider.TryGetComponent<Interactable>(out var interactable))
             {
                 // hit interactable, maybe the same, maybe new one
                 HandleInteractableHit(interactable);
@@ -67,7 +67,7 @@ public partial class PlayerController
         }
     }
 
-    private void HandleInteractableHit(BaseInteractable interactable)
+    private void HandleInteractableHit(Interactable interactable)
     {
         // Only update if we're looking at a different interactable
         if (ReferenceEquals(interactable, interactableLookingAt))

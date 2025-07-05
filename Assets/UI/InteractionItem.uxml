@@ -7,7 +7,7 @@
             </Bindings>
         </engine:Label>
         <engine:VisualElement name="KeyContainer" data-source-type="Interaction, Assembly-CSharp" class="keyboard-key">
-            <engine:Label name="key-text" enable-rich-text="false" text="F" class="key-hint-text" style="-unity-text-align: middle-center; margin-top: 0; margin-right: 5px; margin-bottom: 0; margin-left: 5px; font-size: 12px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; justify-content: center; align-items: center; align-self: center; align-content: center;">
+            <engine:Label name="key-text" enable-rich-text="false" text="F" class="key-hint-text" style="-unity-text-align: middle-center; margin-top: 0; margin-right: 5px; margin-bottom: 0; margin-left: 5px; font-size: 12px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; justify-content: center; align-items: center; align-self: center; align-content: center; white-space: nowrap;">
                 <Bindings>
                     <engine:DataBinding property="text" data-source-path="Key" binding-mode="ToTarget" />
                 </Bindings>
