@@ -1905,7 +1905,7 @@ MonoBehaviour:
   jumpPointRadius: 0.3
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 839
+    m_Bits: 835
   playerCamera: {fileID: 7240546982011560759}
   playerRoot: {fileID: 6185675373264984707}
   pauseMenuManager: {fileID: 0}

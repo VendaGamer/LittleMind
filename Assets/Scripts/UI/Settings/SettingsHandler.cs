@@ -241,15 +241,17 @@ public class SettingsHandler : ScriptableObject
         value =>
         {
             mixer.SetFloat(effectsVolumeKey, SliderValueToDB(value));
-            PlayerPrefs.SetFloat(GameSettings.AudioSettings.EffectsVolume, 100f);
-        });
+            PlayerPrefs.SetFloat(GameSettings.AudioSettings.EffectsVolume, value);
+        },
+        PlayerPrefs.GetFloat(GameSettings.AudioSettings.EffectsVolume, 100f));
 
         MusicVolume = new ValueSetting(audioMenu.MusicVolSlider,audioMenu.MusicVolValueLabel,
         value =>
         {
             mixer.SetFloat(musicVolumeKey, SliderValueToDB(value));
-            PlayerPrefs.SetFloat(GameSettings.AudioSettings.MusicVolume, 100f);
-        });
+            PlayerPrefs.SetFloat(GameSettings.AudioSettings.MusicVolume, value);
+        },
+        PlayerPrefs.GetFloat(GameSettings.AudioSettings.MusicVolume, 100f));
 
         BloomSetting = new VolumeSetting<Bloom>(videoMenu.BloomToggle,volumeProfile);
         VignetteSetting = new VolumeSetting<Vignette>(videoMenu.VignetteToggle,volumeProfile);

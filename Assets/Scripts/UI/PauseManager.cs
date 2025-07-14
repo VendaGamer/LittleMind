@@ -65,10 +65,11 @@ public class PauseManager : MonoBehaviour
         Application.Quit();
     }
 
-    private void OnExit(CallbackContext _)
+    private void OnExit(CallbackContext ctx)
     {
-        if (_currentMenu == videoMenu || _currentMenu ==audioMenu)
+        if (ReferenceEquals(_currentMenu, audioMenu) || ReferenceEquals(_currentMenu, videoMenu))
         {
+            Debug.Log("GOING TO MAIN MENU");
             TransitionToMenu(mainMenu);
         }
         else
@@ -77,7 +78,6 @@ public class PauseManager : MonoBehaviour
             root.SetActive(false);
             playerRoot.SetActive(true);
         }
-        
     }
     
     //video settings - general
