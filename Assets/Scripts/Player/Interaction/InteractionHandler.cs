@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Unity.Properties;
@@ -21,7 +20,7 @@ public partial class InteractionHandler : ScriptableObject, INotifyBindablePrope
     }
     
     [CreateProperty]
-    public IReadOnlyList<Interaction> CurrentInteractions
+    public Interaction[] CurrentInteractions
     {
 
         get => currentInteractions;
@@ -38,7 +37,7 @@ public partial class InteractionHandler : ScriptableObject, INotifyBindablePrope
     private IInteractable shownInteractable;
     
     private string currentInteractionGroupLabel;
-    private IReadOnlyList<Interaction> currentInteractions;
+    private Interaction[] currentInteractions;
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
     public void SetCurrentInteractable([CanBeNull] IInteractable newInteractable)
@@ -70,6 +69,7 @@ public partial class InteractionHandler : ScriptableObject, INotifyBindablePrope
 
     private void OnInteractionsChanged()
     { 
+
         CurrentInteractions = shownInteractable?.CurrentInteractions;
     }
 
@@ -100,6 +100,7 @@ public partial class InteractionHandler : ScriptableObject, INotifyBindablePrope
 
     private void Notify([CallerMemberName] string property = "")
     {
+        Debug.Log($"Property: {property}, has changed");
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 }

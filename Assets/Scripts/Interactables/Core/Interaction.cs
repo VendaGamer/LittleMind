@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
+
 [GeneratePropertyBag]
 [Serializable]
 public partial class Interaction : INotifyBindablePropertyChanged, IDataSourceViewHashProvider
@@ -62,9 +63,6 @@ public partial class Interaction : INotifyBindablePropertyChanged, IDataSourceVi
     }
         
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
-    
-    [SerializeReference]
-    public IInteractionFeedback[] Responses = Array.Empty<IInteractionFeedback>();
 
 
     /// <summary>
@@ -105,7 +103,6 @@ public partial class Interaction : INotifyBindablePropertyChanged, IDataSourceVi
             Key = binding.ToDisplayString();
             IsIcon = false;
         }
-        
         
     }
     
@@ -170,6 +167,13 @@ public partial class Interaction : INotifyBindablePropertyChanged, IDataSourceVi
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 
-    public long GetViewHashCode() => (key, actionName).GetHashCode();
+    public long GetViewHashCode() => (Action, key, actionName).GetHashCode();
     
+        
+    public override string ToString()
+    {
+        return $"|{ActionName}| - {Key}";
+    }
+
+
 }

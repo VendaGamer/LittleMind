@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Unity.Properties;
 using UnityEngine;
 
 [Serializable]
-[GeneratePropertyBag]
-public partial class GlobalInteractionGroup : IInteractionGroup
+public class GlobalInteractionGroup : IInteractionGroup
 {
     [SerializeField, DontCreateProperty] 
     private string interactGroupLabel;
@@ -17,5 +15,5 @@ public partial class GlobalInteractionGroup : IInteractionGroup
     public Interaction[] currentInteractions;
     
     [CreateProperty]
-    public IReadOnlyList<Interaction> CurrentInteractions => currentInteractions;
+    public Interaction[] CurrentInteractions => currentInteractions;
 }

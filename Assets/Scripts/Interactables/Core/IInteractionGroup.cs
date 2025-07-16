@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using DG.Tweening;
 
 public interface IInteractionGroup
 {
     public string InteractGroupLabel { get; }
-    public IReadOnlyList<Interaction> CurrentInteractions { get; }
+    public Interaction[] CurrentInteractions { get; }
 
     public void RebuildKeys()
     {
