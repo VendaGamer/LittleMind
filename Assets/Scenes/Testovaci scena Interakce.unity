@@ -569,35 +569,15 @@ PrefabInstance:
       objectReference: {fileID: 883350564}
     - target: {fileID: 1639137132942048417, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
-      propertyPath: m_ControllerManager.Controllers.Array.data[0].Driver.AccelTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1639137132942048417, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_ControllerManager.Controllers.Array.data[0].Driver.DecelTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1639137132942048417, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_ControllerManager.Controllers.Array.data[1].Driver.AccelTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1639137132942048417, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
-      propertyPath: m_ControllerManager.Controllers.Array.data[1].Driver.DecelTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1639137132942048417, guid: 8c68e2e78cbcff14086fc6e384d096da,
-        type: 3}
       propertyPath: m_ControllerManager.Controllers.Array.data[0].Input.InputAction
       value: 
-      objectReference: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b,
+      objectReference: {fileID: -8581979353572428972, guid: d28e1abc489e3544d8273f9d2a57ed9e,
         type: 3}
     - target: {fileID: 1639137132942048417, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
       propertyPath: m_ControllerManager.Controllers.Array.data[1].Input.InputAction
       value: 
-      objectReference: {fileID: -5630151704836100654, guid: 1d6e640e716dc4ff6989b73d02023f2b,
+      objectReference: {fileID: -8581979353572428972, guid: d28e1abc489e3544d8273f9d2a57ed9e,
         type: 3}
     - target: {fileID: 1827902573783906949, guid: 8c68e2e78cbcff14086fc6e384d096da,
         type: 3}
@@ -1868,9 +1848,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerCinCamera: {fileID: 1140006723}
   maxDistance: 0.05
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 0
   cinemachineBrain: {fileID: 1151097692}
 --- !u!114 &1151097692
 MonoBehaviour:

@@ -16,8 +16,6 @@ public class PlayerCamera : MonoBehaviourSingleton<PlayerCamera>
     [SerializeField]
     private float maxDistance = 0.05f;
 
-    [SerializeField]
-    private LayerMask collisionMask;
     public Camera Camera { get; private set; }
     
     [SerializeField]

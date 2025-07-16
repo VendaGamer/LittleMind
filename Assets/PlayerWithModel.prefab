@@ -1158,7 +1158,7 @@ MonoBehaviour:
         InputAction: {fileID: -8581979353572428972, guid: d28e1abc489e3544d8273f9d2a57ed9e,
           type: 3}
         Gain: 1
-        CancelDeltaTime: 0
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0.075
@@ -1170,7 +1170,7 @@ MonoBehaviour:
         InputAction: {fileID: -8581979353572428972, guid: d28e1abc489e3544d8273f9d2a57ed9e,
           type: 3}
         Gain: -1
-        CancelDeltaTime: 0
+        CancelDeltaTime: 1
       InputValue: -0
       Driver:
         AccelTime: 0.075
@@ -1909,9 +1909,6 @@ MonoBehaviour:
   playerCamera: {fileID: 7240546982011560759}
   playerRoot: {fileID: 6185675373264984707}
   pauseMenuManager: {fileID: 0}
-  references:
-    version: 2
-    RefIds: []
 --- !u!4 &4476688630060171545 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 658689967997702607, guid: 7a82c0231913e8c4cbcec824fe1c49ea,
