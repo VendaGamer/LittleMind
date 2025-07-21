@@ -18,7 +18,7 @@ public class VolumeSetting<T> : IAppliableSetting<bool> where T : VolumeComponen
 
     public VolumeSetting(Toggle toggle, VolumeProfile volumeProfile)
     {
-        toggle.onValueChanged.AddListener(onValueChanged);
+        toggle.onValueChanged.AddListener(OnToggleValueChanged);
         this.toggle = toggle;
         if (!volumeProfile.TryGet<T>(out var component))
             throw new NullReferenceException("There is no such volume profile component");
@@ -32,7 +32,7 @@ public class VolumeSetting<T> : IAppliableSetting<bool> where T : VolumeComponen
         AppliedValue = initialValue;
     }
 
-    private void onValueChanged(bool value)
+    private void OnToggleValueChanged(bool value)
     {
         CurrentValue = value;
     }
@@ -49,7 +49,6 @@ public class VolumeSetting<T> : IAppliableSetting<bool> where T : VolumeComponen
             Debug.Log($"Applied: {typeof(T).Name}");
             AppliedValue = CurrentValue;
             volumeComponent.active = CurrentValue;
-            VolumeManager.instance.CheckDefaultVolumeState();
             PlayerPrefs.SetInt(volumeKey, AppliedValue ? 1 : 0);
         }
     }
@@ -58,7 +57,6 @@ public class VolumeSetting<T> : IAppliableSetting<bool> where T : VolumeComponen
     {
         if (CanApplyOrReset)
         {
-            Debug.Log($"Reseted: {typeof(T).Name}");
             CurrentValue = AppliedValue;
             toggle.SetIsOnWithoutNotify(CurrentValue);
         }

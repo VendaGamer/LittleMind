@@ -10,7 +10,7 @@ public class AntialiasingModeSetting : DefinedSetting<AntialiasingMode>
 
     public AntialiasingModeSetting(GameObject qualitySettingRootObject, TMP_Text label, AntialiasingMode[] possibleValues, Action<AntialiasingMode> applyAction, AntialiasingMode initialValue = default) : base(label, possibleValues, applyAction, initialValue)
     {
-        this.qualitySetting = qualitySettingRootObject;
+        qualitySetting = qualitySettingRootObject;
     }
 
     public override string ToString()

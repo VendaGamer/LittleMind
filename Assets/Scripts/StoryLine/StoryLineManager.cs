@@ -17,5 +17,5 @@ public class StoryLineManager : MonoBehaviourSingleton<StoryLineManager>
         PlayerUIManager.Instance?.NewChapter(currentChapter, chapter.Title);
     }
 
-    public void ShowGameSaving() { }
+    public void SaveGame() { }
 }
