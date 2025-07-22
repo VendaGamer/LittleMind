@@ -41,15 +41,15 @@ public class Drawer : BaseInteractable
     
     private IEnumerator Move(Vector3 destination)
     {
-        Vector3 startPos = transform.position;
-        float distanceToMove = Vector3.Distance(startPos, destination);
-        float adjustedDuration = data.LerpDuration * (distanceToMove / Mathf.Abs(data.OpenX));
+        var startPos = transform.position;
+        var distanceToMove = Vector3.Distance(startPos, destination);
+        var adjustedDuration = data.LerpDuration * (distanceToMove / Mathf.Abs(data.OpenX));
     
-        float elapsedTime = 0f;
+        var elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
         {
             elapsedTime += Time.deltaTime;
-            float step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
+            var step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
 
             transform.position = Vector3.Lerp(startPos, destination, step);
             yield return null;

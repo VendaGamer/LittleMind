@@ -1,0 +1,11 @@
+{
+    "asset": "15ff836df6c49f149a3baa0b2e21d74c",
+    "fileName": "01982d41-b551-7bed-9100-c197fecf6d58.pose.json",
+    "prompt": "Low poly character waking up from his bed and jawning",
+    "negativePrompt": "",
+    "model": "a9c27ca4-3ec9-43e8-96cd-ee891aba64c5",
+    "modelName": "Text to Motion",
+    "customSeed": 1088056407,
+    "w3CTraceId": "d0926ddc29bc634338def01d652f2354",
+    "isTrimmed": false
+}

@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -27,7 +25,7 @@ public class Door : BaseInteractable
     
     private Coroutine currentRotateCoroutine;
     
-    private void Start()
+    protected override void Start()
     {
         closedRotation = transform.parent.rotation;
     }
@@ -69,15 +67,15 @@ public class Door : BaseInteractable
 
     private IEnumerator RotateDoor(Quaternion desiredRotation)
     {
-        Quaternion startRotation = transform.parent.rotation;
-        float angleToRotate = Quaternion.Angle(startRotation, desiredRotation);
-        float adjustedDuration = data.LerpDuration * (angleToRotate / data.OpenAngle);
+        var startRotation = transform.parent.rotation;
+        var angleToRotate = Quaternion.Angle(startRotation, desiredRotation);
+        var adjustedDuration = data.LerpDuration * (angleToRotate / data.OpenAngle);
         
-        float elapsedTime = 0f;
+        var elapsedTime = 0f;
         while (elapsedTime < adjustedDuration)
         {
             elapsedTime += Time.deltaTime;
-            float step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
+            var step = Mathf.SmoothStep(0, 1, elapsedTime / adjustedDuration);
             
             transform.parent.rotation = Quaternion.Lerp(startRotation, desiredRotation, step);
             yield return null;
