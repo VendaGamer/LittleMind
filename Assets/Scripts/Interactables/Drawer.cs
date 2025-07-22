@@ -1,9 +1,9 @@
 using System.Collections;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
-public class Drawer : BaseInteractable
+public class Drawer : Interactable
 {
     [SerializeField] private DrawerData data;
     protected override InteractableData InteractableData => data;
@@ -38,7 +38,9 @@ public class Drawer : BaseInteractable
             return IsOpen ? new[] { data.CloseDrawerInteraction } : new[] {data.OpenDrawerInteraction};
         }
     }
-    
+
+    protected override ReadOnlyArray<Interaction> AllInteractions { get; }
+
     private IEnumerator Move(Vector3 destination)
     {
         var startPos = transform.position;

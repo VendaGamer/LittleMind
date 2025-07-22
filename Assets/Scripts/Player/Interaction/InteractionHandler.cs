@@ -34,24 +34,24 @@ public partial class InteractionHandler : ScriptableObject, INotifyBindablePrope
     public static InteractionHandler Instance { get; private set; }
     
     [CanBeNull]
-    private IInteractable shownInteractable;
+    private Interactable shownInteractable;
     
     private string currentInteractionGroupLabel;
     private Interaction[] currentInteractions;
     public event EventHandler<BindablePropertyChangedEventArgs> propertyChanged;
 
-    public void SetCurrentInteractable([CanBeNull] IInteractable newInteractable)
+    public void SetCurrentInteractable([CanBeNull] Interactable newInteractable)
     {
         if (ReferenceEquals(shownInteractable, newInteractable))
             return;
 
         //unregister current
-        if (shownInteractable != null)
+        if (shownInteractable is not null)
             shownInteractable.InteractionsChanged -= OnInteractionsChanged;
 
 
         PlayerUIManager.Instance.HideInteractableContainer();
-        if (newInteractable == null)
+        if (newInteractable is null)
         {
             CurrentInteractionGroupLabel = null;
             CurrentInteractions = null;
@@ -100,7 +100,6 @@ public partial class InteractionHandler : ScriptableObject, INotifyBindablePrope
 
     private void Notify([CallerMemberName] string property = "")
     {
-        Debug.Log($"Property: {property}, has changed");
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 }

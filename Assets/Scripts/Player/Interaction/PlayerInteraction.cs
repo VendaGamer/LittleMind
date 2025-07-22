@@ -21,12 +21,12 @@ public partial class PlayerController
     private float rayCastDistance = 3f;
 
     [CanBeNull]
-    private IInteractable interactableLookingAt;
+    private Interactable interactableLookingAt;
 
     [CanBeNull]
-    private IInteractable interactableHolding;
+    private Interactable interactableHolding;
     
-    public IInteractable InteractableHolding => interactableHolding;
+    public Interactable InteractableHolding => interactableHolding;
 
     [SerializeField]
     private float pickupLerpDuration = 1f;
@@ -43,7 +43,7 @@ public partial class PlayerController
             )
         )
         {
-            if (raycastHit.collider.TryGetComponent<IInteractable>(out var interactable))
+            if (raycastHit.collider.TryGetComponent<Interactable>(out var interactable))
             {
                 // hit interactable, maybe the same, maybe new one
                 HandleInteractableHit(interactable);
@@ -67,7 +67,7 @@ public partial class PlayerController
         }
     }
 
-    private void HandleInteractableHit(IInteractable interactable)
+    private void HandleInteractableHit(Interactable interactable)
     {
         // Only update if we're looking at a different interactable
         if (ReferenceEquals(interactable, interactableLookingAt))
@@ -81,7 +81,7 @@ public partial class PlayerController
     
     private void ClearCurrentInteractable()
     {
-        if (interactableLookingAt == null)
+        if (interactableLookingAt is null)
             return;
 
         interactableLookingAt.OnEndedLookingAt(this);
@@ -92,7 +92,7 @@ public partial class PlayerController
     
     private void OnUse(InputAction.CallbackContext obj)
     {
-        if (interactableHolding == null)
+        if (interactableHolding is null)
         {
             interactableLookingAt?.Interact(this, obj.action);
         }
@@ -102,7 +102,7 @@ public partial class PlayerController
         }
     }
     
-    public void PickUp(IInteractable itemToPickUp)
+    public void PickUp(Interactable itemToPickUp)
     {
         interactableHolding = itemToPickUp;
         InteractionHandler.Instance.SetCurrentInteractable(interactableHolding);

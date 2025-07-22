@@ -1,9 +1,10 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 using UnityEngine.Serialization;
 
-public class Door : BaseInteractable
+public class Door : Interactable
 {
     [FormerlySerializedAs("info")] [SerializeField] protected DoorData data;
     
@@ -37,6 +38,8 @@ public class Door : BaseInteractable
             return IsOpen ? new[] { data.CloseDoorInteraction } : new[] { data.OpenDoorInteraction, data.LookThroughKeyHoleInteraction };
         }
     }
+
+    protected override ReadOnlyArray<Interaction> AllInteractions { get; }
 
     public override bool Interact(IInteractor interactor, InputAction invokedAction)
     {

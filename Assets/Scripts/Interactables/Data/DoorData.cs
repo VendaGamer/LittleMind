@@ -7,4 +7,4 @@ public class DoorData : InteractableData
     [field:SerializeField] public Interaction OpenDoorInteraction { get; private set; }
     [field:SerializeField] public Interaction CloseDoorInteraction { get; private set; }
     [field:SerializeField] public Interaction LookThroughKeyHoleInteraction { get; private set; }
-}
+} 

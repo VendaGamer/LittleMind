@@ -6,7 +6,7 @@ using Unity.Properties;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class PickableObject : BaseInteractable
+public abstract class PickableObject : Interactable
 {
     protected abstract PickableObjectData Data { get; }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
 public class TransparentablePickableObject : PickableObject
 {
@@ -8,6 +9,8 @@ public class TransparentablePickableObject : PickableObject
     private float originalTransparency;
 
     private Renderer rend;
+
+    protected override ReadOnlyArray<Interaction> AllInteractions { get; }
 
     protected override void Start()
     {

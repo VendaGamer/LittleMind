@@ -3,8 +3,9 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
-public class Switch : BaseInteractable
+public class Switch : Interactable
 {
     [SerializeField]
     private SwitchData data;
@@ -19,7 +20,9 @@ public class Switch : BaseInteractable
             return new Interaction[] { isOn ? data.switchOff : data.switchOn };
         }
     }
-    
+
+    protected override ReadOnlyArray<Interaction> AllInteractions { get; }
+
     private bool isOn = false;
 
     protected bool IsOn
