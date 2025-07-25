@@ -100,7 +100,6 @@ public partial class InteractionHandler : ScriptableObject, INotifyBindablePrope
 
     private void Notify([CallerMemberName] string property = "")
     {
-        Debug.Log($"Property: {property}, has changed");
         propertyChanged?.Invoke(this, new BindablePropertyChangedEventArgs(property));
     }
 }
