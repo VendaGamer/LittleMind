@@ -52,37 +52,23 @@ public static class UIElementDOTweenExtensions
         );
     }
 
-    /// <summary>
-    /// Tweens a VisualElement's opacity property.
-    /// </summary>
     public static Tweener DOFade(this VisualElement target, float endValue, float duration)
     {
-        float startValue = target.resolvedStyle.opacity;
-        return DOTween.To(() => startValue, x => target.style.opacity = x, endValue, duration);
-    }
-
-    public static Tweener DOFadeOut(this VisualElement target, float duration)
-    {
-        float startValue = 1f;
-        return DOTween
-            .To(() => startValue, x => target.style.opacity = x, 0f, duration)
-            .OnComplete(() =>
-            {
-                target.visible = false;
-            });
+        return DOTween.To(() => target.resolvedStyle.opacity,
+            x => target.style.opacity = x,
+            endValue, duration);
     }
 
     public static Tweener DOFadeIn(this VisualElement target, float duration)
-    {
-        float startValue = 0f;
-        return DOTween
-            .To(() => startValue, x => target.style.opacity = x, 1f, duration)
-            .OnStart(() =>
-            {
-                target.visible = true;
-            });
-    }
+        => target.DOFade(1f, duration)
+            .OnStart(() => target.visible = true);
 
+    public static Tweener DOFadeOut(this VisualElement target, float duration)
+        => target.DOFade(0f, duration)
+            .OnStart(() => target.visible = true)
+            .OnComplete(() => target.visible = false);
+    
+    
     /// <summary>
     /// Tweens a VisualElement's position.
     /// </summary>

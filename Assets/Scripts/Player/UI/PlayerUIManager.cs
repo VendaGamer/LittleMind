@@ -2,6 +2,7 @@ using DG.Tweening;
 using Humanizer;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ZLinq;
 
 public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
 {
@@ -17,6 +18,10 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     private VisualElement interactableInteractions;
     private VisualElement statusBar;
     private VisualElement crossHair;
+    
+    private VisualElement[] statusBarElements;
+
+    private Tweener statusBarTweener;
 
     public bool MemoryIconVisibility
     {
@@ -26,12 +31,19 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
             if (value == memoryIcon.visible)
                 return;
             
-            memoryIcon.visible = value;
             
+        }
+    }
+
+    public bool HeartIconVisibility
+    {
+        get => heartIcon.visible;
+        set
+        {
             if (value == heartIcon.visible)
-            {
-                statusBar.visible = value;
-            }
+                return;
+            
+            
         }
     }
     
@@ -39,6 +51,12 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     {
         get => playerUI.rootVisualElement.visible;
         set => playerUI.rootVisualElement.visible = value;
+    }
+    
+
+    private bool IsAnyElementVisible()
+    {
+        return statusBarElements.AsValueEnumerable().Any(e => e.visible);
     }
 
     public void NewChapter(int chapterNum, string contents)
@@ -52,6 +70,19 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     {
         interactableListView.Rebuild();
     }
+
+    private void FadeStatBarElement(VisualElement element)
+    {
+        if (element.visible)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    }
+    
     public void ShowInteractableContainer()
     {
         interactableInteractions.visible = true;
@@ -78,14 +109,30 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         interactableInteractions = root.Q<VisualElement>("interactable-interactions");
         statusBar = root.Q<VisualElement>("status-bar");
         interactableInteractions.visible = false;
-        memoryIcon.visible = false;
-        heartIcon.visible = false;
+        
+        // Initialize status bar and elements as invisible
         statusBar.visible = false;
+        statusBar.style.opacity = 0f;
+        memoryIcon.visible = false;
+        memoryIcon.style.opacity = 0f;
+        heartIcon.visible = false;
+        heartIcon.style.opacity = 0f;
+
+        statusBarElements = new[] { heartIcon, memoryIcon };
         
         newChapterSeq = DOTween
             .Sequence()
             .Append(chapterPopup.DOFadeIn(1f))
             .Append(chapterPopup.DOFadeOut(3f).SetDelay(5f));
+        
         NewChapter(1, "What is upon us");
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        // Clean up tweeners
+        statusBarTweener?.Kill();
+        newChapterSeq?.Kill();
     }
 }

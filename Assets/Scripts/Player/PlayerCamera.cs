@@ -1,7 +1,6 @@
 using System;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// Singleton kamery hráče který každý frame kalkuluje Frustumy

@@ -10,13 +10,22 @@ public class Alzheimer : MonoBehaviour
     [CanBeNull]
     private MemoryTrigger currentMemoryTrigger;
 
-    public void RegisterMemoryTrigger(MemoryTrigger trigger) => currentMemoryTrigger = trigger;
+    public void RegisterMemoryTrigger(MemoryTrigger trigger)
+    {
+        if (ReferenceEquals(trigger, currentMemoryTrigger))
+        {
+            return;
+        }
+        
+        currentMemoryTrigger = trigger;
+    }
 
     public void UnregisterMemoryTrigger(MemoryTrigger trigger)
     {
         if (ReferenceEquals(trigger, currentMemoryTrigger))
         {
             currentMemoryTrigger = null;
+            PlayerUIManager.Instance.MemoryIconVisibility = false;
         }
     }
 
