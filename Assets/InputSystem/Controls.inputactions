@@ -898,6 +898,15 @@
             "id": "7b36260f-0634-4420-9496-b785cb29a569",
             "actions": [
                 {
+                    "name": "Recall",
+                    "type": "Button",
+                    "id": "6ebd5b85-c7e7-4d5b-a473-ba1390dccc60",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "TurnPageLeft",
                     "type": "Button",
                     "id": "29e8efb2-c06d-4bdd-bd71-6cb3d0919dae",
@@ -935,6 +944,28 @@
                 }
             ],
             "bindings": [
+                {
+                    "name": "",
+                    "id": "3b102faa-cee1-411f-adb6-d5c76180a1a7",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Recall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "242ee08c-f4ab-4a11-ad73-21d82b6aff82",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Recall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
                 {
                     "name": "",
                     "id": "03058da6-6607-4509-a56e-860630cf4c42",

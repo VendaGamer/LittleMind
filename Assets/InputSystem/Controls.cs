@@ -984,6 +984,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""7b36260f-0634-4420-9496-b785cb29a569"",
             ""actions"": [
                 {
+                    ""name"": ""Recall"",
+                    ""type"": ""Button"",
+                    ""id"": ""6ebd5b85-c7e7-4d5b-a473-ba1390dccc60"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""TurnPageLeft"",
                     ""type"": ""Button"",
                     ""id"": ""29e8efb2-c06d-4bdd-bd71-6cb3d0919dae"",
@@ -1021,6 +1030,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""3b102faa-cee1-411f-adb6-d5c76180a1a7"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Recall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""242ee08c-f4ab-4a11-ad73-21d82b6aff82"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Recall"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
                 {
                     ""name"": """",
                     ""id"": ""03058da6-6607-4509-a56e-860630cf4c42"",
@@ -1294,6 +1325,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         // Diary
         m_Diary = asset.FindActionMap("Diary", throwIfNotFound: true);
+        m_Diary_Recall = m_Diary.FindAction("Recall", throwIfNotFound: true);
         m_Diary_TurnPageLeft = m_Diary.FindAction("TurnPageLeft", throwIfNotFound: true);
         m_Diary_Exit = m_Diary.FindAction("Exit", throwIfNotFound: true);
         m_Diary_Navigate = m_Diary.FindAction("Navigate", throwIfNotFound: true);
@@ -1763,6 +1795,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     // Diary
     private readonly InputActionMap m_Diary;
     private List<IDiaryActions> m_DiaryActionsCallbackInterfaces = new List<IDiaryActions>();
+    private readonly InputAction m_Diary_Recall;
     private readonly InputAction m_Diary_TurnPageLeft;
     private readonly InputAction m_Diary_Exit;
     private readonly InputAction m_Diary_Navigate;
@@ -1778,6 +1811,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public DiaryActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Diary/Recall".
+        /// </summary>
+        public InputAction @Recall => m_Wrapper.m_Diary_Recall;
         /// <summary>
         /// Provides access to the underlying input action "Diary/TurnPageLeft".
         /// </summary>
@@ -1820,6 +1857,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_DiaryActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_DiaryActionsCallbackInterfaces.Add(instance);
+            @Recall.started += instance.OnRecall;
+            @Recall.performed += instance.OnRecall;
+            @Recall.canceled += instance.OnRecall;
             @TurnPageLeft.started += instance.OnTurnPageLeft;
             @TurnPageLeft.performed += instance.OnTurnPageLeft;
             @TurnPageLeft.canceled += instance.OnTurnPageLeft;
@@ -1843,6 +1883,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="DiaryActions" />
         private void UnregisterCallbacks(IDiaryActions instance)
         {
+            @Recall.started -= instance.OnRecall;
+            @Recall.performed -= instance.OnRecall;
+            @Recall.canceled -= instance.OnRecall;
             @TurnPageLeft.started -= instance.OnTurnPageLeft;
             @TurnPageLeft.performed -= instance.OnTurnPageLeft;
             @TurnPageLeft.canceled -= instance.OnTurnPageLeft;
@@ -2166,6 +2209,13 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     /// <seealso cref="DiaryActions.RemoveCallbacks(IDiaryActions)" />
     public interface IDiaryActions
     {
+        /// <summary>
+        /// Method invoked when associated input action "Recall" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRecall(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "TurnPageLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

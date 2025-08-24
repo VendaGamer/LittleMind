@@ -24,9 +24,16 @@ public class DefinedSetting<T> : IAppliableSetting<T> where T : struct
 
     public virtual void ForceApply()
     {
-        applyAction.Invoke(CurrentValue);
-        appliedIndex = currentIndex;
-        label.text = ToString();
+        try
+        {
+            applyAction.Invoke(CurrentValue);
+            appliedIndex = currentIndex;
+            label.text = ToString();
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     public T NextValue()

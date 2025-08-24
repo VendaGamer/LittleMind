@@ -17,11 +17,17 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     private ListView interactableListView;
     private VisualElement interactableInteractions;
     private VisualElement statusBar;
-    private VisualElement crossHair;
+    private VisualElement crosshair;
     
     private VisualElement[] statusBarElements;
 
     private Tweener statusBarTweener;
+
+    public bool CrosshairVisibility
+    {
+        get => crosshair.visible;
+        set => crosshair.visible = value;
+    }
 
     public bool MemoryIconVisibility
     {
@@ -86,13 +92,13 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     public void ShowInteractableContainer()
     {
         interactableInteractions.visible = true;
-        crossHair.AddToClassList("crosshair--interactive");
+        crosshair.AddToClassList("crosshair--interactive");
     }
     
     public void HideInteractableContainer()
     {
         interactableInteractions.visible = false;
-        crossHair.RemoveFromClassList("crosshair--interactive");
+        crosshair.RemoveFromClassList("crosshair--interactive");
     }
 
     protected override void Awake()
@@ -104,7 +110,7 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         chapterLabel = root.Q<Label>("chapter-label");
         memoryIcon = root.Q<VisualElement>("bulb-icon");
         heartIcon = root.Q<VisualElement>("heart-icon");
-        crossHair = root.Q<VisualElement>("crosshair");
+        crosshair = root.Q<VisualElement>("crosshair");
         interactableListView = root.Q<ListView>("interactable-listview");
         interactableInteractions = root.Q<VisualElement>("interactable-interactions");
         statusBar = root.Q<VisualElement>("status-bar");
