@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 public class PauseManager : MonoBehaviour
@@ -31,14 +32,18 @@ public class PauseManager : MonoBehaviour
 
     private void OnEnable()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         TransitionToMenu(mainMenu);
         InputManager.InputControls.General.Exit.performed += OnExit;
+        PlayerUIManager.Instance.Visibility = false;
     }
     
     private void OnDisable()
     {
         TransitionToMenu(null);
         InputManager.InputControls.General.Exit.performed -= OnExit;
+        PlayerUIManager.Instance.Visibility = true;
     }
 
     public void ShowAudioSettings()
@@ -54,9 +59,11 @@ public class PauseManager : MonoBehaviour
     public void ShowMainMenu()
     {
         TransitionToMenu(mainMenu);
+        root.SetActive(true);
+        playerRoot.SetActive(false);
     }
 
-    private void TransitionToMenu(MenuBase menu)
+    private void TransitionToMenu([CanBeNull] MenuBase menu)
     {
         _currentMenu?.Hide();
         _currentMenu = menu;
@@ -68,6 +75,13 @@ public class PauseManager : MonoBehaviour
         Application.Quit();
     }
 
+    public void ExitMenu()
+    {
+        TransitionToMenu(null);
+        root.SetActive(false);
+        playerRoot.SetActive(true);
+    }
+
     private void OnExit(CallbackContext ctx)
     {
         if (ReferenceEquals(_currentMenu, audioMenu) || ReferenceEquals(_currentMenu, videoMenu))
@@ -76,9 +90,7 @@ public class PauseManager : MonoBehaviour
         }
         else
         {
-            TransitionToMenu(null);
-            root.SetActive(false);
-            playerRoot.SetActive(true);
+            ExitMenu();
         }
     }
     

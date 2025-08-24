@@ -1,10 +1,9 @@
-using System;
 using Unity.Cinemachine;
 using UnityEngine;
 using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 [DefaultExecutionOrder(300)]
-public class Diary : MonoBehaviour
+public class Diary : MonoBehaviourSingleton<Diary>
 {
     [SerializeField]
     private Transform leftPageContainer;
@@ -49,6 +48,7 @@ public class Diary : MonoBehaviour
 
     private void OnDisable()
     {
+        InputManager.InputControls.General.Disable();
         PlayerUIManager.Instance.CrosshairVisibility = true;
         var diaryControls = InputManager.InputControls.Diary;
         diaryControls.Disable();

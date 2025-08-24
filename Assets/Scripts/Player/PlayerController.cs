@@ -81,8 +81,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Drop.performed -= OnDrop;
         controlsPlayer.Crouch.performed -= OnCrouch;
         
-        InputManager.InputControls.General.Disable();
-        InputManager.InputControls.General.Exit.performed -= OnExit;
+        InputManager.InputControls.Player.MainMenu.performed -= OnExit;
 
         // TODO: maybe unlock the IK
     }
@@ -98,8 +97,7 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Drop.performed += OnDrop;
         controlsPlayer.Crouch.performed += OnCrouch;
         
-        InputManager.InputControls.General.Enable();
-        InputManager.InputControls.General.Exit.performed -= OnExit;
+        InputManager.InputControls.Player.MainMenu.performed += OnExit;
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)

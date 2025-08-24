@@ -25,6 +25,7 @@ public class InputManager : MonoBehaviour
         CurrentControlScheme = PlayerInput.currentControlScheme;
         PlayerInput.camera = Camera.main;
         PlayerInput.onControlsChanged += OnControlsChanged;
+        InputControls.General.Enable();
         PlayerInput.uiInputModule = FindFirstObjectByType<InputSystemUIInputModule>();
     }
 

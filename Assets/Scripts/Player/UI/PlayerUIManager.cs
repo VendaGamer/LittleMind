@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Humanizer;
 using UnityEngine;
@@ -37,7 +38,7 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
             if (value == memoryIcon.visible)
                 return;
             
-            
+            memoryIcon.visible = value;
         }
     }
 
@@ -116,22 +117,21 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         statusBar = root.Q<VisualElement>("status-bar");
         interactableInteractions.visible = false;
         
-        // Initialize status bar and elements as invisible
+        
         statusBar.visible = false;
         statusBar.style.opacity = 0f;
         memoryIcon.visible = false;
         memoryIcon.style.opacity = 0f;
         heartIcon.visible = false;
         heartIcon.style.opacity = 0f;
-
-        statusBarElements = new[] { heartIcon, memoryIcon };
         
         newChapterSeq = DOTween
             .Sequence()
             .Append(chapterPopup.DOFadeIn(1f))
             .Append(chapterPopup.DOFadeOut(3f).SetDelay(5f));
         
-        NewChapter(1, "What is upon us");
+        
+        statusBarElements = new[] { heartIcon, memoryIcon };
     }
 
     protected override void OnDestroy()

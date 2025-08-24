@@ -25,7 +25,6 @@ public class Alzheimer : MonoBehaviour
         if (ReferenceEquals(trigger, currentMemoryTrigger))
         {
             currentMemoryTrigger = null;
-            PlayerUIManager.Instance.MemoryIconVisibility = false;
         }
     }
 
@@ -35,11 +34,6 @@ public class Alzheimer : MonoBehaviour
         {
             return;
         }
-        
-        PlayerUIManager.Instance.MemoryIconVisibility = GeometryUtility.TestPlanesAABB(
-            PlayerCamera.Instance.FrustumPlanes,
-            currentMemoryTrigger.BoundsToLookAt
-        );
     }
 
     private void OnEnable()
