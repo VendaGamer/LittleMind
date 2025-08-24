@@ -993,6 +993,24 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""cb57bd25-058c-4852-ba7b-4f615f3191ec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigate"",
+                    ""type"": ""Value"",
+                    ""id"": ""3c89dbb5-35c3-431f-9614-1a82727ffac1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""TurnPageRight"",
                     ""type"": ""Button"",
                     ""id"": ""9dc32c97-20e4-4c20-ac0d-26f4c90d27f7"",
@@ -1024,6 +1042,138 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""TurnPageLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""be6b9ea1-671a-4a1a-ae90-13b1e8a1d59d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e586ca8d-b3ea-4e09-86cb-2e861bc601ae"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51084747-f692-433e-bbaf-b9489688b01c"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""c94b9617-7c18-461c-bb3e-7befd14cf1ac"",
+                    ""path"": ""Dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""fc2fa9af-58e7-4c25-8e4e-522d7e87416d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""5df6ee34-190f-48b1-a5a0-864af500ec9f"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0079e2fb-c710-4625-9646-13674c1292fe"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ec3e651d-84b3-4b4c-a127-99077291452c"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""9877d84f-eda0-4125-8582-77086425375b"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2895e375-4baa-4859-ba83-0a50d37bd22e"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1830a367-da29-4649-8d98-7760e7a64dbf"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""68cd62a2-ea4e-41ba-b847-2f53d276fa5c"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -1145,6 +1295,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         // Diary
         m_Diary = asset.FindActionMap("Diary", throwIfNotFound: true);
         m_Diary_TurnPageLeft = m_Diary.FindAction("TurnPageLeft", throwIfNotFound: true);
+        m_Diary_Exit = m_Diary.FindAction("Exit", throwIfNotFound: true);
+        m_Diary_Navigate = m_Diary.FindAction("Navigate", throwIfNotFound: true);
         m_Diary_TurnPageRight = m_Diary.FindAction("TurnPageRight", throwIfNotFound: true);
         // General
         m_General = asset.FindActionMap("General", throwIfNotFound: true);
@@ -1612,6 +1764,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Diary;
     private List<IDiaryActions> m_DiaryActionsCallbackInterfaces = new List<IDiaryActions>();
     private readonly InputAction m_Diary_TurnPageLeft;
+    private readonly InputAction m_Diary_Exit;
+    private readonly InputAction m_Diary_Navigate;
     private readonly InputAction m_Diary_TurnPageRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "Diary".
@@ -1628,6 +1782,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Diary/TurnPageLeft".
         /// </summary>
         public InputAction @TurnPageLeft => m_Wrapper.m_Diary_TurnPageLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "Diary/Exit".
+        /// </summary>
+        public InputAction @Exit => m_Wrapper.m_Diary_Exit;
+        /// <summary>
+        /// Provides access to the underlying input action "Diary/Navigate".
+        /// </summary>
+        public InputAction @Navigate => m_Wrapper.m_Diary_Navigate;
         /// <summary>
         /// Provides access to the underlying input action "Diary/TurnPageRight".
         /// </summary>
@@ -1661,6 +1823,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @TurnPageLeft.started += instance.OnTurnPageLeft;
             @TurnPageLeft.performed += instance.OnTurnPageLeft;
             @TurnPageLeft.canceled += instance.OnTurnPageLeft;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
+            @Navigate.started += instance.OnNavigate;
+            @Navigate.performed += instance.OnNavigate;
+            @Navigate.canceled += instance.OnNavigate;
             @TurnPageRight.started += instance.OnTurnPageRight;
             @TurnPageRight.performed += instance.OnTurnPageRight;
             @TurnPageRight.canceled += instance.OnTurnPageRight;
@@ -1678,6 +1846,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @TurnPageLeft.started -= instance.OnTurnPageLeft;
             @TurnPageLeft.performed -= instance.OnTurnPageLeft;
             @TurnPageLeft.canceled -= instance.OnTurnPageLeft;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
+            @Navigate.started -= instance.OnNavigate;
+            @Navigate.performed -= instance.OnNavigate;
+            @Navigate.canceled -= instance.OnNavigate;
             @TurnPageRight.started -= instance.OnTurnPageRight;
             @TurnPageRight.performed -= instance.OnTurnPageRight;
             @TurnPageRight.canceled -= instance.OnTurnPageRight;
@@ -1999,6 +2173,20 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTurnPageLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnExit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigate(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "TurnPageRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

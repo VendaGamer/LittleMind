@@ -6,7 +6,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private GameObject root;
     
-    [SerializeField] 
+    [SerializeField]
     private MenuBase mainMenu;
 
     [SerializeField] 
@@ -72,7 +72,6 @@ public class PauseManager : MonoBehaviour
     {
         if (ReferenceEquals(_currentMenu, audioMenu) || ReferenceEquals(_currentMenu, videoMenu))
         {
-            Debug.Log("GOING TO MAIN MENU");
             TransitionToMenu(mainMenu);
         }
         else

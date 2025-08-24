@@ -13,32 +13,17 @@ public class Diary : MonoBehaviour
 
     [SerializeField]
     private GlobalInteractionGroup globalInteractions;
-
-    private DiaryPage[] leftPages;
-    private DiaryPage[] rightPages;
+    
     private PlayerController playerController;
     private CinemachineCamera virtualCamera;
-
-    private int currentPageIndex = 0;
+    
+    [SerializeField]
+    private Outline[] notes;
+    
+    private int currentNoteIndex;
 
     private void Awake()
     {
-        leftPages = new DiaryPage[leftPageContainer.childCount];
-        rightPages = new DiaryPage[rightPageContainer.childCount];
-
-        for (int i = 0; i < leftPageContainer.childCount; i++)
-        {
-            leftPages[i] = leftPageContainer.GetChild(i).GetComponent<DiaryPage>();
-            leftPages[i].gameObject.SetActive(false); // Disable all pages initially
-        }
-
-        for (int i = 0; i < rightPageContainer.childCount; i++)
-        {
-            rightPages[i] = rightPageContainer.GetChild(i).GetComponent<DiaryPage>();
-            rightPages[i].gameObject.SetActive(false); // Disable all pages initially
-        }
-
-        ShowCurrentPages();
         playerController = FindFirstObjectByType<PlayerController>();
         virtualCamera = GetComponentInChildren<CinemachineCamera>();
     }
@@ -48,8 +33,7 @@ public class Diary : MonoBehaviour
         InputManager.InputControls.General.Enable();
         var diaryControls = InputManager.InputControls.Diary;
         diaryControls.Enable();
-        diaryControls.TurnPageLeft.performed += TurnLeft;
-        diaryControls.TurnPageRight.performed += TurnRight;
+        diaryControls.Navigate.performed += OnNavigate;
         PlayerCamera.Instance.OnBlendFinished += OnBlendFinished;
         InputManager.InputControls.General.Exit.performed += OnExit;
         playerController.enabled = false;
@@ -61,12 +45,16 @@ public class Diary : MonoBehaviour
         InputManager.InputControls.General.Disable();
         var diaryControls = InputManager.InputControls.Diary;
         diaryControls.Disable();
-        diaryControls.TurnPageLeft.performed -= TurnLeft;
-        diaryControls.TurnPageRight.performed -= TurnRight;
+        diaryControls.Navigate.performed -= OnNavigate;
         PlayerCamera.Instance.OnBlendFinished -= OnBlendFinished;
         InputManager.InputControls.General.Exit.performed -= OnExit;
         playerController.enabled = true;
         virtualCamera.Priority = PlayerCamera.Instance.CurrentVirtualCameraPriority - 2;
+    }
+
+    private void OnNavigate(CallbackContext obj)
+    {
+        
     }
 
     private void OnBlendFinished()
@@ -79,59 +67,15 @@ public class Diary : MonoBehaviour
         NegateActiveState();
     }
 
-    private void TurnRight(CallbackContext _)
-    {
-        FlipToNextPage();
-    }
-
-    private void TurnLeft(CallbackContext _)
-    {
-        FlipToPreviousPage();
-    }
-
     public void NegateActiveState()
     {
         gameObject.SetActive(!gameObject.activeSelf);
     }
+    
+    
 
-    public void FlipToNextPage()
+    public void UnlockNote(int noteIndex)
     {
-        if (currentPageIndex < leftPages.Length - 1)
-        {
-            HideCurrentPages();
-            currentPageIndex++;
-            ShowCurrentPages();
-        }
-    }
-
-    public void FlipToPreviousPage()
-    {
-        if (currentPageIndex > 0)
-        {
-            HideCurrentPages();
-            currentPageIndex--;
-            ShowCurrentPages();
-        }
-    }
-
-    public void UnlockPage(int pageIndex)
-    {
-        if (pageIndex >= 0 && pageIndex < leftPages.Length)
-        {
-            leftPages[pageIndex].gameObject.SetActive(true);
-            rightPages[pageIndex].gameObject.SetActive(true);
-        }
-    }
-
-    private void ShowCurrentPages()
-    {
-        leftPages[currentPageIndex].gameObject.SetActive(true);
-        rightPages[currentPageIndex].gameObject.SetActive(true);
-    }
-
-    private void HideCurrentPages()
-    {
-        leftPages[currentPageIndex].gameObject.SetActive(true);
-        rightPages[currentPageIndex].gameObject.SetActive(true);
+        
     }
 }
