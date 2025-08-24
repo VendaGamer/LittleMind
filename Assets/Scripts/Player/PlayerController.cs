@@ -1,5 +1,6 @@
 using System.Collections;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -81,6 +82,9 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Drop.performed -= OnDrop;
         controlsPlayer.Crouch.performed -= OnCrouch;
         
+        
+        InputManager.InputControls.General.Exit.performed += OnExit;
+
         // TODO: maybe unlock the IK
     }
 
@@ -94,6 +98,8 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         controlsPlayer.Sprint.performed += OnSprint;
         controlsPlayer.Drop.performed += OnDrop;
         controlsPlayer.Crouch.performed += OnCrouch;
+        
+        InputManager.InputControls.General.Exit.performed -= OnExit;
     }
 
     private void OnCrouch(InputAction.CallbackContext obj)

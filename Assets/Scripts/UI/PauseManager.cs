@@ -32,14 +32,12 @@ public class PauseManager : MonoBehaviour
     private void OnEnable()
     {
         TransitionToMenu(mainMenu);
-        InputManager.InputControls.General.Enable();
         InputManager.InputControls.General.Exit.performed += OnExit;
     }
     
     private void OnDisable()
     {
         TransitionToMenu(null);
-        InputManager.InputControls.General.Disable();
         InputManager.InputControls.General.Exit.performed -= OnExit;
     }
 
@@ -51,6 +49,11 @@ public class PauseManager : MonoBehaviour
     public void ShowVideoSettings()
     {
         TransitionToMenu(videoMenu);
+    }
+
+    public void ShowMainMenu()
+    {
+        TransitionToMenu(mainMenu);
     }
 
     private void TransitionToMenu(MenuBase menu)

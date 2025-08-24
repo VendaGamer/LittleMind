@@ -107,5 +107,9 @@ public partial class PlayerController
         interactableHolding = itemToPickUp;
         InteractionHandler.Instance.SetCurrentInteractable(interactableHolding);
     }
-    
+
+    private void OnExit(InputAction.CallbackContext obj)
+    {
+        SwitchToMainMenu();
+    }
 }

@@ -13,5 +13,6 @@ public partial class PlayerController
     public void SwitchToMainMenu()
     {
         playerRoot.SetActive(false);
+        pauseMenuManager.ShowMainMenu();
     }
 }
