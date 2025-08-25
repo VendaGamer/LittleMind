@@ -34,9 +34,11 @@ public partial class PlayerController
 
     private void HandleInteraction()
     {
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        
         if (
             Physics.Raycast(
-                PlayerCamera.Instance.Camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)),
+                ray,
                 out var raycastHit,
                 rayCastDistance,
                 interactableLayerMask
@@ -46,6 +48,7 @@ public partial class PlayerController
             if (raycastHit.collider.TryGetComponent<IInteractable>(out var interactable))
             {
                 // hit interactable, maybe the same, maybe new one
+                Debug.Log("Looking at interactable");
                 HandleInteractableHit(interactable);
                 return;
             }

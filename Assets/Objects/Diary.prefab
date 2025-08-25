@@ -631,7 +631,14 @@ PrefabInstance:
     - target: {fileID: 1183401895952367972, guid: 71f8696e541d36b45bf77abf3c295242,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581883822894785530, guid: 71f8696e541d36b45bf77abf3c295242,
+        type: 3}
+      propertyPath: m_text
+      value: 'Got the documents now back to boat
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 2835704649327841999, guid: 71f8696e541d36b45bf77abf3c295242,
         type: 3}
@@ -751,7 +758,7 @@ PrefabInstance:
     - target: {fileID: 1183401895952367972, guid: 71f8696e541d36b45bf77abf3c295242,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2835704649327841999, guid: 71f8696e541d36b45bf77abf3c295242,
         type: 3}
@@ -876,7 +883,15 @@ PrefabInstance:
     - target: {fileID: 1183401895952367972, guid: 71f8696e541d36b45bf77abf3c295242,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581883822894785530, guid: 71f8696e541d36b45bf77abf3c295242,
+        type: 3}
+      propertyPath: m_text
+      value: 'There should be a key in room on my right
+
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 2835704649327841999, guid: 71f8696e541d36b45bf77abf3c295242,
         type: 3}

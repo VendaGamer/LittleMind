@@ -13,6 +13,8 @@ public class Diary : MonoBehaviourSingleton<Diary>
 
     [SerializeField]
     private GlobalInteractionGroup globalInteractions;
+
+    private Alzheimer alzh;
     
     private PlayerController playerController;
     private CinemachineCamera virtualCamera;
@@ -20,15 +22,17 @@ public class Diary : MonoBehaviourSingleton<Diary>
     [SerializeField]
     private Outline[] notes;
 
-    private int unlockedNoteCount = 3;
+    private int unlockedNoteCount = 0;
     
     private int currentNoteIndex;
 
     private void Awake()
     {
         HighlightCurrentNote();
+        UnlockNextNote();
         playerController = FindFirstObjectByType<PlayerController>();
         virtualCamera = GetComponentInChildren<CinemachineCamera>();
+        alzh = playerController.GetComponent<Alzheimer>();
     }
 
     private void OnEnable()
@@ -44,6 +48,7 @@ public class Diary : MonoBehaviourSingleton<Diary>
         
         playerController.enabled = false;
         virtualCamera.Priority = PlayerCamera.Instance.CurrentVirtualCameraPriority + 2;
+        
     }
 
     private void OnDisable()
@@ -98,7 +103,7 @@ public class Diary : MonoBehaviourSingleton<Diary>
 
     public void UnlockNextNote()
     {
-        notes[unlockedNoteCount - 1].transform.parent.gameObject.SetActive(true);
+        notes[unlockedNoteCount].transform.gameObject.SetActive(true);
         unlockedNoteCount++;
     }
 }

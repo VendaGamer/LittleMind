@@ -8,16 +8,8 @@ public class RevealMemoryTrigger : MemoryTrigger
     [SerializeField]
     private GameObject[] objectsToReveal;
 
-    [SerializeField] private Transform PointToLookAt;
-
-    public override Bounds BoundsToLookAt => BoundsOfPointToLookAt;
+    public int indexOfNote;
     
-    private Bounds BoundsOfPointToLookAt;
-
-    private void Start()
-    {
-        BoundsOfPointToLookAt = new Bounds(PointToLookAt.position, Vector3.zero);
-    }
 
     public override void MemoryDiscovered()
     {

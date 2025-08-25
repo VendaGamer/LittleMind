@@ -70,6 +70,12 @@ public partial class PlayerController : MonoBehaviour, IInteractor
     private void Start()
     {
         currentSpeed = moveSpeed;
+        ShowTuto();
+    }
+
+    private void ShowTuto()
+    {
+        PlayerUIManager.Instance.NewChapter(1, "TO REGAIN WHAT WAS LOST \n --------------- \n Press J to open journal");
     }
 
     private void OnDisable()
@@ -123,15 +129,12 @@ public partial class PlayerController : MonoBehaviour, IInteractor
         HandleMovement();
         HandleJump();
     }
-
-    private void Update()
-    {
-        HandleInteraction();
-    }
+    
     
     private void LateUpdate()
     {
         RotatePlayerBody();
+        HandleInteraction();
     }
 
     private void HandleJump()
@@ -183,7 +186,6 @@ public partial class PlayerController : MonoBehaviour, IInteractor
 
     private void HandleMovement()
     {
-        
         Vector2 moveInput = InputManager.InputControls.Player.Move.ReadValue<Vector2>();
 
         currentMoveVelocity = Vector2.Lerp(

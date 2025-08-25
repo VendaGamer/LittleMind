@@ -1,28 +1,28 @@
 <engine:UXML xmlns:engine="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PlayerUIStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#PlayerUIStyles" />
     <engine:VisualElement name="Container" enabled="true" class="player-ui-container">
-        <engine:VisualElement name="status-bar" class="status-bar">
+        <engine:VisualElement name="status-bar" enabled="false" class="status-bar">
             <engine:VisualElement name="status-icons" class="status-icons">
                 <engine:VisualElement name="heart-icon" class="status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/heart.svg?fileID=7388822144124034973&amp;guid=d9fddde7b578b8d48b808567340af0c8&amp;type=3#heart&quot;); display: flex;" />
                 <engine:VisualElement name="bulb-icon" class="status-icon" style="background-image: url(&quot;project://database/Assets/UI/Icons/light%20bulb.svg?fileID=7388822144124034973&amp;guid=e95cff2e3d097f2428677daf85ac073e&amp;type=3#light bulb&quot;); display: flex; margin-bottom: 0;" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="chapter-popup" enabled="false" class="chapter-popup" style="opacity: 1; display: flex;">
-            <engine:VisualElement name="chapter" class="chapter-border">
+            <engine:VisualElement name="chapter" class="chapter-border" style="height: auto; min-height: auto;">
                 <engine:Label name="chapter-title" text="I" class="chapter-number" style="margin-right: 0; margin-left: 0; margin-top: 4px;" />
-                <engine:VisualElement name="chapter-divider" class="chapter-divider" />
-                <engine:Label name="chapter-label" text="AWAKENING" class="chapter-title" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/OpenSans-Light%20SDF.asset?fileID=11400000&amp;guid=9e566c4120afe0349963b11beb47b5f4&amp;type=2#OpenSans-Light SDF&quot;);" />
+                <engine:VisualElement name="chapter-divider" class="chapter-divider" style="height: 0;" />
+                <engine:Label name="chapter-label" text="WELCOME" class="chapter-title" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/OpenSans-Light%20SDF.asset?fileID=11400000&amp;guid=9e566c4120afe0349963b11beb47b5f4&amp;type=2#OpenSans-Light SDF&quot;);" />
             </engine:VisualElement>
         </engine:VisualElement>
         <engine:VisualElement name="interactable-interactions" data-source="project://database/Assets/UI/interactHandler.asset?fileID=11400000&amp;guid=8354aec3e80db6c4b93b57951eba3dd1&amp;type=2#interactHandler" class="interactable-interactions">
-            <engine:Label text="Label">
+            <engine:Label text="Label" style="color: rgb(255, 255, 255);">
                 <Bindings>
                     <engine:DataBinding property="text" data-source-path="CurrentInteractionGroupLabel" binding-mode="ToTarget" update-trigger="OnSourceChanged" />
                 </Bindings>
             </engine:Label>
             <engine:ListView binding-source-selection-mode="AutoAssign" show-add-remove-footer="false" selection-type="None" virtualization-method="DynamicHeight" name="interactable-listview" item-template="project://database/Assets/UI/InteractionItem.uxml?fileID=9197481963319205126&amp;guid=fe8085d39552ba54e8b1fbc47f237af5&amp;type=3#InteractionItem" style="max-height: none; min-height: auto;">
                 <Bindings>
-                    <engine:DataBinding property="itemsSource" data-source-path="CurrentInteractions" binding-mode="ToTarget" update-trigger="OnSourceChanged"/>
+                    <engine:DataBinding property="itemsSource" data-source-path="CurrentInteractions" binding-mode="ToTarget" update-trigger="OnSourceChanged" />
                 </Bindings>
             </engine:ListView>
         </engine:VisualElement>

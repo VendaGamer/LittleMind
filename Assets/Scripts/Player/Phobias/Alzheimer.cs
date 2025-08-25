@@ -9,6 +9,7 @@ public class Alzheimer : MonoBehaviour
 
     [CanBeNull]
     private MemoryTrigger currentMemoryTrigger;
+    
 
     public void RegisterMemoryTrigger(MemoryTrigger trigger)
     {
@@ -25,14 +26,6 @@ public class Alzheimer : MonoBehaviour
         if (ReferenceEquals(trigger, currentMemoryTrigger))
         {
             currentMemoryTrigger = null;
-        }
-    }
-
-    private void Update()
-    {
-        if (!currentMemoryTrigger)
-        {
-            return;
         }
     }
 

@@ -1,7 +1,7 @@
 <engine:UXML xmlns:engine="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/PlayerUIStyles.uss?fileID=7433441132597879392&amp;guid=48edef120b2c4034ab539c043d9d571d&amp;type=3#PlayerUIStyles" />
     <engine:VisualElement name="InteractionItem" data-source-type="Interaction, Assembly-CSharp" class="menu-item" style="min-width: auto;">
-        <engine:Label name="action-name" text="ssssssssssss" data-source-type="Interaction, Assembly-CSharp" class="action-text" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 10px;">
+        <engine:Label name="action-name" text="ssssssssssss" data-source-type="Interaction, Assembly-CSharp" class="action-text" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; font-size: 10px; color: rgb(255, 255, 255);">
             <Bindings>
                 <engine:DataBinding property="text" data-source-path="ActionName" binding-mode="ToTarget" />
             </Bindings>

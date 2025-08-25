@@ -14,7 +14,6 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     private Label chapterLabel;
     private VisualElement memoryIcon;
     private VisualElement heartIcon;
-    private Sequence newChapterSeq;
     private ListView interactableListView;
     private VisualElement interactableInteractions;
     private VisualElement statusBar;
@@ -70,7 +69,11 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
     {
         chapterTitle.text = chapterNum.ToRoman();
         chapterLabel.text = contents;
-        newChapterSeq.Play();
+        
+        DOTween
+            .Sequence()
+            .Append(chapterPopup.DOFadeIn(1f))
+            .Append(chapterPopup.DOFadeOut(5f).SetDelay(5f));
     }
 
     public void RefreshInteractionsListView()
@@ -125,11 +128,6 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         heartIcon.visible = false;
         heartIcon.style.opacity = 0f;
         
-        newChapterSeq = DOTween
-            .Sequence()
-            .Append(chapterPopup.DOFadeIn(1f))
-            .Append(chapterPopup.DOFadeOut(3f).SetDelay(5f));
-        
         
         statusBarElements = new[] { heartIcon, memoryIcon };
     }
@@ -139,6 +137,5 @@ public class PlayerUIManager : MonoBehaviourSingleton<PlayerUIManager>
         base.OnDestroy();
         // Clean up tweeners
         statusBarTweener?.Kill();
-        newChapterSeq?.Kill();
     }
 }

@@ -164,7 +164,7 @@
     width: 60px;
     height: 1px;
     background-color: rgba(180, 180, 190, 0.4);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .chapter-title {
